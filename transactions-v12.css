@@ -1,0 +1,47 @@
+/* JuHelo V12 — Movimentações sem duplicação e extratos separados */
+.ref-bell{display:none!important}
+
+.ref-transactions-page .tx-hide-duplicate-title{display:none!important}
+.ref-transactions-page .tx-month-only{display:flex;justify-content:flex-start!important;align-items:center!important;margin:0 0 14px!important}
+.ref-transactions-page .tx-month-only .month-select{max-width:220px;border:1px solid #e5d8fa;background:#faf7ff;color:#4e269d;border-radius:999px;padding:9px 13px;font-weight:800;box-shadow:none}
+
+.ref-transactions-page .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-bottom:14px!important}
+.ref-transactions-page .quick{min-height:58px!important;border-radius:17px!important;font-size:18px!important}
+.ref-transactions-page .quick small{font-size:12px!important}
+
+.ref-transactions-page .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-bottom:14px!important}
+.ref-transactions-page .kpi-grid .kpi:last-child{grid-column:1/-1}
+.ref-transactions-page .kpi{border:1px solid var(--ref-line)!important;box-shadow:none!important}
+.ref-transactions-page .kpi.income{background:#f8fdfb!important;border-color:#d9eee7!important}
+.ref-transactions-page .kpi.expense{background:#fff9fa!important;border-color:#f2dce1!important}
+.ref-transactions-page .kpi:last-child{background:#fff!important}
+
+.tx-extract-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:2px}
+.tx-extract-panel{padding:14px 14px 10px!important;border-radius:20px!important;box-shadow:none!important;border:1px solid var(--ref-line)!important;background:#fff!important}
+.tx-extract-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.tx-extract-head h2{margin:0;font-size:17px;letter-spacing:-.35px}
+.tx-extract-head span{min-width:26px;height:24px;padding:0 7px;border-radius:999px;display:grid;place-items:center;font-size:10px;font-weight:800;background:#f4f1f7;color:#766f80}
+.tx-extract-panel.expense .tx-extract-head h2{color:#30253d}
+.tx-extract-panel.income .tx-extract-head h2{color:#14795a}
+.tx-extract-panel.expense .tx-extract-head span{background:#fff1f3;color:#b84059}
+.tx-extract-panel.income .tx-extract-head span{background:#eefaf5;color:#147b5a}
+
+.tx-extract-panel .row{padding:9px 0!important;grid-template-columns:auto minmax(0,1fr) auto auto!important;gap:9px!important}
+.tx-extract-panel .row-icon{width:34px!important;height:34px!important;border-radius:11px!important;font-size:17px!important}
+.tx-extract-panel.expense .row-icon{background:var(--ref-red-soft)!important;color:var(--ref-red)!important}
+.tx-extract-panel.income .row-icon{background:var(--ref-green-soft)!important;color:var(--ref-green)!important}
+.tx-extract-panel .row-title{font-size:13px!important;font-weight:740!important}
+.tx-extract-panel .row-sub{font-size:10px!important}
+.tx-extract-panel .row-value{font-size:12px!important;font-weight:760!important;white-space:nowrap}
+.tx-extract-panel .row .icon-btn{display:grid!important;width:29px!important;height:29px!important;border:0!important;background:transparent!important;color:#6f687c!important}
+.tx-extract-empty{padding:24px 8px!important;font-size:13px!important}
+
+@media(min-width:761px){
+  .tx-extract-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:430px){
+  .ref-transactions-page .tx-month-only .month-select{width:100%;max-width:none}
+  .ref-transactions-page .kpi .value{font-size:17px!important}
+  .tx-extract-panel .row-value{font-size:11px!important}
+}
