@@ -40,14 +40,7 @@ function refineTopbar(main, tab) {
     if (title && title.textContent !== wanted) title.textContent = wanted;
   }
 
-  const chip = top.querySelector('.user-chip');
-  if (chip && !top.querySelector('.ref-bell')) {
-    const bell = document.createElement('span');
-    bell.className = 'ref-bell';
-    bell.setAttribute('aria-hidden', 'true');
-    bell.innerHTML = icon('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/>');
-    chip.before(bell);
-  }
+  top.querySelector('.ref-bell')?.remove();
 }
 
 function refineNav() {
@@ -96,8 +89,8 @@ function refineHome(main) {
   if (eyebrows[1] && eyebrows[1].textContent !== 'Atualizado agora há pouco') eyebrows[1].textContent = 'Atualizado agora há pouco';
 
   const quick = main.querySelector('.quick-actions');
-  const lists = main.querySelector('.grid-2');
-  if (quick && lists && lists.nextElementSibling !== quick) lists.after(quick);
+  const kpis = main.querySelector('.kpi-grid');
+  if (quick && kpis && kpis.nextElementSibling !== quick) kpis.after(quick);
 
   main.querySelector('.overview-strip')?.classList.add('ref-hidden-summary');
 
