@@ -1,0 +1,10 @@
+/* JuHelo V9 — avatares do casal conectado */
+.ref-topbar .user-chip.profile-trigger{display:flex;align-items:center;min-width:74px;justify-content:flex-end;overflow:visible}
+.couple-avatar-stack{position:relative;display:flex;align-items:center;padding-right:3px;min-width:70px;height:44px}
+.couple-avatar{position:relative;flex:0 0 auto;width:42px!important;height:42px!important;border:3px solid #fff!important;box-shadow:0 4px 13px rgba(39,28,55,.12)!important;overflow:hidden;font-size:12px!important;font-weight:850;color:#5f2eb7;background:linear-gradient(145deg,#efe7ff,#e9f8f2)}
+.couple-avatar+.couple-avatar{margin-left:-12px}
+.couple-avatar-2{background:linear-gradient(145deg,#e9f8f2,#f0e9ff);color:#1e7d61;z-index:2}
+.couple-avatar.current{z-index:3}
+.couple-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.couple-connected-dot{position:absolute;right:0;top:0;width:10px;height:10px;border-radius:50%;background:#7531dd;border:2px solid #fff;box-shadow:0 2px 5px rgba(50,33,70,.15);z-index:5}
+@media(max-width:520px){.ref-topbar .user-chip.profile-trigger{min-width:66px}.couple-avatar-stack{min-width:64px}.couple-avatar{width:40px!important;height:40px!important}.couple-avatar+.couple-avatar{margin-left:-11px}}
