@@ -1,0 +1,59 @@
+/* JuHelo v23 — Etapa 7: Modais e seletores */
+:root{--jh-visual-height:100dvh}
+.modal-backdrop{display:grid!important;align-items:end!important;justify-items:center!important;overflow:hidden!important}
+.modal-card.jh-modal-v23{
+  width:min(100%,560px)!important;
+  max-width:min(560px,calc(100vw - 20px))!important;
+  max-height:min(88dvh,calc(var(--jh-visual-height) - 18px))!important;
+  padding:24px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  border-radius:30px 30px 24px 24px!important;
+  border:1px solid rgba(231,226,238,.95)!important;
+  background:#fff!important;
+  box-shadow:0 26px 74px rgba(28,20,38,.22)!important;
+  scroll-padding-top:88px;
+  scroll-padding-bottom:108px;
+}
+.jh-modal-v23 .modal-head{top:-24px!important;margin:-24px -24px 20px!important;padding:22px 24px 15px!important;border-bottom:1px solid rgba(236,232,242,.7)!important;background:rgba(255,255,255,.97)!important}
+.jh-modal-v23 .modal-head h2{font-size:25px!important;font-weight:820!important;line-height:1.08!important;letter-spacing:-.04em!important;color:var(--jh-text)!important}
+.jh-modal-v23 .modal-head [data-close]{width:44px!important;height:44px!important;border:1px solid var(--jh-line)!important;border-radius:15px!important;background:#fff!important;color:#766f80!important}
+.jh-modal-v23 .form-grid{gap:18px!important;width:100%!important}
+.jh-modal-v23 .jh-modal-field{gap:8px!important;min-width:0!important;width:100%!important}
+.jh-modal-v23 .jh-modal-field label{font-size:13px!important;font-weight:800!important;color:#5e566b!important}
+.jh-modal-v23 .input,.jh-modal-v23 select.input,.jh-modal-v23 textarea.input{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  min-height:56px!important;
+  border:1px solid #ded8e7!important;
+  border-radius:18px!important;
+  background:#fbfafc!important;
+  color:var(--jh-text)!important;
+  padding:14px 16px!important;
+  font-size:16px!important;
+  line-height:1.25!important;
+  box-shadow:none!important;
+}
+.jh-modal-v23 textarea.input{min-height:104px!important}
+.jh-modal-v23 .input:focus,.jh-modal-v23 select.input:focus,.jh-modal-v23 textarea.input:focus{border-color:#bca4f2!important;background:#fff!important;box-shadow:0 0 0 4px rgba(111,53,232,.07)!important}
+.jh-modal-v23 select.input,.jh-modal-v23 .jh-modal-month-select{padding-right:46px!important;background-color:#fbf9ff!important;border-color:#ddd0f7!important;color:var(--jh-purple-dark)!important;font-weight:740!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23635a70' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 15px center!important;appearance:none!important;-webkit-appearance:none!important}
+.jh-modal-v23 input[type="date"]{padding-right:12px!important;overflow:visible!important}
+.jh-modal-v23 .segmented{padding:5px!important;border-radius:20px!important;background:#f2eef7!important}
+.jh-modal-v23 .segmented button{min-height:48px!important;border-radius:15px!important;font-size:15px!important}
+.jh-modal-v23 .segmented button.active{background:#fff!important;color:var(--jh-purple-dark)!important;box-shadow:0 5px 16px rgba(46,30,68,.06)!important}
+.jh-modal-v23 .modal-actions{bottom:-24px!important;margin:4px -24px -24px!important;padding:18px 24px calc(20px + env(safe-area-inset-bottom))!important;background:linear-gradient(to top,#fff 82%,rgba(255,255,255,.94))!important;border-top:1px solid rgba(236,232,242,.75)!important;grid-template-columns:1fr 1.35fr!important;gap:10px!important}
+.jh-modal-v23 .modal-actions .btn{width:100%!important;min-height:52px!important;border-radius:17px!important;font-size:15px!important}
+.jh-modal-v23 .recurring-note,.jh-modal-v23 .gb-info-note,.jh-modal-v23 .invite-card,.jh-modal-v23 .history-balance{padding:14px 16px!important;border-radius:17px!important;background:#f8f5fc!important;border:1px solid #eee8f5!important;color:#655d70!important;font-size:12px!important}
+.jh-modal-v23 .jh-premium-scope-card{width:100%!important;padding:15px 16px!important;border:1px solid var(--jh-line)!important;border-radius:18px!important;background:#fff!important;text-align:left!important;display:grid!important;gap:4px!important;color:var(--jh-text)!important}
+.jh-modal-v23 .jh-premium-scope-card strong{font-size:14px!important}
+.jh-modal-v23 .jh-premium-scope-card span{font-size:11px!important;color:var(--jh-muted)!important}
+.jh-modal-v23 .jh-premium-scope-card.danger{border-color:#f1dce2!important;background:#fffafb!important}
+.jh-modal-v23 .btn.red{min-height:48px!important;border-radius:16px!important}
+@media(max-width:560px){
+  .modal-backdrop{padding:8px max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))!important}
+  .modal-card.jh-modal-v23{max-width:100%!important;max-height:min(91dvh,calc(var(--jh-visual-height) - 10px))!important;padding:20px 18px!important;border-radius:28px 28px 20px 20px!important}
+  .jh-modal-v23 .modal-head{top:-20px!important;margin:-20px -18px 18px!important;padding:20px 18px 14px!important}
+  .jh-modal-v23 .modal-actions{bottom:-20px!important;margin:4px -18px -20px!important;padding:16px 18px calc(18px + env(safe-area-inset-bottom))!important}
+}
+@media(max-width:360px){.jh-modal-v23 .modal-actions{grid-template-columns:1fr!important}}
