@@ -1,0 +1,116 @@
+/* JuHelo v18 — Etapa 2: Inicio */
+.jh-home-v18 .jh-home-month-hidden{display:none!important}
+
+.jh-home-intro{margin:20px 8px 28px}
+.jh-home-intro h1{margin:0;font-size:clamp(34px,7vw,48px);line-height:1.02;letter-spacing:-.045em;color:var(--jh-text);font-weight:760}
+.jh-home-intro p{margin:10px 0 0;color:var(--jh-muted);font-size:16px;line-height:1.45}
+
+.jh-home-v18 .jh-balance-card{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:22px;
+  padding:28px;
+  color:var(--jh-text);
+  background:#fff;
+  border:1px solid var(--jh-line);
+  border-radius:30px;
+  box-shadow:var(--jh-shadow-card);
+}
+.jh-home-v18 .jh-balance-card::after{display:none}
+.jh-home-v18 .jh-balance-card .hero-row{display:block;padding-right:48px}
+.jh-home-v18 .jh-balance-card .eyebrow:first-child{
+  color:var(--jh-green);
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.jh-home-v18 .jh-balance-card .eyebrow:last-child{margin-top:4px;color:var(--jh-muted);font-size:13px;font-weight:600}
+.jh-home-v18 .jh-balance-card .balance{margin:8px 0 2px;color:var(--jh-text);font-size:clamp(40px,9vw,58px);font-weight:780;letter-spacing:-.045em;line-height:1.04}
+
+.jh-balance-eye{position:absolute!important;top:24px;right:24px!important;width:42px!important;height:42px!important;border-radius:14px!important;color:#5a4d6c!important;display:grid!important;place-items:center!important}
+.jh-balance-eye svg{width:23px;height:23px}
+.jh-balance-eye[aria-pressed="true"]::after{content:"";position:absolute;width:27px;height:2px;background:currentColor;transform:rotate(-42deg);border-radius:99px}
+
+.jh-home-v18 .jh-home-kpis{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:12px!important;
+  margin:28px 0 0!important;
+}
+.jh-home-v18 .jh-home-kpis .kpi{
+  min-width:0;
+  padding:16px 16px;
+  border-radius:20px;
+  background:#fff!important;
+  border:1px solid var(--jh-line)!important;
+  box-shadow:0 5px 18px rgba(37,25,55,.025);
+}
+.jh-home-v18 .jh-home-kpis .jh-mini-income,
+.jh-home-v18 .jh-home-kpis .jh-mini-expense{display:grid;grid-template-columns:48px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;align-items:center}
+.jh-home-v18 .jh-home-kpis .jh-kpi-icon{grid-column:1;grid-row:1/3;width:46px;height:46px;border-radius:15px;display:grid;place-items:center}
+.jh-home-v18 .jh-home-kpis .jh-kpi-icon svg{width:22px;height:22px}
+.jh-home-v18 .jh-home-kpis .jh-mini-income .jh-kpi-icon{background:var(--jh-green-soft);color:var(--jh-green)}
+.jh-home-v18 .jh-home-kpis .jh-mini-expense .jh-kpi-icon{background:var(--jh-red-soft);color:var(--jh-red)}
+.jh-home-v18 .jh-home-kpis .label{margin:0 0 3px;color:var(--jh-muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.jh-home-v18 .jh-home-kpis .value{min-width:0;font-size:18px;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jh-home-v18 .jh-home-kpis .jh-mini-result{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px}
+.jh-home-v18 .jh-home-kpis .jh-mini-result .label{margin:0}
+.jh-home-v18 .jh-home-kpis .jh-mini-result .value{color:var(--jh-green);font-size:20px}
+.jh-home-v18.jh-values-hidden .jh-home-kpis .jh-mini-result .value{color:var(--jh-text)}
+
+.jh-actions-title{margin:26px 4px 12px;font-size:16px;color:#696172;font-weight:760;letter-spacing:-.02em}
+.jh-home-v18 .jh-home-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.jh-home-v18 .jh-home-actions .quick{
+  min-height:96px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:14px;
+  text-align:left;
+  border:1px solid var(--jh-line);
+  border-radius:24px;
+  background:#fff!important;
+  box-shadow:var(--jh-shadow-card);
+  color:var(--jh-text)!important;
+}
+.jh-home-v18 .jh-home-actions .jh-action-icon{flex:0 0 auto;width:48px;height:48px;border-radius:16px;display:grid;place-items:center}
+.jh-home-v18 .jh-home-actions .jh-action-icon svg{width:24px;height:24px}
+.jh-home-v18 .jh-home-actions .expense .jh-action-icon{background:var(--jh-red-soft);color:var(--jh-red)}
+.jh-home-v18 .jh-home-actions .income .jh-action-icon{background:var(--jh-green-soft);color:var(--jh-green)}
+.jh-home-v18 .jh-home-actions .box .jh-action-icon,
+.jh-home-v18 .jh-home-actions .goal .jh-action-icon{background:var(--jh-purple-soft);color:var(--jh-purple)}
+.jh-home-v18 .jh-home-actions .jh-action-copy{min-width:0;display:grid;gap:3px}
+.jh-home-v18 .jh-home-actions strong{font-size:17px;line-height:1.1}
+.jh-home-v18 .jh-home-actions small{font-size:12px;color:var(--jh-muted);font-weight:650;opacity:1}
+
+.jh-home-v18 .ref-hidden-summary{display:flex!important;margin:12px 0 22px;gap:10px}
+.jh-home-v18 .overview-strip .mini-summary{background:#fff;border:1px solid var(--jh-line);box-shadow:none;border-radius:18px}
+
+.jh-home-v18 .grid-2{gap:16px}
+.jh-home-v18 .grid-2 .panel{box-shadow:var(--jh-shadow-card)}
+
+@media(max-width:760px){
+  .jh-home-intro{margin:18px 2px 24px}
+  .jh-home-intro h1{font-size:36px}
+  .jh-home-v18 .jh-balance-card{padding:24px 20px}
+  .jh-balance-eye{top:19px;right:18px!important}
+  .jh-home-v18 .jh-home-kpis{gap:10px!important;margin-top:24px!important}
+  .jh-home-v18 .jh-home-kpis .kpi{padding:14px 12px}
+  .jh-home-v18 .jh-home-kpis .jh-mini-income,
+  .jh-home-v18 .jh-home-kpis .jh-mini-expense{grid-template-columns:42px minmax(0,1fr);column-gap:9px}
+  .jh-home-v18 .jh-home-kpis .jh-kpi-icon{width:40px;height:40px;border-radius:13px}
+  .jh-home-v18 .jh-home-kpis .value{font-size:15px}
+  .jh-home-v18 .jh-home-actions{gap:12px}
+  .jh-home-v18 .jh-home-actions .quick{min-height:88px;padding:14px}
+  .jh-home-v18 .jh-home-actions .jh-action-icon{width:44px;height:44px;border-radius:14px}
+}
+
+@media(max-width:390px){
+  .jh-home-v18 .jh-home-kpis{grid-template-columns:1fr!important}
+  .jh-home-v18 .jh-home-kpis .jh-mini-result{grid-column:auto}
+  .jh-home-v18 .jh-home-actions{grid-template-columns:1fr 1fr}
+  .jh-home-v18 .jh-home-actions .quick{padding:12px;gap:10px}
+  .jh-home-v18 .jh-home-actions strong{font-size:15px}
+}
