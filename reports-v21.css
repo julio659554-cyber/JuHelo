@@ -1,0 +1,71 @@
+/* JuHelo v21 — Etapa 5: Relatorios */
+.jh-reports-v21 .ref-section-title{display:block!important;margin:8px 0 20px!important}
+.jh-reports-v21 .jh-report-legacy{display:none!important}
+.jh-report-period{display:grid;gap:9px;width:100%}
+.jh-report-period-label{font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase;color:var(--jh-muted)}
+.jh-report-period-fields{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:end}
+.jh-report-period-fields label{display:grid;gap:6px;min-width:0}
+.jh-report-period-fields label small{font-size:11px;color:var(--jh-muted);font-weight:760;margin-left:4px}
+.jh-report-select{width:100%;min-width:0;min-height:56px;border:1px solid #ded1f8;border-radius:20px;background:#fbf9ff;color:var(--jh-purple-dark);font-size:15px;font-weight:820;padding:0 42px 0 16px;box-shadow:0 8px 24px rgba(65,39,98,.04);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23635a70' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.jh-report-arrow{height:56px;display:grid;place-items:center;color:#91879c;font-weight:800}
+
+.jh-report-dashboard{display:grid;gap:18px}
+.jh-report-dashboard.loading{opacity:.6;pointer-events:none}
+.jh-report-balance-card{padding:28px;border:1px solid var(--jh-line);border-radius:30px;background:#fff;box-shadow:var(--jh-shadow-card)}
+.jh-report-balance-head{display:grid;gap:5px}
+.jh-report-balance-head>span{color:var(--jh-green);font-size:12px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}
+.jh-report-balance-head>strong{font-size:clamp(38px,8vw,54px);line-height:1.02;letter-spacing:-.045em;color:var(--jh-text)}
+.jh-report-balance-head>small{font-size:13px;color:var(--jh-muted);font-weight:600}
+.jh-report-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.jh-report-mini-grid article{display:grid;gap:5px;padding:16px 18px;border:1px solid var(--jh-line);border-radius:20px;background:#fff}
+.jh-report-mini-grid article.income{border-color:#dcedea}
+.jh-report-mini-grid article.expense{border-color:#f1dce2}
+.jh-report-mini-grid span{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--jh-muted)}
+.jh-report-mini-grid strong{font-size:19px;letter-spacing:-.025em}
+
+.jh-line-chart-card{padding:22px;border:1px solid var(--jh-line);border-radius:26px;background:#fff;box-shadow:var(--jh-shadow-card);overflow:hidden}
+.jh-chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}
+.jh-chart-head h2{margin:0;font-size:20px;letter-spacing:-.03em}
+.jh-chart-head p{margin:5px 0 0;font-size:12px;color:var(--jh-muted)}
+.jh-chart-legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.jh-chart-legend span{font-size:11px;font-weight:760;color:var(--jh-muted);display:inline-flex;align-items:center;gap:6px}
+.jh-chart-legend span::before{content:"";width:9px;height:9px;border-radius:50%}
+.jh-chart-legend .income::before{background:var(--jh-green)}
+.jh-chart-legend .expense::before{background:var(--jh-red)}
+.jh-chart-wrap{width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.jh-chart-wrap svg{display:block;width:100%;min-width:520px;height:auto}
+.jh-chart-guide{stroke:#eeeaf2;stroke-width:1}
+.jh-chart-line{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.jh-chart-line.income{stroke:var(--jh-green)}
+.jh-chart-line.expense{stroke:var(--jh-red)}
+.jh-chart-dot{stroke:#fff;stroke-width:2}
+.jh-chart-dot.income{fill:var(--jh-green)}
+.jh-chart-dot.expense{fill:var(--jh-red)}
+.jh-chart-label{font-size:12px;fill:#857c91;font-weight:650}
+
+.jh-report-month-list{padding:20px 22px;border:1px solid var(--jh-line);border-radius:26px;background:#fff;box-shadow:var(--jh-shadow-card)}
+.jh-report-list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.jh-report-list-head h2{margin:0;font-size:19px;letter-spacing:-.03em}
+.jh-report-list-head>span{padding:5px 9px;border-radius:999px;background:#f4f0f8;color:var(--jh-muted);font-size:10px;font-weight:800}
+.jh-report-month-row{display:grid;grid-template-columns:minmax(120px,1.25fr) repeat(3,minmax(90px,1fr));gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--jh-line);font-size:12px}
+.jh-report-month-row strong{font-size:13px}
+.jh-report-month-row span,.jh-report-month-row b{text-align:right;font-variant-numeric:tabular-nums}
+.jh-report-month-row .income{color:var(--jh-green)}
+.jh-report-month-row .expense{color:var(--jh-red)}
+.jh-report-month-row b{color:var(--jh-text)}
+
+@media(max-width:620px){
+  .jh-report-period-fields{grid-template-columns:1fr;gap:8px}
+  .jh-report-arrow{height:20px;transform:rotate(90deg)}
+  .jh-report-balance-card{padding:22px 18px}
+  .jh-report-mini-grid{gap:10px}
+  .jh-report-mini-grid article{padding:14px}
+  .jh-report-mini-grid strong{font-size:16px}
+  .jh-chart-head{display:grid}
+  .jh-chart-legend{justify-content:flex-start}
+  .jh-line-chart-card{padding:18px 14px}
+  .jh-report-month-list{padding:18px}
+  .jh-report-month-row{grid-template-columns:1fr auto;gap:6px 12px}
+  .jh-report-month-row strong{grid-column:1/-1}
+  .jh-report-month-row span,.jh-report-month-row b{text-align:left}
+}
