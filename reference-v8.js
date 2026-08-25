@@ -1,5 +1,3 @@
-const NS = 'http://www.w3.org/2000/svg';
-
 const navIcons = {
   home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-6h5v6"/>',
   transactions: '<path d="M7 4v16"/><path d="m3.5 7.5 3.5-3.5 3.5 3.5"/><path d="M17 20V4"/><path d="m13.5 16.5 3.5 3.5 3.5-3.5"/>',
@@ -31,14 +29,15 @@ function refineTopbar(main, tab) {
   const top = main.querySelector('.topbar');
   if (!top) return;
   top.classList.add('ref-topbar');
+  const wanted = titleFor(tab);
 
   const brand = top.querySelector('.brand-inline');
   if (brand) {
     brand.className = 'ref-screen-title';
-    brand.textContent = titleFor(tab);
+    brand.textContent = wanted;
   } else {
     const title = top.querySelector('.ref-screen-title');
-    if (title) title.textContent = titleFor(tab);
+    if (title && title.textContent !== wanted) title.textContent = wanted;
   }
 
   const chip = top.querySelector('.user-chip');
@@ -94,7 +93,7 @@ function refineHome(main) {
   }
 
   const eyebrows = hero.querySelectorAll('.eyebrow');
-  if (eyebrows[1]) eyebrows[1].textContent = 'Atualizado agora há pouco';
+  if (eyebrows[1] && eyebrows[1].textContent !== 'Atualizado agora há pouco') eyebrows[1].textContent = 'Atualizado agora há pouco';
 
   const quick = main.querySelector('.quick-actions');
   const lists = main.querySelector('.grid-2');
