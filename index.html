@@ -6,75 +6,69 @@
   <meta name="theme-color" content="#f8f7fb" />
   <meta name="color-scheme" content="light dark" />
   <meta name="description" content="JuHelo — finanças do casal" />
-  <meta name="juhelo-build" content="v30" />
+  <meta name="juhelo-build" content="v31" />
   <script>
     (()=>{
-      const key='juhelo-theme-preference';
-      const saved=localStorage.getItem(key);
+      const saved=localStorage.getItem('juhelo-theme-preference');
       const pref=['light','dark','system'].includes(saved)?saved:'light';
-      const dark=pref==='dark'||(pref==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
-      const theme=dark?'dark':'light';
-      document.documentElement.dataset.theme=theme;
+      const dark=pref==='dark'||(pref==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme=dark?'dark':'light';
       document.documentElement.dataset.themePreference=pref;
-      document.documentElement.style.colorScheme=theme;
-      const meta=document.querySelector('meta[name="theme-color"]');
-      if(meta)meta.content=dark?'#0f0d14':'#f8f7fb';
+      document.documentElement.style.colorScheme=dark?'dark':'light';
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#0f0d14':'#f8f7fb');
     })();
   </script>
-  <link rel="manifest" href="./manifest.webmanifest?v=30" />
+  <link rel="manifest" href="./manifest.webmanifest?v=31" />
   <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
   <title>JuHelo</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link rel="stylesheet" href="./styles.css?v=30" />
-  <link rel="stylesheet" href="./styles-v2.css?v=30" />
-  <link rel="stylesheet" href="./styles-v3.css?v=30" />
-  <link rel="stylesheet" href="./styles-v4.css?v=30" />
-  <link rel="stylesheet" href="./styles-v5.css?v=30" />
-  <link rel="stylesheet" href="./reference-v8.css?v=30" />
-  <link rel="stylesheet" href="./styles-v7.css?v=30" />
-  <link rel="stylesheet" href="./responsive-v10.css?v=30" />
-  <link rel="stylesheet" href="./home-v11.css?v=30" />
-  <link rel="stylesheet" href="./transactions-v12.css?v=30" />
-  <link rel="stylesheet" href="./compact-v13.css?v=30" />
-  <link rel="stylesheet" href="./stability-v14.css?v=30" />
-  <link rel="stylesheet" href="./tabs-profile-v15.css?v=30" />
-  <link rel="stylesheet" href="./polish-v16.css?v=30" />
-  <link rel="stylesheet" href="./design-v17.css?v=30" />
-  <link rel="stylesheet" href="./home-v18.css?v=30" />
-  <link rel="stylesheet" href="./transactions-v19.css?v=30" />
-  <link rel="stylesheet" href="./boxes-v20.css?v=30" />
-  <link rel="stylesheet" href="./reports-v21.css?v=30" />
-  <link rel="stylesheet" href="./goals-v22.css?v=30" />
-  <link rel="stylesheet" href="./modals-v23.css?v=30" />
-  <link rel="stylesheet" href="./theme-v26.css?v=30" />
-  <link rel="stylesheet" href="./stability-v27.css?v=30" />
-  <link rel="stylesheet" href="./stability-v28.css?v=30" />
-  <link rel="stylesheet" href="./canonical-v29.css?v=30" />
+  <link rel="stylesheet" href="./app-v31.css?v=31" />
+  <style>
+    /* Máscara de boot: nunca exibe uma versão antiga da interface enquanto sessão/dados carregam. */
+    .splash{
+      min-height:100dvh!important;
+      width:100%!important;
+      display:block!important;
+      place-content:initial!important;
+      background-color:var(--bg,#f8f7fb)!important;
+      background-repeat:no-repeat!important;
+      background-image:
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1));
+      background-size:
+        115px 30px,
+        66px 66px,
+        calc(100% - 48px) 230px,
+        calc(50% - 30px) 112px,
+        calc(50% - 30px) 112px,
+        calc(100% - 48px) 82px;
+      background-position:
+        24px 92px,
+        calc(100% - 90px) 72px,
+        24px 166px,
+        24px 420px,
+        calc(50% + 6px) 420px,
+        24px calc(100% - 112px);
+      animation:jhBootPulse 1.25s ease-in-out infinite alternate!important;
+    }
+    .splash .brand-name,.splash p,.splash .brand-mark{display:none!important}
+    :root{--skel-1:#eeebf3;--skel-2:#f8f6fb}
+    html[data-theme="dark"]{--skel-1:#1b1723;--skel-2:#262031}
+    @keyframes jhBootPulse{from{opacity:.72}to{opacity:1}}
+    @media(max-width:420px){
+      .splash{background-size:100px 28px,60px 60px,calc(100% - 36px) 220px,calc(50% - 25px) 106px,calc(50% - 25px) 106px,calc(100% - 36px) 78px;background-position:18px 88px,calc(100% - 76px) 70px,18px 158px,18px 400px,calc(50% + 7px) 400px,18px calc(100% - 104px)}}
+    @media(prefers-reduced-motion:reduce){.splash{animation:none!important}}
+  </style>
 </head>
-<body data-juhelo-build="v30">
-  <div id="app" class="app-shell jh-ui-pending">
-    <div class="splash" id="splash">
-      <div class="brand-mark" aria-hidden="true">♡</div>
-      <div class="brand-name"><span>Ju</span>Helo</div>
-      <p>finanças do casal</p>
-    </div>
+<body data-juhelo-build="v31">
+  <div id="app" class="app-shell">
+    <div class="splash" aria-label="Carregando JuHelo"><div class="brand-name"><span>Ju</span>Helo</div></div>
   </div>
   <div id="toast-root" class="toast-root" aria-live="polite"></div>
-  <script type="module" src="./app-v14.js?v=30"></script>
-  <script type="module" src="./settings-ui.js?v=30"></script>
-  <script type="module" src="./ui-fixes-v7.js?v=30"></script>
-  <script type="module" src="./reference-v8.js?v=30"></script>
-  <script type="module" src="./transactions-v12.js?v=30"></script>
-  <script type="module" src="./profile-polish-v16.js?v=30"></script>
-  <script type="module" src="./ux-v17.js?v=30"></script>
-  <script type="module" src="./home-v18.js?v=30"></script>
-  <script type="module" src="./transactions-v19.js?v=30"></script>
-  <script type="module" src="./reports-v21.js?v=30"></script>
-  <script type="module" src="./modals-v23.js?v=30"></script>
-  <script type="module" src="./theme-v26.js?v=30"></script>
-  <script type="module" src="./goals-v29.js?v=30"></script>
-  <script type="module" src="./boxes-v29.js?v=30"></script>
-  <script type="module" src="./boxes-bridge-v30.js?v=30"></script>
-  <script type="module" src="./stability-v28.js?v=30"></script>
+  <script type="module" src="./app-v31.js?v=31"></script>
 </body>
 </html>

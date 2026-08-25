@@ -1,0 +1,30 @@
+name: JuHelo Stabilization CI
+
+on:
+  push:
+    branches: [stabilization-v31]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: node --check app-v31.js
+      - name: Ensure canonical entrypoint only
+        run: |
+          test "$(grep -o '<script type="module"' index.html | wc -l)" -eq 1
+          grep -q 'app-v31.js' index.html
+          grep -q 'app-v31.css' index.html
+          ! grep -qE 'app-v14|reference-v8|transactions-v12|home-v18|transactions-v19|boxes-v20|goals-v22|goals-v29|boxes-v29|boxes-bridge|stability-v2[78]' index.html
+      - name: Ensure no DOM mutation redesign loops
+        run: '! grep -q "MutationObserver" app-v31.js'
+      - name: Ensure one Supabase client
+        run: 'test "$(grep -o "createClient(" app-v31.js | wc -l)" -eq 1'
+      - name: Check PWA cache version
+        run: |
+          grep -q "juhelo-v31" sw.js
+          grep -q "app-v31.js?v=31" sw.js
+          grep -q "app-v31.css?v=31" sw.js
