@@ -1,16 +1,18 @@
-const CACHE = 'juhelo-v6';
+const CACHE = 'juhelo-v7';
 const CORE = [
   './',
   './index.html',
-  './styles.css?v=6',
-  './styles-v2.css?v=6',
-  './styles-v3.css?v=6',
-  './styles-v4.css?v=6',
-  './app.js?v=6',
-  './couple-widget.js?v=6',
-  './settings-ui.js?v=6',
-  './goals-boxes-v2.js?v=6',
-  './manifest.webmanifest?v=6',
+  './styles.css?v=7',
+  './styles-v2.css?v=7',
+  './styles-v3.css?v=7',
+  './styles-v4.css?v=7',
+  './styles-v5.css?v=7',
+  './app.js?v=7',
+  './couple-widget.js?v=7',
+  './settings-ui.js?v=7',
+  './goals-boxes-v2.js?v=7',
+  './ui-fixes-v7.js?v=7',
+  './manifest.webmanifest?v=7',
   './assets/icon.svg'
 ];
 
