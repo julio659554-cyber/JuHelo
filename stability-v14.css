@@ -1,0 +1,10 @@
+/* JuHelo V14 — estabilidade de sessão e perfil */
+.ref-topbar .user-chip{position:relative;display:flex;align-items:center;justify-content:flex-end;overflow:visible}
+.ref-topbar .user-chip>.profile-name{display:none!important}
+.ref-topbar .user-chip>.single-avatar{display:none!important}
+.ref-topbar .couple-avatar-stack{display:flex!important;align-items:center;min-width:64px;height:44px;position:relative;padding-right:2px}
+.ref-topbar .couple-avatar{display:grid!important;place-items:center;position:relative;flex:0 0 auto;width:42px!important;height:42px!important;border-radius:50%;border:3px solid #fff!important;overflow:hidden;box-shadow:0 4px 13px rgba(39,28,55,.12)!important;font-size:12px!important;font-weight:850}
+.ref-topbar .couple-avatar+.couple-avatar{margin-left:-12px}
+.ref-topbar .couple-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.ref-topbar .couple-connected-dot{position:absolute;right:0;top:1px;width:10px;height:10px;border-radius:50%;background:#7531dd;border:2px solid #fff;z-index:5}
+@media(max-width:520px){.ref-topbar .couple-avatar-stack{min-width:61px;height:40px}.ref-topbar .couple-avatar{width:39px!important;height:39px!important}.ref-topbar .couple-avatar+.couple-avatar{margin-left:-10px}}
