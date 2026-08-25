@@ -1,0 +1,69 @@
+/* JuHelo V16 — refinamentos do perfil e card principal */
+
+/* Menu de perfil: ícones vetoriais, sem emoji */
+.profile-menu .profile-menu-icon{
+  width:22px!important;
+  min-width:22px!important;
+  height:22px!important;
+  display:grid!important;
+  place-items:center!important;
+  line-height:1!important;
+  font-size:0!important;
+}
+.profile-menu .profile-menu-icon svg{
+  width:18px!important;
+  height:18px!important;
+  display:block!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.9!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+
+/* Home: card de saldo ainda mais compacto */
+.ref-home .hero{
+  min-height:0!important;
+  height:auto!important;
+  padding:12px 17px 11px!important;
+  margin-bottom:12px!important;
+  border-radius:20px!important;
+}
+.ref-home .hero .eyebrow:first-child{
+  margin:0!important;
+  font-size:13px!important;
+  line-height:1.15!important;
+}
+.ref-home .balance{
+  margin:5px 0 2px!important;
+  font-size:clamp(30px,8.7vw,39px)!important;
+  line-height:.98!important;
+}
+.ref-home .hero .eyebrow:last-child{
+  margin-top:1px!important;
+  font-size:10.5px!important;
+  line-height:1.15!important;
+}
+.ref-home .ref-eye{
+  top:10px!important;
+  right:13px!important;
+  width:31px!important;
+  height:31px!important;
+}
+
+@media(max-width:520px){
+  .ref-home .hero{
+    padding:11px 15px 10px!important;
+    border-radius:19px!important;
+  }
+  .ref-home .balance{
+    margin:4px 0 2px!important;
+    font-size:clamp(29px,8.9vw,37px)!important;
+  }
+  .ref-home .ref-eye{
+    top:9px!important;
+    right:11px!important;
+    width:29px!important;
+    height:29px!important;
+  }
+}
