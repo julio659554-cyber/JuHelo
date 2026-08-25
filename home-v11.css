@@ -1,0 +1,61 @@
+/* JuHelo V11 — ajustes finos da Home */
+.ref-bell{display:none!important}
+
+/* Receita e despesa: fundo suave + borda fina */
+.ref-home .kpi.income{
+  background:#f7fcfa!important;
+  border:1px solid #d8efe5!important;
+}
+.ref-home .kpi.expense{
+  background:#fff8f9!important;
+  border:1px solid #f2dce1!important;
+}
+.ref-home .kpi{
+  box-shadow:none!important;
+}
+
+/* Ações rápidas logo após os KPIs, em grade 2x2 */
+.ref-home .quick-actions{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin:0 0 16px!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+.ref-home .quick{
+  width:100%!important;
+  min-width:0!important;
+  min-height:50px!important;
+  padding:12px 14px!important;
+  border-radius:16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  font-size:20px!important;
+  text-align:left!important;
+}
+.ref-home .quick small{
+  font-size:13px!important;
+  font-weight:760!important;
+  line-height:1!important;
+}
+.ref-home .quick.expense{
+  background:#fff8f9!important;
+  border:1px solid #f2dce1!important;
+}
+.ref-home .quick.income{
+  background:#f7fcfa!important;
+  border:1px solid #d8efe5!important;
+}
+.ref-home .quick.box,
+.ref-home .quick.goal{
+  background:#fbf8ff!important;
+  border:1px solid #e4d8f8!important;
+}
+
+@media(max-width:380px){
+  .ref-home .quick{padding:11px 12px!important}
+  .ref-home .quick small{font-size:12px!important}
+}
