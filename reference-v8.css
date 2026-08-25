@@ -1,0 +1,117 @@
+/* JuHelo V8 — aproximação visual do mockup aprovado */
+:root{--ref-ink:#171326;--ref-muted:#7f788b;--ref-purple:#7531dd;--ref-purple-soft:#f0e9ff;--ref-green:#209b76;--ref-green-soft:#e9f8f2;--ref-red:#d94f6a;--ref-red-soft:#fff0f2;--ref-line:#ece8f1}
+body{background:#fbfafc;color:var(--ref-ink)}
+.page{max-width:760px;padding-top:24px;padding-bottom:118px}
+.ref-icon{width:1em;height:1em;display:block}
+
+/* Cabeçalho no padrão app: título + sino + avatar */
+.ref-topbar{min-height:52px;margin-bottom:12px;align-items:center}
+.ref-screen-title{font-size:25px;font-weight:860;letter-spacing:-.8px;color:var(--ref-ink)}
+.ref-topbar .user-chip>span{display:none!important}
+.ref-topbar .user-chip{margin-left:8px;padding:0!important}
+.ref-topbar .avatar{width:42px;height:42px;border:3px solid #fff;box-shadow:0 4px 13px rgba(39,28,55,.12);font-size:14px}
+.ref-bell{margin-left:auto;width:38px;height:38px;display:grid;place-items:center;color:#423953;font-size:22px}
+.topbar .couple-invite-btn{display:none!important}
+
+/* Home */
+.ref-home .ref-month-row{display:flex;justify-content:flex-start;margin:2px 0 16px}
+.ref-home .month-select{font-size:14px;padding:9px 13px;border:1px solid #e5d8fa;background:#faf7ff;border-radius:999px;color:#4e269d;box-shadow:none;max-width:190px}
+.ref-home .hero{padding:20px 22px 18px;margin-bottom:14px;border-radius:23px;border:1px solid #decdf7;box-shadow:none;background:linear-gradient(135deg,#fbf8ff 0%,#f5edff 62%,#efe7ff 100%);min-height:142px}
+.ref-home .hero::after{width:210px;height:150px;right:-45px;bottom:-72px;background:rgba(117,49,221,.07)}
+.ref-home .hero-row{display:block}
+.ref-home .hero .eyebrow:first-child{font-size:14px;font-weight:760;color:#392c4b}
+.ref-home .hero .eyebrow:last-child{font-size:11px;font-weight:560;color:#8b8394;margin-top:3px}
+.ref-home .balance{font-size:clamp(34px,10vw,44px);font-weight:850;line-height:1.05;letter-spacing:-1.8px;margin:10px 0 5px;color:#2f2442;white-space:nowrap}
+.ref-eye{position:absolute;right:18px;top:17px;width:34px;height:34px;display:grid;place-items:center;color:#39245f;font-size:20px;z-index:2}
+
+.ref-home .kpi-grid{grid-template-columns:1fr 1fr!important;gap:10px;margin-bottom:16px}
+.ref-home .kpi-grid .kpi:nth-child(3){display:none!important}
+.ref-home .kpi{padding:15px 14px;min-height:85px;border-radius:18px;box-shadow:none}
+.ref-home .kpi .label{font-size:12px;margin-bottom:8px;color:#746d80}
+.ref-home .kpi .value{font-size:18px;letter-spacing:-.4px}
+.ref-home .kpi.income{background:#f0faf6}
+.ref-home .kpi.expense{background:#fff3f5}
+
+.ref-hidden-summary{display:none!important}
+.ref-home .grid-2{display:grid;grid-template-columns:1fr;gap:12px;margin-top:0}
+.ref-home .panel{padding:14px 14px 10px;border-radius:20px;box-shadow:none;border:1px solid var(--ref-line)}
+.ref-home .panel-head{margin-bottom:5px}
+.ref-home .panel-head h2{font-size:17px}
+.ref-home .panel:first-child .panel-head h2{color:#30253d}
+.ref-home .panel:nth-child(2) .panel-head h2{color:#14795a}
+.ref-home .row{padding:9px 0;grid-template-columns:auto minmax(0,1fr) auto auto;gap:9px}
+.ref-home .row-icon{width:34px;height:34px;border-radius:11px;font-size:17px}
+.ref-home .row-icon[data-type="income"]{background:var(--ref-green-soft);color:var(--ref-green)}
+.ref-home .row-icon[data-type="expense"]{background:var(--ref-red-soft);color:var(--ref-red)}
+.ref-home .row-icon[data-type="box"],.ref-home .row-icon[data-type="recurring"]{background:var(--ref-purple-soft);color:var(--ref-purple)}
+.ref-home .row-title{font-size:13px;font-weight:740}
+.ref-home .row-sub{font-size:10px}
+.ref-home .row-value{font-size:12px;font-weight:760}
+.ref-home .row .icon-btn{display:grid!important;width:29px;height:29px;border:0;background:transparent;color:#6f687c;font-size:15px}
+.ref-home .ref-panel-footer{padding:10px 2px 4px;border-top:1px solid #f1eef3;margin-top:3px}
+.ref-home .ref-panel-footer .link-btn{font-size:12px;font-weight:720}
+
+/* Ações rápidas como pills, abaixo das listas */
+.ref-home .quick-actions{display:flex!important;grid-template-columns:none!important;gap:7px;margin:14px 0 0;overflow-x:auto;padding:0 1px 3px;scrollbar-width:none}
+.ref-home .quick-actions::-webkit-scrollbar{display:none}
+.ref-home .quick{min-height:0!important;display:inline-flex!important;align-items:center;justify-content:center;gap:5px;white-space:nowrap;padding:9px 12px;border-radius:999px;font-size:16px;flex:0 0 auto}
+.ref-home .quick small{font-size:11px;opacity:1;font-weight:740}
+.ref-home .quick.expense{background:#fff1f3;color:#b84059;border:1px solid #f9d9df}
+.ref-home .quick.income{background:#eefaf5;color:#147b5a;border:1px solid #d5f0e5}
+.ref-home .quick.box,.ref-home .quick.goal{background:#f5efff;color:#6432bd;border:1px solid #eadcff}
+
+/* Navegação inferior */
+.bottom-nav{width:min(calc(100% - 24px),560px);padding:7px 8px;border-radius:24px;background:rgba(255,255,255,.96);border:1px solid #eeeaf2;box-shadow:0 11px 34px rgba(40,29,54,.13);gap:2px}
+.nav-item{min-height:58px;border-radius:18px;font-size:9px;gap:4px;color:#716b7b;position:relative}
+.nav-item .nav-icon{font-size:21px;display:grid;place-items:center}
+.nav-item.active{background:#f1e9ff;color:#6832c3}
+.nav-item.active::after{content:"";position:absolute;bottom:4px;left:50%;width:18px;height:2px;border-radius:99px;background:#7531dd;transform:translateX(-50%)}
+
+/* Títulos internos */
+.ref-section-title{align-items:center;margin:6px 0 14px}
+.ref-section-title h1{font-size:23px;letter-spacing:-.7px}
+.ref-section-title p{font-size:12px;line-height:1.35}
+.ref-section-title .btn.soft{padding:8px 12px;border:1px solid #e5d7fb;background:#faf6ff;border-radius:999px;font-size:11px}
+
+/* Caixinhas como lista compacta, próxima ao mockup */
+.ref-boxes-page .card-grid{grid-template-columns:1fr;gap:10px}
+.ref-boxes-page .box-card{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;column-gap:11px;align-items:start;padding:14px;border-radius:20px;box-shadow:none;border:1px solid var(--ref-line);background:#fff}
+.ref-box-glyph{grid-column:1;grid-row:1 / span 3;width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#efe5ff,#f8f4ff);color:#6d31c7;display:grid;place-items:center;font-size:24px}
+.ref-boxes-page .box-top{grid-column:2;grid-row:1;display:block;min-width:0}
+.ref-boxes-page .box-top .box-name{font-size:15px;line-height:1.2}
+.ref-boxes-page .box-top .pill{margin-top:4px;padding:0;background:transparent;font-size:10px;font-weight:580}
+.ref-boxes-page .box-top .edit-box{position:absolute;right:10px;top:10px;width:28px;height:28px;border:0;background:transparent}
+.ref-boxes-page .box-balance{grid-column:3;grid-row:1;margin:3px 30px 0 0;font-size:16px;letter-spacing:-.35px;text-align:right;color:#6b2fc6;white-space:nowrap}
+.ref-boxes-page .box-card>.row-sub{grid-column:3;grid-row:2;text-align:right;font-size:9px;margin-right:30px}
+.ref-boxes-page .progress{grid-column:2 / 4;height:6px;margin:10px 0 0}
+.ref-boxes-page .progress-copy{grid-column:2 / 4;font-size:9px;margin-top:4px!important}
+.ref-boxes-page .gb-box-meta{grid-column:2 / 4;margin:8px 0 0;padding-top:8px}
+.ref-boxes-page .gb-box-meta-row{font-size:10px}
+.ref-boxes-page .gb-deadline{font-size:9px;min-height:22px;padding:3px 7px}
+.ref-boxes-page .gb-target-copy{font-size:9px}
+.ref-boxes-page .box-preview{grid-column:1 / -1;margin-top:10px;padding:9px 10px;border:0;border-radius:13px;background:#faf7ff;gap:6px}
+.ref-boxes-page .box-preview span,.ref-boxes-page .box-preview strong{font-size:10px}
+.ref-boxes-page .actions-inline{grid-column:1 / -1;margin-top:10px;gap:6px}
+.ref-boxes-page .actions-inline .btn{padding:7px 10px;border-radius:999px;font-size:10px}
+
+/* Metas: checklist limpo */
+.ref-goals-page .panel{padding:8px 14px;border-radius:20px;box-shadow:none}
+.ref-goals-page .gb-goal-item,.ref-goals-page .goal-row{padding:13px 0;gap:11px}
+.ref-goals-page .gb-goal-check,.ref-goals-page .check{width:27px;height:27px}
+.ref-goals-page .gb-goal-body strong,.ref-goals-page .row-title{font-size:13px}
+.ref-goals-page .gb-goal-body p,.ref-goals-page .row-sub,.ref-goals-page .gb-goal-status{font-size:10px}
+
+/* Movimentações e relatórios mais compactos */
+.ref-transactions-page .quick-actions{grid-template-columns:repeat(4,1fr);gap:8px}
+.ref-transactions-page .quick{min-height:62px;border-radius:16px}
+.ref-transactions-page .kpi{padding:14px;border-radius:17px}
+.ref-transactions-page .panel,.ref-reports-page .panel{box-shadow:none;border-radius:20px}
+
+/* Modais: alinhamento estável e aparência iOS */
+.modal-backdrop{padding:12px!important;align-items:end!important;justify-items:center!important}
+.modal-card{width:min(100%,520px)!important;margin:0!important;border-radius:25px 25px 20px 20px!important;padding:19px!important;box-shadow:0 22px 65px rgba(35,24,49,.23)!important}
+.modal-head h2{font-size:19px}
+.modal-actions{gap:8px}
+
+@media(min-width:761px){.page{max-width:900px}.ref-home .grid-2{grid-template-columns:1fr 1fr}.ref-home .quick-actions{justify-content:center}.ref-boxes-page .card-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.page{padding:20px 15px 112px}.ref-screen-title{font-size:23px}.ref-home .hero{min-height:136px}.ref-home .balance{font-size:39px}.ref-home .row{grid-template-columns:auto minmax(0,1fr) auto auto!important}.ref-home .row-value{grid-column:3!important;grid-row:1!important}.ref-home .row .icon-btn{grid-column:4!important;grid-row:1!important}.bottom-nav{width:calc(100% - 20px)}}
