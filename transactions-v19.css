@@ -1,0 +1,87 @@
+/* JuHelo v19 — Etapa 3: Movimentacoes */
+.jh-transactions-v19 .tx-month-only{margin:6px 0 18px!important;display:block!important}
+.jh-month-control{position:relative;display:flex;align-items:center;width:min(100%,420px)}
+.jh-month-icon{position:absolute;left:17px;z-index:1;width:21px;height:21px;color:var(--jh-purple);pointer-events:none}
+.jh-month-icon svg{width:100%;height:100%}
+.jh-transactions-v19 .jh-month-control .month-select{
+  width:100%!important;
+  max-width:none!important;
+  min-height:56px!important;
+  padding:0 50px 0 50px!important;
+  border:1px solid #ded1f8!important;
+  border-radius:20px!important;
+  background-color:#fbf9ff!important;
+  color:var(--jh-purple-dark)!important;
+  font-size:16px!important;
+  font-weight:820!important;
+  box-shadow:0 8px 24px rgba(65,39,98,.04)!important;
+}
+
+.jh-tx-balance-card{
+  margin:0 0 20px;
+  padding:26px;
+  border:1px solid var(--jh-line);
+  border-radius:30px;
+  background:#fff;
+  box-shadow:var(--jh-shadow-card);
+}
+.jh-tx-balance-head{display:grid;gap:5px;margin-bottom:22px}
+.jh-tx-balance-head>span{color:var(--jh-green);font-size:12px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}
+.jh-tx-balance-head>strong{font-size:clamp(38px,8vw,54px);line-height:1.02;letter-spacing:-.045em;color:var(--jh-text)}
+.jh-tx-balance-head>small{font-size:13px;color:var(--jh-muted);font-weight:600}
+
+.jh-transactions-v19 .jh-tx-kpis{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;margin:0!important}
+.jh-transactions-v19 .jh-tx-kpis .kpi{padding:16px 18px!important;border-radius:20px!important;background:#fff!important;border:1px solid var(--jh-line)!important;box-shadow:none!important}
+.jh-transactions-v19 .jh-tx-kpis .jh-tx-income{border-color:#dcedea!important}
+.jh-transactions-v19 .jh-tx-kpis .jh-tx-expense{border-color:#f1dce2!important}
+.jh-transactions-v19 .jh-tx-kpis .label{font-size:11px!important;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--jh-muted)}
+.jh-transactions-v19 .jh-tx-kpis .value{font-size:19px!important;letter-spacing:-.025em}
+.jh-transactions-v19 .jh-tx-source-balance{display:none!important}
+
+.jh-tx-actions-title{margin:24px 4px 12px;font-size:16px;color:#696172;font-weight:760;letter-spacing:-.02em}
+.jh-transactions-v19 .jh-tx-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin:0 0 22px!important}
+.jh-transactions-v19 .jh-tx-actions .quick{
+  min-height:88px!important;
+  padding:15px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  text-align:left!important;
+  border:1px solid var(--jh-line)!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  color:var(--jh-text)!important;
+  box-shadow:var(--jh-shadow-card)!important;
+}
+.jh-tx-action-icon{width:44px;height:44px;flex:0 0 auto;border-radius:14px;display:grid;place-items:center}
+.jh-tx-action-icon svg{width:22px;height:22px}
+.jh-tx-actions .expense .jh-tx-action-icon{background:var(--jh-red-soft);color:var(--jh-red)}
+.jh-tx-actions .income .jh-tx-action-icon{background:var(--jh-green-soft);color:var(--jh-green)}
+.jh-tx-actions .box .jh-tx-action-icon,.jh-tx-actions .goal .jh-tx-action-icon{background:var(--jh-purple-soft);color:var(--jh-purple)}
+.jh-tx-action-copy{min-width:0;display:grid;gap:3px}
+.jh-tx-action-copy strong{font-size:16px;line-height:1.1}
+.jh-transactions-v19 .jh-tx-actions .jh-tx-action-copy small{font-size:11px!important;color:var(--jh-muted);font-weight:650;opacity:1}
+
+.jh-transactions-v19 .tx-extract-grid{gap:14px;margin-top:4px}
+.jh-transactions-v19 .tx-extract-panel{padding:18px!important;border-radius:24px!important;border:1px solid var(--jh-line)!important;box-shadow:var(--jh-shadow-card)!important}
+.jh-transactions-v19 .tx-extract-head{margin-bottom:8px}
+.jh-transactions-v19 .tx-extract-head h2{font-size:20px;letter-spacing:-.03em}
+.jh-transactions-v19 .tx-extract-panel .row{padding:12px 0!important;grid-template-columns:auto minmax(0,1fr) auto auto!important;gap:10px!important}
+.jh-transactions-v19 .tx-extract-panel .row-icon{width:40px!important;height:40px!important;border-radius:13px!important}
+.jh-transactions-v19 .tx-extract-panel .row-title{font-size:14px!important}
+.jh-transactions-v19 .tx-extract-panel .row-sub{font-size:11px!important}
+.jh-transactions-v19 .tx-extract-panel .row-value{font-size:13px!important}
+.jh-transactions-v19 .edit-tx{display:grid!important;width:34px!important;height:34px!important;font-size:14px!important;letter-spacing:1px!important;border-radius:12px!important;color:#756d80!important}
+.jh-transactions-v19 .edit-tx:hover{background:#f7f4fb!important}
+
+@media(max-width:760px){
+  .jh-month-control{width:100%}
+  .jh-tx-balance-card{padding:22px 18px}
+  .jh-transactions-v19 .jh-tx-kpis{gap:10px!important}
+  .jh-transactions-v19 .jh-tx-kpis .kpi{padding:14px!important}
+  .jh-transactions-v19 .jh-tx-kpis .value{font-size:16px!important}
+  .jh-transactions-v19 .jh-tx-actions{gap:10px!important}
+  .jh-transactions-v19 .jh-tx-actions .quick{min-height:82px!important;padding:13px!important}
+  .jh-tx-action-icon{width:40px;height:40px}
+}
