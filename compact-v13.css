@@ -1,0 +1,70 @@
+/* JuHelo V13 — cards com altura guiada pelo conteúdo */
+
+/* Evita que grids estiquem cards vizinhos até a mesma altura */
+.grid-2,.card-grid,.tx-extract-grid,.kpi-grid{align-items:start}
+
+/* Cards financeiros devem crescer apenas conforme o conteúdo */
+.hero,.kpi,.panel,.box-card,.account-card,.tx-extract-panel,.gb-goals-panel{height:auto!important;min-height:0!important}
+
+/* HOME — card principal mais baixo e KPIs compactos */
+.ref-home .hero{min-height:0!important;height:auto!important;padding:16px 18px 15px!important}
+.ref-home .hero .eyebrow:first-child{margin:0!important}
+.ref-home .balance{margin:7px 0 3px!important;line-height:1!important}
+.ref-home .hero .eyebrow:last-child{margin-top:2px!important}
+.ref-home .kpi{min-height:0!important;height:auto!important;padding:12px 13px!important}
+.ref-home .kpi .label{margin-bottom:5px!important}
+.ref-home .grid-2{align-items:start!important}
+.ref-home .panel{height:auto!important;min-height:0!important;padding:12px 13px 8px!important;align-self:start}
+.ref-home .panel-head{margin-bottom:3px!important}
+.ref-home .row{padding:7px 0!important}
+.ref-home .empty{padding:16px 8px!important;min-height:0!important}
+.ref-home .ref-panel-footer{padding:8px 2px 3px!important;margin-top:2px!important}
+
+/* MOVIMENTAÇÕES — elimina espaço vazio causado pelo botão de editar em outra linha */
+.ref-transactions-page .quick{min-height:52px!important;height:auto!important;padding:10px 12px!important}
+.ref-transactions-page .kpi{min-height:0!important;height:auto!important;padding:12px 13px!important}
+.ref-transactions-page .kpi .label{margin-bottom:5px!important}
+.ref-transactions-page .tx-extract-grid{align-items:start!important}
+.tx-extract-panel{min-height:0!important;height:auto!important;padding:12px 13px 8px!important;align-self:start!important}
+.tx-extract-head{margin-bottom:2px!important}
+.tx-extract-panel .list{gap:0!important}
+.tx-extract-panel .row{min-height:0!important;height:auto!important;padding:8px 0!important;align-items:center!important}
+.tx-extract-panel .row .icon-btn{display:grid!important;grid-column:4!important;grid-row:1!important;align-self:center!important;justify-self:end!important;margin:0!important}
+.tx-extract-empty{min-height:0!important;padding:15px 5px!important}
+
+/* CAIXINHAS — sem altura igual entre cartões */
+.ref-boxes-page .card-grid{align-items:start!important}
+.ref-boxes-page .box-card{height:auto!important;min-height:0!important;align-self:start!important;padding-top:12px!important;padding-bottom:12px!important}
+.ref-boxes-page .box-preview{margin-top:8px!important;padding-top:8px!important}
+.ref-boxes-page .actions-inline{margin-top:8px!important}
+.ref-boxes-page .gb-box-meta{margin-top:7px!important;padding-top:7px!important}
+
+/* METAS */
+.ref-goals-page .panel{height:auto!important;min-height:0!important;padding-top:6px!important;padding-bottom:6px!important;align-self:start!important}
+.ref-goals-page .gb-goal-item,.ref-goals-page .goal-row{min-height:0!important;padding-top:11px!important;padding-bottom:11px!important}
+.ref-goals-page .empty{padding:18px 8px!important}
+
+/* RELATÓRIOS */
+.ref-reports-page .kpi{height:auto!important;min-height:0!important;padding-top:12px!important;padding-bottom:12px!important}
+.ref-reports-page .panel{height:auto!important;min-height:0!important;align-self:start!important}
+.ref-reports-page .report-row{padding-top:9px!important;padding-bottom:9px!important}
+
+/* Mobile: ainda mais compacto, sem apertar textos/valores */
+@media(max-width:520px){
+  .ref-home .hero{padding:15px 16px 14px!important;border-radius:21px!important}
+  .ref-home .balance{font-size:clamp(30px,9.2vw,38px)!important}
+  .ref-home .kpi{padding:11px 12px!important}
+  .ref-home .panel{padding:11px 12px 7px!important}
+
+  .ref-transactions-page .quick{min-height:50px!important;padding:9px 10px!important}
+  .ref-transactions-page .kpi{padding:11px 12px!important}
+  .tx-extract-panel{padding:11px 12px 7px!important}
+  .tx-extract-panel .row{padding:7px 0!important}
+  .tx-extract-panel .row .icon-btn{width:26px!important;height:26px!important;min-width:26px!important;min-height:26px!important}
+}
+
+@media(max-width:359px){
+  .ref-home .hero{padding:14px 14px 13px!important}
+  .ref-home .kpi{padding:10px!important}
+  .tx-extract-panel{padding:10px 10px 6px!important}
+}
