@@ -1,5 +1,18 @@
-const CACHE = 'juhelo-v5';
-const CORE = ['./', './index.html', './styles.css', './styles-v2.css', './styles-v3.css', './styles-v4.css', './app.js', './couple-widget.js', './settings-ui.js', './goals-boxes-v2.js', './manifest.webmanifest', './assets/icon.svg'];
+const CACHE = 'juhelo-v6';
+const CORE = [
+  './',
+  './index.html',
+  './styles.css?v=6',
+  './styles-v2.css?v=6',
+  './styles-v3.css?v=6',
+  './styles-v4.css?v=6',
+  './app.js?v=6',
+  './couple-widget.js?v=6',
+  './settings-ui.js?v=6',
+  './goals-boxes-v2.js?v=6',
+  './manifest.webmanifest?v=6',
+  './assets/icon.svg'
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE)));
