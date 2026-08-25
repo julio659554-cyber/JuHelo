@@ -1,0 +1,19 @@
+{
+  "name": "JuHelo — finanças do casal",
+  "short_name": "JuHelo",
+  "description": "Controle financeiro compartilhado do casal.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5fb",
+  "theme_color": "#7c3aed",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
