@@ -17,16 +17,20 @@
   box-shadow:var(--jh-shadow-card);
 }
 .jh-home-v18 .jh-balance-card::after{display:none}
-.jh-home-v18 .jh-balance-card .hero-row{display:block;padding-right:48px}
+.jh-home-v18 .jh-balance-card .hero-row{display:block!important;padding-right:48px;min-height:0!important;position:relative!important}
 .jh-home-v18 .jh-balance-card .eyebrow:first-child{
   color:var(--jh-green);
-  font-size:12px;
+  font-size:11px;
   font-weight:850;
-  letter-spacing:.14em;
+  letter-spacing:.11em;
   text-transform:uppercase;
+  padding-right:0!important;
+  min-height:0!important;
+  display:block!important;
+  white-space:nowrap;
 }
 .jh-home-v18 .jh-balance-card .eyebrow:last-child{margin-top:4px;color:var(--jh-muted);font-size:13px;font-weight:600}
-.jh-home-v18 .jh-balance-card .balance{margin:8px 0 2px;color:var(--jh-text);font-size:clamp(40px,9vw,58px);font-weight:780;letter-spacing:-.045em;line-height:1.04}
+.jh-home-v18 .jh-balance-card .balance{margin:8px 0 2px;color:var(--jh-text);font-size:clamp(38px,9vw,58px);font-weight:780;letter-spacing:-.045em;line-height:1.04;white-space:nowrap}
 
 .jh-balance-eye{position:absolute!important;top:24px;right:24px!important;width:42px!important;height:42px!important;border-radius:14px!important;color:#5a4d6c!important;display:grid!important;place-items:center!important}
 .jh-balance-eye svg{width:23px;height:23px}
@@ -36,43 +40,43 @@
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
   gap:12px!important;
-  margin:28px 0 0!important;
+  margin:24px 0 0!important;
 }
 .jh-home-v18 .jh-home-kpis .kpi{
   min-width:0;
-  padding:16px 16px;
+  padding:16px;
   border-radius:20px;
   background:#fff!important;
   border:1px solid var(--jh-line)!important;
   box-shadow:0 5px 18px rgba(37,25,55,.025);
 }
 .jh-home-v18 .jh-home-kpis .jh-mini-income,
-.jh-home-v18 .jh-home-kpis .jh-mini-expense{display:grid;grid-template-columns:48px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;align-items:center}
-.jh-home-v18 .jh-home-kpis .jh-kpi-icon{grid-column:1;grid-row:1/3;width:46px;height:46px;border-radius:15px;display:grid;place-items:center}
-.jh-home-v18 .jh-home-kpis .jh-kpi-icon svg{width:22px;height:22px}
+.jh-home-v18 .jh-home-kpis .jh-mini-expense{display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;align-items:center}
+.jh-home-v18 .jh-home-kpis .jh-kpi-icon{grid-column:1;grid-row:1/3;width:42px;height:42px;border-radius:14px;display:grid;place-items:center}
+.jh-home-v18 .jh-home-kpis .jh-kpi-icon svg{width:21px;height:21px}
 .jh-home-v18 .jh-home-kpis .jh-mini-income .jh-kpi-icon{background:var(--jh-green-soft);color:var(--jh-green)}
 .jh-home-v18 .jh-home-kpis .jh-mini-expense .jh-kpi-icon{background:var(--jh-red-soft);color:var(--jh-red)}
-.jh-home-v18 .jh-home-kpis .label{margin:0 0 3px;color:var(--jh-muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
-.jh-home-v18 .jh-home-kpis .value{min-width:0;font-size:18px;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jh-home-v18 .jh-home-kpis .label{margin:0 0 3px;color:var(--jh-muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+.jh-home-v18 .jh-home-kpis .value{min-width:0;font-size:15px;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:visible;text-overflow:clip}
 .jh-home-v18 .jh-home-kpis .jh-mini-result{grid-column:1/-1;display:flex!important;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px}
 .jh-home-v18 .jh-home-kpis .jh-mini-result .label{margin:0}
-.jh-home-v18 .jh-home-kpis .jh-mini-result .value{color:var(--jh-green);font-size:20px}
+.jh-home-v18 .jh-home-kpis .jh-mini-result .value{color:var(--jh-green);font-size:18px}
 .jh-home-v18.jh-values-hidden .jh-home-kpis .jh-mini-result .value{color:var(--jh-text)}
 
 .jh-actions-title{margin:26px 4px 12px;font-size:16px;color:#696172;font-weight:760;letter-spacing:-.02em}
-.jh-home-v18 .jh-home-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.jh-home-v18 .jh-home-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;margin:0 0 24px!important}
 .jh-home-v18 .jh-home-actions .quick{
-  min-height:96px;
-  padding:18px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:14px;
-  text-align:left;
-  border:1px solid var(--jh-line);
-  border-radius:24px;
+  min-height:96px!important;
+  padding:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:14px!important;
+  text-align:left!important;
+  border:1px solid var(--jh-line)!important;
+  border-radius:24px!important;
   background:#fff!important;
-  box-shadow:var(--jh-shadow-card);
+  box-shadow:var(--jh-shadow-card)!important;
   color:var(--jh-text)!important;
 }
 .jh-home-v18 .jh-home-actions .jh-action-icon{flex:0 0 auto;width:48px;height:48px;border-radius:16px;display:grid;place-items:center}
@@ -85,10 +89,11 @@
 .jh-home-v18 .jh-home-actions strong{font-size:17px;line-height:1.1}
 .jh-home-v18 .jh-home-actions small{font-size:12px;color:var(--jh-muted);font-weight:650;opacity:1}
 
-.jh-home-v18 .ref-hidden-summary{display:flex!important;margin:12px 0 22px;gap:10px}
-.jh-home-v18 .overview-strip .mini-summary{background:#fff;border:1px solid var(--jh-line);box-shadow:none;border-radius:18px}
+/* Resumo antigo Caixinhas/Metas/Casal nao faz parte da nova Home. */
+.jh-home-v18 .overview-strip,
+.jh-home-v18 .ref-hidden-summary{display:none!important}
 
-.jh-home-v18 .grid-2{gap:16px}
+.jh-home-v18 .grid-2{gap:16px;margin-top:0!important}
 .jh-home-v18 .grid-2 .panel{box-shadow:var(--jh-shadow-card)}
 
 @media(max-width:760px){
@@ -96,21 +101,21 @@
   .jh-home-intro h1{font-size:36px}
   .jh-home-v18 .jh-balance-card{padding:24px 20px}
   .jh-balance-eye{top:19px;right:18px!important}
-  .jh-home-v18 .jh-home-kpis{gap:10px!important;margin-top:24px!important}
-  .jh-home-v18 .jh-home-kpis .kpi{padding:14px 12px}
+  .jh-home-v18 .jh-home-kpis{gap:10px!important;margin-top:20px!important}
+  .jh-home-v18 .jh-home-kpis .kpi{padding:13px 11px}
   .jh-home-v18 .jh-home-kpis .jh-mini-income,
-  .jh-home-v18 .jh-home-kpis .jh-mini-expense{grid-template-columns:42px minmax(0,1fr);column-gap:9px}
-  .jh-home-v18 .jh-home-kpis .jh-kpi-icon{width:40px;height:40px;border-radius:13px}
-  .jh-home-v18 .jh-home-kpis .value{font-size:15px}
-  .jh-home-v18 .jh-home-actions{gap:12px}
-  .jh-home-v18 .jh-home-actions .quick{min-height:88px;padding:14px}
+  .jh-home-v18 .jh-home-kpis .jh-mini-expense{grid-template-columns:38px minmax(0,1fr);column-gap:8px}
+  .jh-home-v18 .jh-home-kpis .jh-kpi-icon{width:36px;height:36px;border-radius:12px}
+  .jh-home-v18 .jh-home-kpis .value{font-size:13px}
+  .jh-home-v18 .jh-home-actions{gap:12px!important}
+  .jh-home-v18 .jh-home-actions .quick{min-height:88px!important;padding:14px!important}
   .jh-home-v18 .jh-home-actions .jh-action-icon{width:44px;height:44px;border-radius:14px}
 }
 
 @media(max-width:390px){
-  .jh-home-v18 .jh-home-kpis{grid-template-columns:1fr!important}
-  .jh-home-v18 .jh-home-kpis .jh-mini-result{grid-column:auto}
-  .jh-home-v18 .jh-home-actions{grid-template-columns:1fr 1fr}
-  .jh-home-v18 .jh-home-actions .quick{padding:12px;gap:10px}
+  .jh-home-v18 .jh-home-kpis{grid-template-columns:1fr 1fr!important}
+  .jh-home-v18 .jh-home-actions{grid-template-columns:1fr 1fr!important}
+  .jh-home-v18 .jh-home-actions .quick{padding:12px!important;gap:10px!important}
   .jh-home-v18 .jh-home-actions strong{font-size:15px}
+  .jh-home-v18 .jh-home-actions small{font-size:11px}
 }
