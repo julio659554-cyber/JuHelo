@@ -8,38 +8,48 @@ Aplicativo/PWA de finanças do casal.
 - Cloudflare Pages para publicação
 - PWA instalável no celular
 
-## Funcionalidades da V1
+## Funcionalidades atuais
 - Login e cadastro
 - Espaço financeiro compartilhado para duas pessoas
+- Código de convite do casal
 - Controle por mês, sem exigir dia
 - Receitas e despesas editáveis
 - Gastos fixos com mês inicial e mês final opcional
-- Caixinhas com saldo automático
+- Edição de gasto fixo: só este mês / deste mês em diante / toda a série
+- Exclusão de gasto fixo: só este mês / deste mês em diante / toda a série
+- Caixinhas com nome, meta, saldo e histórico
 - Depósito em caixinha contado como despesa do mês
 - Retirada da caixinha sem duplicar despesa
 - Metas em checklist
 - Metas ligadas opcionalmente a caixinhas
-- Relatório anual de receitas, despesas e saldo
+- Conclusão automática de meta financeira ao atingir o valor da caixinha
+- Relatório anual de receitas, despesas, saldo e total destinado a caixinhas
 - Navbar inferior flutuante
 - Layout responsivo e mobile-first
+- Service Worker e manifest PWA
 
 ## Supabase
 O frontend está apontado para o projeto Supabase atual do JuHelo usando apenas a Publishable Key.
 
-Para preparar um banco novo, execute no SQL Editor:
+Para preparar o banco, execute no SQL Editor, nesta ordem:
 
-`sql/001_initial_schema.sql`
+1. `sql/001_initial_schema.sql`
+2. `sql/002_recurring_goals_rls.sql`
+
+A migration 002 é obrigatória para a V2 porque adiciona os escopos de edição/exclusão de recorrência, conclusão automática de metas e corrige a edição compartilhada de caixinhas.
 
 Nunca coloque `service_role`, Secret Key ou senha do banco no frontend.
 
 ## Cloudflare Pages
 Este projeto não precisa de etapa de build.
 
-Configuração recomendada:
+Configuração:
 - Framework preset: `None`
 - Build command: vazio
 - Build output directory: `.`
 - Root directory: `/`
 
+Quando o repositório estiver conectado ao Cloudflare Pages, cada push em `main` publica automaticamente uma nova versão.
+
 ## Status
-A base funcional da V1 já está no repositório. O próximo passo é executar a migration no Supabase, validar o fluxo real de autenticação/dados e conectar o repositório ao Cloudflare Pages.
+V2 publicada no repositório e validada localmente quanto à sintaxe JavaScript e estrutura PWA. Falta apenas rodar a migration 002 no Supabase e validar a URL pública do Cloudflare em produção.
