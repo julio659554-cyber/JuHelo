@@ -1,0 +1,113 @@
+/* JuHelo V27 — estabilidade visual + correcoes finais do dark mode */
+
+/* Enquanto os refinamentos de uma nova tela estao sendo aplicados, nao mostre o layout-base antigo. */
+#app.jh-ui-pending > main.page{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+#app.jh-ui-pending::before{
+  content:'JuHelo';
+  position:fixed;
+  inset:0;
+  z-index:9998;
+  display:grid;
+  place-items:center;
+  background:var(--jh-bg,#f8f7fb);
+  color:var(--jh-purple,#6f35e8);
+  font-size:24px;
+  font-weight:850;
+  letter-spacing:-.04em;
+}
+#app:not(.jh-ui-pending) > main.page{
+  visibility:visible;
+  opacity:1;
+}
+
+/* A aba Tema fica sem preview decorativo. */
+.jh-theme-preview{display:none!important}
+.jh-theme-settings .settings-divider:has(+ .jh-theme-preview){display:none!important}
+
+/* Dark: regras deliberadamente mais especificas do que os CSS historicos. */
+html[data-theme="dark"] .jh-transactions-v19 .jh-month-control .month-select{
+  background:#1c1823!important;
+  border-color:#493d58!important;
+  color:#cdafff!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.14)!important;
+}
+html[data-theme="dark"] .jh-transactions-v19 .jh-month-icon{color:#a875ff!important}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-actions .quick{
+  background:#17141f!important;
+  border-color:#2d2736!important;
+  color:#f6f2fb!important;
+  box-shadow:var(--jh-shadow-card)!important;
+}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-actions .jh-tx-action-copy strong{color:#f6f2fb!important}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-actions .jh-tx-action-copy small{color:#a79fb3!important}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-kpis .kpi{color:#f6f2fb!important}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-kpis .jh-tx-income{
+  background:#142a24!important;
+  border-color:#234a3d!important;
+}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-kpis .jh-tx-expense{
+  background:#331b24!important;
+  border-color:#5b2a39!important;
+}
+html[data-theme="dark"] .jh-transactions-v19 .jh-tx-kpis .value{color:#f6f2fb!important}
+html[data-theme="dark"] .jh-tx-actions-title{color:#a79fb3!important}
+
+/* Caixinhas: botoes secundarios nao podem herdar branco do tema claro. */
+html[data-theme="dark"] .jh-boxes-v20 .actions-inline .btn.ghost,
+html[data-theme="dark"] .jh-boxes-v20 .actions-inline button.btn.ghost{
+  background:#1c1823!important;
+  border:1px solid #3a3245!important;
+  color:#c2b8cb!important;
+  box-shadow:none!important;
+}
+html[data-theme="dark"] .jh-boxes-v20 .actions-inline .btn.soft,
+html[data-theme="dark"] .jh-boxes-v20 .actions-inline .add-box{
+  background:#2a203b!important;
+  border-color:#493568!important;
+  color:#d4bfff!important;
+}
+html[data-theme="dark"] .jh-boxes-v20 .jh-large-create{
+  background:#211a2d!important;
+  border-color:#493568!important;
+  color:#d4bfff!important;
+}
+html[data-theme="dark"] .jh-boxes-v20 .jh-box-card{background:#17141f!important;border-color:#2d2736!important}
+html[data-theme="dark"] .jh-boxes-v20 .jh-box-top .pill,
+html[data-theme="dark"] .jh-boxes-v20 .jh-box-balance-label,
+html[data-theme="dark"] .jh-boxes-v20 .progress-copy{color:#a79fb3!important}
+
+/* Regras globais de controles no escuro, para modais/ajustes e CTAs secundarios. */
+html[data-theme="dark"] button.btn.ghost,
+html[data-theme="dark"] .btn.ghost{
+  background:#1c1823!important;
+  border-color:#3a3245!important;
+  color:#c2b8cb!important;
+}
+html[data-theme="dark"] button.btn.soft,
+html[data-theme="dark"] .btn.soft{
+  background:#2a203b!important;
+  border-color:#493568!important;
+  color:#d4bfff!important;
+}
+html[data-theme="dark"] .jh-report-select,
+html[data-theme="dark"] select.month-select,
+html[data-theme="dark"] select.input,
+html[data-theme="dark"] .jh-modal-month-select{
+  background-color:#1c1823!important;
+  border-color:#3a3245!important;
+  color:#f0e8fa!important;
+}
+
+/* Evita qualquer fundo claro residual em cards interativos. */
+html[data-theme="dark"] .settings-panel button:not(.btn.primary):not(.jh-theme-check),
+html[data-theme="dark"] .profile-menu-item{
+  color:inherit;
+}
+
+@media(max-width:600px){
+  #app.jh-ui-pending::before{font-size:22px}
+}
