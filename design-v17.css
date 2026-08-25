@@ -1,0 +1,326 @@
+/* JuHelo v17 — base visual global
+   Etapa 1: sistema visual, formularios, modais e interacoes touch. */
+
+:root{
+  --jh-bg:#f8f7fb;
+  --jh-surface:#ffffff;
+  --jh-surface-soft:#fbfaff;
+  --jh-text:#191525;
+  --jh-muted:#81798d;
+  --jh-line:#ece8f2;
+  --jh-line-strong:#ddd5ea;
+  --jh-purple:#6f35e8;
+  --jh-purple-dark:#5226ad;
+  --jh-purple-soft:#f0e8ff;
+  --jh-green:#168465;
+  --jh-green-soft:#e7f8f1;
+  --jh-red:#c94d69;
+  --jh-red-soft:#fdecef;
+  --jh-shadow-card:0 10px 30px rgba(37,25,55,.045),0 2px 8px rgba(37,25,55,.025);
+  --jh-shadow-float:0 18px 50px rgba(37,25,55,.10);
+  --jh-radius-xl:30px;
+  --jh-radius-lg:24px;
+  --jh-radius-md:18px;
+  --jh-control-h:54px;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  background:var(--jh-bg);
+  touch-action:manipulation;
+}
+
+body{
+  background:var(--jh-bg);
+  color:var(--jh-text);
+  overscroll-behavior-y:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body.jh-modal-open{
+  overflow:hidden !important;
+  position:fixed;
+  width:100%;
+  left:0;
+  right:0;
+}
+
+button,a,[role="button"],input,select,textarea{
+  -webkit-tap-highlight-color:transparent;
+}
+
+button,a,[role="button"]{
+  touch-action:manipulation;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:3px solid rgba(111,53,232,.18);
+  outline-offset:2px;
+}
+
+/* Superficies */
+.auth-card,
+.panel,
+.box-card,
+.account-card,
+.modal-card,
+.settings-panel{
+  background:var(--jh-surface);
+  border:1px solid var(--jh-line);
+  box-shadow:var(--jh-shadow-card);
+}
+
+.panel,
+.box-card,
+.account-card{
+  border-radius:var(--jh-radius-lg);
+}
+
+/* Botoes */
+.btn{
+  min-height:48px;
+  border-radius:16px;
+  padding:12px 18px;
+  font-weight:800;
+  letter-spacing:-.01em;
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease,border-color .14s ease,opacity .14s ease;
+}
+
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.primary{background:var(--jh-purple);color:#fff;box-shadow:0 8px 20px rgba(111,53,232,.16)}
+.btn.soft{background:var(--jh-purple-soft);color:var(--jh-purple-dark)}
+.btn.ghost{background:#fff;color:var(--jh-muted);border:1px solid var(--jh-line)}
+.btn.red{background:var(--jh-red-soft);color:#a93c56}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  border:0;
+  background:transparent;
+  color:var(--jh-muted);
+  box-shadow:none;
+}
+
+.icon-btn:hover{background:#f7f4fb}
+
+/* Formularios */
+.field{min-width:0;gap:8px}
+.field label{
+  font-size:13px;
+  font-weight:800;
+  color:#625a70;
+  letter-spacing:-.01em;
+}
+
+.input,
+select.input,
+input.input,
+textarea.input{
+  display:block;
+  width:100%;
+  min-width:0;
+  min-height:var(--jh-control-h);
+  border:1px solid var(--jh-line-strong);
+  border-radius:18px;
+  padding:14px 16px;
+  line-height:1.25;
+  background:var(--jh-surface-soft);
+  color:var(--jh-text);
+  box-shadow:none;
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+textarea.input{min-height:110px;resize:vertical}
+
+.input:focus,
+select.input:focus,
+input.input:focus,
+textarea.input:focus{
+  border-color:#bda4f7;
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(111,53,232,.075);
+}
+
+select.input,
+.month-select{
+  padding-right:44px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23635a70' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 15px center;
+  background-size:18px;
+}
+
+input[type="month"].input,
+input[type="date"].input{
+  overflow:visible;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+input[type="month"]::-webkit-date-and-time-value,
+input[type="date"]::-webkit-date-and-time-value{
+  min-height:1.35em;
+  text-align:left;
+}
+
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator{
+  opacity:.58;
+  min-width:24px;
+  min-height:24px;
+}
+
+.segmented{
+  padding:5px;
+  border-radius:20px;
+  background:#f3eff8;
+  gap:5px;
+}
+.segmented button{
+  min-height:46px;
+  border-radius:15px;
+  font-weight:850;
+}
+.segmented button.active{
+  color:var(--jh-purple-dark);
+  box-shadow:0 5px 16px rgba(46,30,68,.06);
+}
+
+/* Seletor base premium — usado pelas proximas etapas */
+.month-select,
+.jh-select,
+.jh-period-select{
+  min-height:50px;
+  border:1px solid #dfd1fb;
+  border-radius:18px;
+  padding:0 46px 0 16px;
+  background-color:#fbf9ff;
+  color:var(--jh-purple-dark);
+  font-weight:850;
+  letter-spacing:-.015em;
+  box-shadow:0 5px 18px rgba(71,42,107,.035);
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+/* Modal */
+.modal-backdrop,
+.settings-overlay{
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+.modal-backdrop{
+  padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));
+  background:rgba(24,18,31,.42);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+
+.modal-card{
+  width:min(100%,560px);
+  max-height:min(90dvh,760px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  border-radius:30px;
+  padding:24px;
+  box-shadow:0 26px 70px rgba(28,20,38,.20);
+}
+
+.modal-head{
+  position:sticky;
+  top:-24px;
+  z-index:2;
+  margin:-24px -24px 18px;
+  padding:22px 24px 14px;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.modal-head h2{
+  font-size:26px;
+  line-height:1.08;
+  letter-spacing:-.035em;
+}
+
+.modal-head [data-close]{
+  width:44px;
+  height:44px;
+  border:1px solid var(--jh-line);
+  background:#fff;
+  border-radius:15px;
+  font-size:24px;
+}
+
+.modal-actions{
+  position:sticky;
+  bottom:-24px;
+  z-index:2;
+  margin:8px -24px -24px;
+  padding:18px 24px calc(20px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,#fff 75%,rgba(255,255,255,.92));
+  border-top:1px solid rgba(236,232,242,.72);
+}
+
+/* Navbar e espacamento seguro */
+.page{
+  padding-bottom:calc(126px + env(safe-area-inset-bottom));
+}
+
+.bottom-nav{
+  box-shadow:0 14px 44px rgba(36,25,53,.12);
+  border:1px solid rgba(230,225,237,.9);
+}
+
+/* Icones de edicao: base sem caixa pesada */
+.edit-tx,
+.edit-box,
+.edit-goal{
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+/* Mobile */
+@media (max-width:760px){
+  .page{
+    padding-left:18px;
+    padding-right:18px;
+    padding-top:20px;
+  }
+  .modal-backdrop{align-items:end;padding-left:10px;padding-right:10px}
+  .modal-card{
+    max-height:88dvh;
+    padding:22px 20px;
+    border-radius:30px 30px 24px 24px;
+  }
+  .modal-head{
+    top:-22px;
+    margin:-22px -20px 16px;
+    padding:20px 20px 13px;
+  }
+  .modal-actions{
+    bottom:-22px;
+    margin:8px -20px -22px;
+    padding:16px 20px calc(18px + env(safe-area-inset-bottom));
+  }
+  .input,select.input,input.input,textarea.input{font-size:16px}
+}
+
+@media (max-width:380px){
+  .modal-actions{grid-template-columns:1fr}
+  .btn{padding-left:14px;padding-right:14px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
