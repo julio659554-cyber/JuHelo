@@ -88,9 +88,13 @@ function refineHome(main) {
   const eyebrows = hero.querySelectorAll('.eyebrow');
   if (eyebrows[1] && eyebrows[1].textContent !== 'Atualizado agora há pouco') eyebrows[1].textContent = 'Atualizado agora há pouco';
 
-  const quick = main.querySelector('.quick-actions');
-  const kpis = main.querySelector('.kpi-grid');
-  if (quick && kpis && kpis.nextElementSibling !== quick) kpis.after(quick);
+  // A partir da V18 a ordem da Home e controlada pelo modulo novo.
+  // Evita que este refinamento legado puxe as acoes rapidas para dentro do card principal.
+  if (!main.classList.contains('jh-home-v18')) {
+    const quick = main.querySelector(':scope > .quick-actions');
+    const kpis = main.querySelector(':scope > .kpi-grid');
+    if (quick && kpis && kpis.nextElementSibling !== quick) kpis.after(quick);
+  }
 
   main.querySelector('.overview-strip')?.classList.add('ref-hidden-summary');
 
