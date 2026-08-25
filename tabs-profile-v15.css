@@ -1,0 +1,69 @@
+/* JuHelo V15 — estabilidade do avatar e cabeçalhos sem duplicação */
+
+/* O CSS antigo escondia todo span direto do user-chip, incluindo o stack do casal. */
+.ref-topbar .user-chip > .profile-name,
+.ref-topbar .user-chip > .single-avatar{
+  display:none!important;
+}
+.ref-topbar .user-chip > .couple-avatar-stack{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+.ref-topbar .user-chip.profile-trigger{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  overflow:visible!important;
+}
+
+/* Em todas as abas internas, o título oficial é o do topbar. */
+.ref-transactions-page .section-title > div:first-child,
+.ref-boxes-page .section-title > div:first-child,
+.ref-reports-page .section-title > div:first-child,
+.ref-goals-page .section-title > div:first-child{
+  display:none!important;
+}
+
+/* Movimentações mantém apenas o seletor de mês. */
+.ref-transactions-page .section-title{
+  min-height:0!important;
+  margin:0 0 14px!important;
+  padding:0!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+}
+.ref-transactions-page .section-title .month-select{
+  width:100%!important;
+  max-width:none!important;
+}
+
+/* Caixinhas e Metas mantêm somente o CTA abaixo do título do topo. */
+.ref-boxes-page .section-title,
+.ref-goals-page .section-title{
+  min-height:0!important;
+  margin:0 0 14px!important;
+  padding:0!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+}
+
+/* Relatórios mantém somente o seletor de ano. */
+.ref-reports-page .section-title{
+  min-height:0!important;
+  margin:0 0 14px!important;
+  padding:0!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+}
+.ref-reports-page .year-switch{
+  margin:0!important;
+}
+
+@media(max-width:520px){
+  .ref-topbar .user-chip.profile-trigger{min-width:64px!important}
+  .ref-topbar .user-chip > .couple-avatar-stack{min-width:62px!important}
+  .ref-boxes-page .section-title .btn.soft,
+  .ref-goals-page .section-title .btn.soft{width:auto!important;max-width:100%;white-space:nowrap}
+}
