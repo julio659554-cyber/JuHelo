@@ -1,0 +1,38 @@
+/* JuHelo v22 — Etapa 6: Metas */
+.jh-goals-v22 .ref-section-title{align-items:center!important;margin:10px 0 22px!important;gap:16px}
+.jh-goals-v22 .ref-section-title>div p{font-size:13px;color:var(--jh-muted)}
+.jh-goals-v22 .jh-goal-create{
+  min-width:190px!important;
+  min-height:54px!important;
+  padding:0 22px!important;
+  border:1px solid #dfd1fb!important;
+  border-radius:18px!important;
+  background:#fbf9ff!important;
+  color:var(--jh-purple-dark)!important;
+  font-size:14px!important;
+  font-weight:850!important;
+  box-shadow:0 8px 24px rgba(65,39,98,.04)!important;
+}
+.jh-goals-v22 .gb-goals-panel{padding:18px 20px!important;border-radius:26px!important;border:1px solid var(--jh-line)!important;background:#fff!important;box-shadow:var(--jh-shadow-card)!important}
+.jh-goals-v22 .gb-checklist-head{padding:0 4px 12px!important;border-bottom:1px solid var(--jh-line)!important;color:var(--jh-muted)!important;font-size:12px!important}
+.jh-goals-v22 .gb-goal-item{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;gap:14px!important;align-items:center!important;padding:16px 2px!important}
+.jh-goals-v22 .gb-goal-check{width:34px!important;height:34px!important;border:2px solid #d5cddd!important;background:#fff!important;color:#fff!important}
+.jh-goals-v22 .gb-goal-check.done{background:var(--jh-purple)!important;border-color:var(--jh-purple)!important}
+.jh-goals-v22 .gb-goal-body strong{font-size:16px!important;line-height:1.2!important;letter-spacing:-.025em}
+.jh-goals-v22 .gb-goal-body p{margin:5px 0!important;font-size:12px!important;line-height:1.4!important;color:var(--jh-muted)!important}
+.jh-goals-v22 .gb-goal-status{display:inline-flex!important;width:max-content!important;max-width:100%!important;margin-top:7px!important;padding:6px 10px!important;border-radius:999px!important;background:#f4f0f7!important;color:#7c7388!important;font-size:10px!important;font-weight:760!important}
+.jh-goals-v22 .gb-goal-status.soon{background:#fff5e8!important;color:#a76516!important}
+.jh-goals-v22 .gb-goal-status.late{background:var(--jh-red-soft)!important;color:#a93c56!important}
+.jh-goals-v22 .gb-goal-status.completed{background:var(--jh-green-soft)!important;color:var(--jh-green)!important}
+.jh-goals-v22 .jh-goal-options{display:grid!important;place-items:center!important;width:36px!important;height:36px!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:12px!important;color:#756d80!important;font-size:14px!important;letter-spacing:1px!important}
+.jh-goals-v22 .jh-goal-options:hover{background:#f7f4fb!important}
+.jh-goal-modal .jh-goal-month-control{position:relative;width:100%}
+.jh-goal-modal input[type="month"]{min-height:56px!important;background-color:#fbf9ff!important;border-color:#ded1f8!important;color:var(--jh-purple-dark)!important;font-weight:760!important}
+.jh-field-help{display:block;margin:6px 2px 0;color:var(--jh-muted);font-size:11px}
+@media(max-width:560px){
+  .jh-goals-v22 .ref-section-title{align-items:flex-end!important;flex-wrap:wrap!important}
+  .jh-goals-v22 .jh-goal-create{width:100%!important;min-width:0!important}
+  .jh-goals-v22 .gb-goals-panel{padding:16px!important}
+  .jh-goals-v22 .gb-goal-item{gap:11px!important}
+  .jh-goals-v22 .gb-goal-body strong{font-size:15px!important}
+}
