@@ -1,4 +1,4 @@
-/* JuHelo V26 — tema Claro / Escuro / Sistema + aba Tema em Ajustes */
+/* JuHelo V26/V27 — tema Claro / Escuro / Sistema + aba Tema em Ajustes */
 const JH_THEME_KEY='juhelo-theme-preference';
 const JH_THEME_VALUES=new Set(['light','dark','system']);
 const jhThemeMedia=window.matchMedia('(prefers-color-scheme: dark)');
@@ -57,8 +57,14 @@ function activateThemeTab(overlay){
   });
   overlay.querySelectorAll('[data-settings-section]').forEach(section=>section.classList.toggle('active',section.dataset.settingsSection==='theme'));
 }
+function cleanSettingsTabs(overlay){
+  const couple=overlay.querySelector('[data-settings-tab="couple"]');
+  couple?.querySelectorAll('span').forEach(span=>span.remove());
+}
 function injectThemeSettings(overlay){
-  if(!overlay||overlay.dataset.jhThemeReady==='1')return;
+  if(!overlay)return;
+  cleanSettingsTabs(overlay);
+  if(overlay.dataset.jhThemeReady==='1')return;
   const tabs=overlay.querySelector('.settings-tabs');
   const content=overlay.querySelector('.settings-content');
   if(!tabs||!content)return;
@@ -68,7 +74,7 @@ function injectThemeSettings(overlay){
   tab.className='settings-tab jh-theme-tab';
   tab.dataset.settingsTab='theme';
   tab.setAttribute('role','tab');
-  tab.innerHTML='Tema';
+  tab.textContent='Tema';
   tabs.appendChild(tab);
 
   const section=document.createElement('section');
@@ -83,11 +89,6 @@ function injectThemeSettings(overlay){
       ${themeOption('light','Claro','Visual claro e suave')}
       ${themeOption('dark','Escuro','Confortável em ambientes escuros')}
       ${themeOption('system','Sistema','Segue o tema do seu aparelho')}
-    </div>
-    <div class="settings-divider"></div>
-    <div class="jh-theme-preview" aria-hidden="true">
-      <div class="jh-theme-preview-card"><span></span><strong></strong><small></small></div>
-      <div class="jh-theme-preview-mini"><span></span><span></span></div>
     </div>
     <p class="jh-theme-help">A preferência fica salva somente neste dispositivo e é aplicada assim que o app abre.</p>`;
   content.appendChild(section);
@@ -105,7 +106,6 @@ function scanThemeSettings(){
   document.querySelectorAll('.settings-overlay').forEach(injectThemeSettings);
 }
 
-// Reage a mudanças do sistema somente quando a preferência é "Sistema".
 function handleSystemThemeChange(){if(getThemePreference()==='system')applyTheme('system',false)}
 if(jhThemeMedia.addEventListener)jhThemeMedia.addEventListener('change',handleSystemThemeChange);
 else jhThemeMedia.addListener?.(handleSystemThemeChange);
