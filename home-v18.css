@@ -58,7 +58,7 @@
 .jh-home-v18 .jh-home-kpis .jh-mini-expense .jh-kpi-icon{background:var(--jh-red-soft);color:var(--jh-red)}
 .jh-home-v18 .jh-home-kpis .label{margin:0 0 3px;color:var(--jh-muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
 .jh-home-v18 .jh-home-kpis .value{min-width:0;font-size:15px;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:visible;text-overflow:clip}
-.jh-home-v18 .jh-home-kpis .jh-mini-result{grid-column:1/-1;display:flex!important;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px}
+.jh-home-v18.ref-home .jh-home-kpis .kpi.jh-mini-result{grid-column:1/-1;display:flex!important;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px}
 .jh-home-v18 .jh-home-kpis .jh-mini-result .label{margin:0}
 .jh-home-v18 .jh-home-kpis .jh-mini-result .value{color:var(--jh-green);font-size:18px}
 .jh-home-v18.jh-values-hidden .jh-home-kpis .jh-mini-result .value{color:var(--jh-text)}
