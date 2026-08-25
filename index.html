@@ -23,10 +23,50 @@
   <title>JuHelo</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="./app-v31.css?v=31" />
+  <style>
+    /* Máscara de boot: nunca exibe uma versão antiga da interface enquanto sessão/dados carregam. */
+    .splash{
+      min-height:100dvh!important;
+      width:100%!important;
+      display:block!important;
+      place-content:initial!important;
+      background-color:var(--bg,#f8f7fb)!important;
+      background-repeat:no-repeat!important;
+      background-image:
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1)),
+        linear-gradient(90deg,var(--skel-1),var(--skel-2),var(--skel-1));
+      background-size:
+        115px 30px,
+        66px 66px,
+        calc(100% - 48px) 230px,
+        calc(50% - 30px) 112px,
+        calc(50% - 30px) 112px,
+        calc(100% - 48px) 82px;
+      background-position:
+        24px 92px,
+        calc(100% - 90px) 72px,
+        24px 166px,
+        24px 420px,
+        calc(50% + 6px) 420px,
+        24px calc(100% - 112px);
+      animation:jhBootPulse 1.25s ease-in-out infinite alternate!important;
+    }
+    .splash .brand-name,.splash p,.splash .brand-mark{display:none!important}
+    :root{--skel-1:#eeebf3;--skel-2:#f8f6fb}
+    html[data-theme="dark"]{--skel-1:#1b1723;--skel-2:#262031}
+    @keyframes jhBootPulse{from{opacity:.72}to{opacity:1}}
+    @media(max-width:420px){
+      .splash{background-size:100px 28px,60px 60px,calc(100% - 36px) 220px,calc(50% - 25px) 106px,calc(50% - 25px) 106px,calc(100% - 36px) 78px;background-position:18px 88px,calc(100% - 76px) 70px,18px 158px,18px 400px,calc(50% + 7px) 400px,18px calc(100% - 104px)}}
+    @media(prefers-reduced-motion:reduce){.splash{animation:none!important}}
+  </style>
 </head>
 <body data-juhelo-build="v31">
   <div id="app" class="app-shell">
-    <div class="splash"><div class="brand-name"><span>Ju</span>Helo</div></div>
+    <div class="splash" aria-label="Carregando JuHelo"><div class="brand-name"><span>Ju</span>Helo</div></div>
   </div>
   <div id="toast-root" class="toast-root" aria-live="polite"></div>
   <script type="module" src="./app-v31.js?v=31"></script>
