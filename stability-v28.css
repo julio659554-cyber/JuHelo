@@ -1,0 +1,4 @@
+/* JuHelo V28 — neutraliza o overlay de espera da V27 sem perder os overrides de tema. */
+#app.jh-ui-pending::before{display:none!important;content:none!important}
+#app.jh-ui-pending > main.page{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#app:not(.jh-ui-pending) > main.page{visibility:visible!important;opacity:1!important;transition:none!important}
