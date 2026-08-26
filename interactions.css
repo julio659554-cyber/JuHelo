@@ -1,0 +1,83 @@
+/* JuHelo — microinterações e estados canônicos. */
+
+/* Feedback de toque consistente sem exagerar animações. */
+button,[role="button"]{
+  transition:transform var(--jh-duration-fast) var(--jh-ease),opacity var(--jh-duration-base) var(--jh-ease),background-color var(--jh-duration-base) var(--jh-ease),border-color var(--jh-duration-base) var(--jh-ease),color var(--jh-duration-base) var(--jh-ease),box-shadow var(--jh-duration-base) var(--jh-ease);
+}
+button:not(:disabled):active,[role="button"]:not([aria-disabled="true"]):active{transform:scale(.985)}
+button:disabled,[aria-disabled="true"]{opacity:.52;pointer-events:none}
+
+/* setBusy() já cria data-old-text; a UI usa isso como estado visual de carregamento. */
+button[data-old-text]:disabled{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  cursor:wait;
+}
+button[data-old-text]:disabled::before{
+  content:"";
+  flex:0 0 auto;
+  width:15px;
+  height:15px;
+  border:2px solid currentColor;
+  border-right-color:transparent;
+  border-radius:50%;
+  animation:jh-spin .7s linear infinite;
+  opacity:.72;
+}
+@keyframes jh-spin{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast{animation:jh-toast-in var(--jh-duration-slow) var(--jh-ease) both}
+@keyframes jh-toast-in{
+  from{opacity:0;transform:translateY(-7px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Loading local: nunca substitui a tela inteira quando só uma região atualiza. */
+.loading-card{
+  position:relative;
+  min-height:94px;
+  display:grid;
+  place-content:center;
+  padding-left:52px;
+}
+.loading-card::before{
+  content:"";
+  position:absolute;
+  left:calc(50% - 58px);
+  top:50%;
+  width:16px;
+  height:16px;
+  margin-top:-9px;
+  border:2px solid var(--jh-muted-soft);
+  border-right-color:transparent;
+  border-radius:50%;
+  animation:jh-spin .8s linear infinite;
+}
+
+/* Focus only for keyboard / assistive navigation. */
+:where(button,[role="button"],a,input,textarea):focus-visible{
+  outline:none;
+  box-shadow:var(--jh-focus-ring);
+}
+
+/* Estados sem dados permanecem calmos, sem CTA visual concorrendo com o conteúdo. */
+.empty,.empty-card{transition:color var(--jh-duration-base) var(--jh-ease),background var(--jh-duration-base) var(--jh-ease)}
+
+/* Cards acionáveis mantêm sensação tátil consistente. */
+.quick-card,.create-btn,.goal-check,.more-btn,.box-actions button,.period-presets button,.theme-option,.nav-item,.eye-btn{
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+/* Transições de tema sem flash prolongado. */
+body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.chart-card,.modal-card,.settings-panel,.bottom-nav,.quick-card{
+  transition:background-color var(--jh-duration-slow) var(--jh-ease),border-color var(--jh-duration-slow) var(--jh-ease),color var(--jh-duration-slow) var(--jh-ease),box-shadow var(--jh-duration-slow) var(--jh-ease);
+}
+
+@media(prefers-reduced-motion:reduce){
+  button,[role="button"],.toast,.loading-card,body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.chart-card,.modal-card,.settings-panel,.bottom-nav,.quick-card{transition:none!important;animation:none!important}
+  button[data-old-text]:disabled::before,.loading-card::before{animation:none}
+}
