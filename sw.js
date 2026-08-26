@@ -1,5 +1,5 @@
-const CACHE='juhelo-uiux-07';
-const CORE=['./','./index.html','./app-v31.css?v=40','./design-system.css?v=uiux7','./app-shell.css?v=uiux7','./app-ui.css?v=uiux7','./modal-ux-v36.css?v=40','./picker-v40.css?v=40','./app-v31.js?v=40','./modal-ux-v36.js?v=40','./picker-v40.js?v=40','./boot-v40.js?v=40','./supabase-proxy-v33.js?v=40','./manifest.webmanifest?v=uiux7','./assets/icon.svg'];
+const CACHE='juhelo-uiux-08';
+const CORE=['./','./index.html','./app-v31.css?v=40','./design-system.css?v=uiux8','./app-shell.css?v=uiux8','./app-ui.css?v=uiux8','./forms.css?v=uiux8','./picker.css?v=uiux8','./app-v31.js?v=40','./form-ux.js?v=uiux8','./picker.js?v=uiux8','./boot-v40.js?v=40','./supabase-proxy-v33.js?v=40','./manifest.webmanifest?v=uiux8','./assets/icon.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(CORE.map(url=>cache.add(url)))));
