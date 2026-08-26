@@ -1,8 +1,8 @@
-name: JuHelo Stabilization CI
+name: JuHelo Frontend Audit
 
 on:
   push:
-    branches: [stabilization-v31]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -11,20 +11,58 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Check JavaScript syntax
-        run: node --check app-v31.js
-      - name: Ensure canonical entrypoint only
         run: |
-          test "$(grep -o '<script type="module"' index.html | wc -l)" -eq 1
-          grep -q 'app-v31.js' index.html
-          grep -q 'app-v31.css' index.html
-          ! grep -qE 'app-v14|reference-v8|transactions-v12|home-v18|transactions-v19|boxes-v20|goals-v22|goals-v29|boxes-v29|boxes-bridge|stability-v2[78]' index.html
-      - name: Ensure no DOM mutation redesign loops
-        run: '! grep -q "MutationObserver" app-v31.js'
-      - name: Ensure one Supabase client
-        run: 'test "$(grep -o "createClient(" app-v31.js | wc -l)" -eq 1'
-      - name: Check PWA cache version
+          node --check app-v31.js
+          node --check boot.js
+          node --check form-ux.js
+          node --check picker.js
+          node --check supabase-proxy-v33.js
+
+      - name: Ensure canonical active styles only
         run: |
-          grep -q "juhelo-v31" sw.js
-          grep -q "app-v31.js?v=31" sw.js
-          grep -q "app-v31.css?v=31" sw.js
+          grep -q 'design-system.css?v=uiux10' index.html
+          grep -q 'app-shell.css?v=uiux10' index.html
+          grep -q 'app-ui.css?v=uiux10' index.html
+          grep -q 'forms.css?v=uiux10' index.html
+          grep -q 'picker.css?v=uiux10' index.html
+          grep -q 'interactions.css?v=uiux10' index.html
+          ! grep -q 'app-v31.css' index.html
+          ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
+
+      - name: Ensure one renderer and no redesign observers
+        run: |
+          grep -q "app-v31.js?v=uiux10" boot.js
+          ! grep -q 'MutationObserver' app-v31.js
+          ! grep -q 'MutationObserver' boot.js
+          ! grep -q 'MutationObserver' form-ux.js
+          ! grep -q 'MutationObserver' picker.js
+          test "$(grep -o 'createClient(' app-v31.js | wc -l)" -eq 1
+
+      - name: Ensure canonical form and picker behavior
+        run: |
+          grep -q 'data-currency-mask' form-ux.js
+          grep -q 'jh-select-popover' picker.js
+          grep -q 'aria-haspopup' picker.js
+          grep -q 'font-size:16px' forms.css
+          ! grep -q 'gesturestart' picker.js
+
+      - name: Check PWA final asset graph
+        run: |
+          grep -q "juhelo-uiux-10" sw.js
+          grep -q "design-system.css?v=uiux10" sw.js
+          grep -q "app-shell.css?v=uiux10" sw.js
+          grep -q "app-ui.css?v=uiux10" sw.js
+          grep -q "forms.css?v=uiux10" sw.js
+          grep -q "picker.css?v=uiux10" sw.js
+          grep -q "interactions.css?v=uiux10" sw.js
+          grep -q "form-ux.js?v=uiux10" sw.js
+          grep -q "picker.js?v=uiux10" sw.js
+          grep -q "boot.js?v=uiux10" sw.js
+          ! grep -q 'app-v31.css' sw.js
+
+      - name: Check build marker
+        run: |
+          grep -q 'juhelo-build" content="uiux-10' index.html
+          grep -q 'data-juhelo-build="uiux-10"' index.html
