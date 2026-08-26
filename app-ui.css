@@ -1,4 +1,4 @@
-/* JuHelo — UI canônica das telas. Etapas 3–5: Home + Movimentos + Caixinhas. */
+/* JuHelo — UI canônica das telas. Etapas 3–6: Home + Movimentos + Caixinhas + Relatórios. */
 
 .section-label{margin:var(--jh-space-10) var(--jh-space-1) var(--jh-space-4);color:var(--jh-muted);font-size:var(--jh-font-lg);font-weight:var(--jh-weight-semibold);letter-spacing:var(--jh-tracking-title)}
 
@@ -68,22 +68,10 @@
 
 /* CAIXINHAS */
 .page-action{display:block;margin:0 0 var(--jh-space-7)}
-.page-action .create-btn{
-  width:100%;max-width:none;min-width:0;min-height:56px;padding:0 var(--jh-space-5);
-  border:1px solid color-mix(in srgb,var(--jh-accent) 22%,var(--jh-border));
-  border-radius:var(--jh-radius-md);background:var(--jh-surface);color:var(--jh-accent-strong);
-  box-shadow:var(--jh-shadow-xs);font-size:var(--jh-font-base);font-weight:var(--jh-weight-semibold)
-}
+.page-action .create-btn{width:100%;max-width:none;min-width:0;min-height:56px;padding:0 var(--jh-space-5);border:1px solid color-mix(in srgb,var(--jh-accent) 22%,var(--jh-border));border-radius:var(--jh-radius-md);background:var(--jh-surface);color:var(--jh-accent-strong);box-shadow:var(--jh-shadow-xs);font-size:var(--jh-font-base);font-weight:var(--jh-weight-semibold)}
 .boxes-list{display:grid;gap:var(--jh-space-4)}
-.box-card-v31{
-  display:grid;grid-template-columns:48px minmax(0,1fr) 44px;gap:0 var(--jh-space-3);
-  padding:var(--jh-space-5);border:1px solid var(--jh-border);border-radius:var(--jh-radius-xl);
-  background:var(--jh-surface);box-shadow:var(--jh-shadow-xs)
-}
-.box-glyph{
-  grid-column:1;grid-row:1;width:46px;height:46px;border-radius:var(--jh-radius-sm);
-  background:var(--jh-accent-soft);color:var(--jh-accent);display:grid;place-items:center
-}
+.box-card-v31{display:grid;grid-template-columns:48px minmax(0,1fr) 44px;gap:0 var(--jh-space-3);padding:var(--jh-space-5);border:1px solid var(--jh-border);border-radius:var(--jh-radius-xl);background:var(--jh-surface);box-shadow:var(--jh-shadow-xs)}
+.box-glyph{grid-column:1;grid-row:1;width:46px;height:46px;border-radius:var(--jh-radius-sm);background:var(--jh-accent-soft);color:var(--jh-accent);display:grid;place-items:center}
 .box-glyph svg{width:var(--jh-icon-md);height:var(--jh-icon-md)}
 .box-title{grid-column:2;grid-row:1;align-self:center;display:grid;gap:4px;min-width:0}
 .box-title strong{color:var(--jh-text);font-size:var(--jh-font-lg);font-weight:var(--jh-weight-semibold);white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
@@ -99,6 +87,36 @@
 .box-actions{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:var(--jh-space-2);margin-top:var(--jh-space-5)}
 .box-actions button{min-height:50px;border:1px solid var(--jh-border);border-radius:var(--jh-radius-md);background:var(--jh-surface-subtle);color:var(--jh-text-soft);font-size:var(--jh-font-sm);font-weight:var(--jh-weight-semibold)}
 .box-actions .primary{grid-column:1/-1;min-height:54px;border-color:transparent;background:var(--jh-accent);color:#fff}
+
+/* RELATÓRIOS */
+.period-card{margin-bottom:var(--jh-space-6);padding:var(--jh-space-5);border:1px solid var(--jh-border);border-radius:var(--jh-radius-xl);background:var(--jh-surface);box-shadow:var(--jh-shadow-xs)}
+.period-card>span{display:block;margin-bottom:var(--jh-space-3);color:var(--jh-muted);font-size:var(--jh-font-xs);font-weight:var(--jh-weight-bold);letter-spacing:.12em;text-transform:uppercase}
+.period-card>div:first-of-type{display:grid;grid-template-columns:1fr auto 1fr;gap:var(--jh-space-2);align-items:end}
+.period-card label{display:grid;gap:6px;color:var(--jh-muted);font-size:var(--jh-font-xs);font-weight:var(--jh-weight-medium)}
+.period-card select{min-height:54px;width:100%;border:1px solid var(--jh-border);border-radius:var(--jh-radius-md);padding:0 var(--jh-space-3);background:var(--jh-surface-subtle);color:var(--jh-text);font-size:var(--jh-font-md);font-weight:var(--jh-weight-semibold)}
+.period-card b{padding-bottom:17px;color:var(--jh-muted-soft);font-weight:var(--jh-weight-medium)}
+.period-presets{display:flex;gap:var(--jh-space-2);flex-wrap:wrap;margin-top:var(--jh-space-4)}
+.period-presets button{min-height:36px;padding:0 var(--jh-space-3);border:1px solid var(--jh-border);border-radius:var(--jh-radius-pill);background:var(--jh-surface-subtle);color:var(--jh-muted);font-size:var(--jh-font-sm);font-weight:var(--jh-weight-medium)}
+.period-presets button:active{background:var(--jh-accent-soft);color:var(--jh-accent-strong)}
+.report-balance{margin-top:0;margin-bottom:var(--jh-space-6)}
+.report-balance .eyebrow{color:var(--jh-muted)}
+.chart-card{padding:var(--jh-space-5);border:1px solid var(--jh-border);border-radius:var(--jh-radius-xl);background:var(--jh-surface);box-shadow:var(--jh-shadow-xs)}
+.chart-card h2{margin:0;color:var(--jh-text);font-size:var(--jh-font-xl);font-weight:var(--jh-weight-semibold);letter-spacing:var(--jh-tracking-title)}
+.chart-card p{margin:5px 0 0;color:var(--jh-muted);font-size:var(--jh-font-sm);line-height:var(--jh-leading-body)}
+.legend{display:flex;gap:var(--jh-space-4);margin:var(--jh-space-4) 0 0;color:var(--jh-muted);font-size:var(--jh-font-sm)}
+.legend span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+.legend .income:before{background:var(--jh-green)}
+.legend .expense:before{background:var(--jh-red)}
+.chart-wrap{overflow-x:auto;margin-top:var(--jh-space-4);scrollbar-width:none}
+.chart-wrap::-webkit-scrollbar{display:none}
+.chart-wrap svg{width:100%;min-width:500px;height:auto}
+.chart-wrap .guide{stroke:var(--jh-border)}
+.chart-wrap .line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.chart-wrap .line.income{stroke:var(--jh-green)}
+.chart-wrap .line.expense{stroke:var(--jh-red)}
+.chart-wrap .dot.income{fill:var(--jh-green)}
+.chart-wrap .dot.expense{fill:var(--jh-red)}
+.chart-wrap text{fill:var(--jh-muted);font-size:11px}
 
 @media(max-width:560px){
   .home-intro{margin-bottom:var(--jh-space-7)}
@@ -121,6 +139,10 @@
   .box-glyph{width:42px;height:42px}
   .box-balance-v31 strong{font-size:30px}
   .progress-meta{font-size:12px}
+  .period-card{padding:var(--jh-space-4)}
+  .period-card select{min-height:52px;font-size:14px}
+  .chart-card{padding:var(--jh-space-4)}
+  .chart-wrap svg{min-width:460px}
 }
 
 @media(max-width:390px){
@@ -143,4 +165,8 @@
   .tx-row>b{font-size:13px}
   .box-title strong{font-size:16px}
   .box-balance-v31 strong{font-size:28px}
+  .period-card>div:first-of-type{grid-template-columns:1fr 18px 1fr;gap:6px}
+  .period-card{padding:14px}
+  .period-card select{padding:0 10px;font-size:13px}
+  .period-card b{text-align:center}
 }
