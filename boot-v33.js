@@ -81,9 +81,9 @@
   (async()=>{
     try{
       await loadSupabase();
-      await import('./app-v31.js?v=33');
+      await import('./app-v31.js?v=34');
     }catch(err){
-      console.error('JuHelo boot v33',err);
+      console.error('JuHelo boot v34',err);
       clearTimeout(hardTimeout);
       finishObserver.disconnect();
       fail('Não foi possível carregar os componentes necessários.');
