@@ -1,0 +1,151 @@
+/* JuHelo v37 — picker próprio + polish mobile */
+
+/* Home: Resultado do mês era repetição do saldo principal. */
+.home-intro + .balance-card .mini-grid .result{display:none!important}
+
+/* CTA principal de páginas como Caixinhas/Metas ocupa o bloco inteiro. */
+.page-action{display:block!important}
+.page-action .create-btn{width:100%!important;max-width:none!important;min-width:0!important}
+
+/* Scroll continua funcionando, mas sem barra visual. */
+html,body,#app,.page,.modal-card,.settings-panel,.jh-picker-list,.chart-wrap{
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#app::-webkit-scrollbar,
+.page::-webkit-scrollbar,
+.modal-card::-webkit-scrollbar,
+.settings-panel::-webkit-scrollbar,
+.jh-picker-list::-webkit-scrollbar,
+.chart-wrap::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+
+html,body{touch-action:manipulation}
+button,input,textarea,select{touch-action:manipulation}
+
+/* O select continua no DOM para FormData/handlers, mas o visual é do JuHelo. */
+select{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  cursor:pointer;
+}
+.field:has(> select),
+.period-card label:has(> select){position:relative}
+.field:has(> select)::after,
+.period-card label:has(> select)::after{
+  content:'⌄';
+  position:absolute;
+  right:17px;
+  bottom:18px;
+  color:var(--muted);
+  font-size:22px;
+  font-weight:800;
+  line-height:1;
+  pointer-events:none;
+}
+.field>select,.form-grid select,.period-card select{padding-right:48px!important}
+.month-control{position:relative}
+.month-control::after{
+  content:'⌄';
+  margin-left:auto;
+  color:var(--purple);
+  font-size:24px;
+  font-weight:850;
+  pointer-events:none;
+}
+.month-control select{padding-right:6px!important;cursor:pointer}
+
+/* Picker */
+.jh-picker-overlay{
+  position:fixed;
+  z-index:220;
+  inset:0;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:20px 14px max(14px,env(safe-area-inset-bottom));
+  background:rgba(8,6,12,.62);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  overscroll-behavior:none;
+}
+.jh-picker-sheet{
+  width:min(100%,560px);
+  max-height:min(78dvh,720px);
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:30px;
+  background:var(--surface);
+  box-shadow:0 30px 90px rgba(0,0,0,.42);
+}
+.jh-picker-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:20px 20px 15px;
+  border-bottom:1px solid var(--line);
+}
+.jh-picker-head div{display:grid;gap:4px}
+.jh-picker-head strong{font-size:20px;letter-spacing:-.025em}
+.jh-picker-head span{font-size:12px;color:var(--muted)}
+.jh-picker-close{
+  width:44px;height:44px;border:1px solid var(--line);border-radius:15px;
+  background:var(--surface2);color:var(--muted);font-size:26px;line-height:1
+}
+.jh-picker-list{
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:10px;
+}
+.jh-picker-item{
+  width:100%;
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:10px 15px;
+  border:1px solid transparent;
+  border-radius:17px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  font-size:16px;
+  font-weight:700;
+}
+.jh-picker-item + .jh-picker-item{margin-top:3px}
+.jh-picker-item.is-selected{
+  background:var(--purpleSoft);
+  border-color:color-mix(in srgb,var(--purple) 35%,var(--line));
+  color:var(--purple2);
+}
+.jh-picker-check{
+  width:28px;height:28px;border-radius:10px;display:grid;place-items:center;
+  background:var(--purple);color:#fff;font-size:16px;font-weight:900;opacity:0
+}
+.jh-picker-item.is-selected .jh-picker-check{opacity:1}
+.jh-picker-actions{
+  display:grid;
+  grid-template-columns:1fr 1.35fr;
+  gap:10px;
+  padding:14px 16px 16px;
+  border-top:1px solid var(--line);
+  background:color-mix(in srgb,var(--surface) 96%,transparent);
+}
+.jh-picker-actions button{
+  min-height:54px;border-radius:17px;font-size:15px;font-weight:850
+}
+.jh-picker-cancel{border:1px solid var(--line);background:var(--surface2);color:var(--muted)}
+.jh-picker-confirm{border:0;background:var(--purple);color:#fff}
+
+html.jh-picker-open,body.jh-picker-open{overflow:hidden!important;overscroll-behavior:none!important}
+
+@media(min-width:700px){
+  .jh-picker-overlay{align-items:center}
+  .jh-picker-sheet{max-height:min(70dvh,680px)}
+}
