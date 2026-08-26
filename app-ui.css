@@ -1,4 +1,4 @@
-/* JuHelo — UI canônica das telas. Etapas 3–6: Home + Movimentos + Caixinhas + Relatórios. */
+/* JuHelo — UI canônica das telas. Etapas 3–7. */
 
 .section-label{margin:var(--jh-space-10) var(--jh-space-1) var(--jh-space-4);color:var(--jh-muted);font-size:var(--jh-font-lg);font-weight:var(--jh-weight-semibold);letter-spacing:var(--jh-tracking-title)}
 
@@ -118,6 +118,19 @@
 .chart-wrap .dot.expense{fill:var(--jh-red)}
 .chart-wrap text{fill:var(--jh-muted);font-size:11px}
 
+/* METAS */
+.goals-card{padding:var(--jh-space-3) var(--jh-space-5);border:1px solid var(--jh-border);border-radius:var(--jh-radius-xl);background:var(--jh-surface);box-shadow:var(--jh-shadow-xs)}
+.goals-head{display:flex;justify-content:space-between;gap:var(--jh-space-4);padding:var(--jh-space-2) 2px var(--jh-space-4);border-bottom:1px solid var(--jh-border);color:var(--jh-muted);font-size:var(--jh-font-sm);font-weight:var(--jh-weight-regular)}
+.goal-row-v31{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:var(--jh-space-3);align-items:center;padding:var(--jh-space-4) 0;border-bottom:1px solid var(--jh-border)}
+.goal-row-v31:last-child{border-bottom:0}
+.goal-row-v31.completed{opacity:.58}
+.goal-check{width:40px;height:40px;border-radius:50%;border:2px solid var(--jh-border-strong);background:transparent;color:#fff;font-size:18px;font-weight:var(--jh-weight-bold);display:grid;place-items:center}
+.goal-check.done{background:var(--jh-green);border-color:var(--jh-green)}
+.goal-row-v31>div{min-width:0;display:grid;gap:5px}
+.goal-row-v31>div strong{color:var(--jh-text);font-size:var(--jh-font-base);font-weight:var(--jh-weight-semibold);line-height:1.28;white-space:normal;overflow-wrap:anywhere}
+.goal-row-v31>div small{color:var(--jh-muted);font-size:var(--jh-font-sm);line-height:var(--jh-leading-body)}
+.goal-row-v31>div span{justify-self:start;padding:5px 9px;border-radius:var(--jh-radius-pill);background:var(--jh-surface-subtle);color:var(--jh-muted);font-size:var(--jh-font-xs);font-weight:var(--jh-weight-medium)}
+
 @media(max-width:560px){
   .home-intro{margin-bottom:var(--jh-space-7)}
   .home-intro h2{font-size:38px}
@@ -143,6 +156,9 @@
   .period-card select{min-height:52px;font-size:14px}
   .chart-card{padding:var(--jh-space-4)}
   .chart-wrap svg{min-width:460px}
+  .goals-card{padding:10px var(--jh-space-4)}
+  .goal-row-v31{grid-template-columns:42px minmax(0,1fr) 42px;gap:10px;padding:15px 0}
+  .goal-check{width:38px;height:38px}
 }
 
 @media(max-width:390px){
@@ -169,4 +185,5 @@
   .period-card{padding:14px}
   .period-card select{padding:0 10px;font-size:13px}
   .period-card b{text-align:center}
+  .goal-row-v31>div strong{font-size:15px}
 }
