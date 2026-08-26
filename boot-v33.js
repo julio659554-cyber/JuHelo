@@ -61,18 +61,31 @@
 
   ensureSkeleton();
 
+  let finished=false;
+  const finishObserver=new MutationObserver(()=>{
+    if(!app.querySelector(':scope > .splash')){
+      finished=true;
+      clearTimeout(hardTimeout);
+      finishObserver.disconnect();
+    }
+  });
+  finishObserver.observe(app,{childList:true});
+
   const hardTimeout=setTimeout(()=>{
-    if(app.querySelector(':scope > .splash'))fail('A conexão demorou além do esperado.');
+    if(!finished&&app.querySelector(':scope > .splash')){
+      finishObserver.disconnect();
+      fail('A conexão demorou além do esperado.');
+    }
   },15000);
 
   (async()=>{
     try{
       await loadSupabase();
       await import('./app-v31.js?v=33');
-      clearTimeout(hardTimeout);
     }catch(err){
       console.error('JuHelo boot v33',err);
       clearTimeout(hardTimeout);
+      finishObserver.disconnect();
       fail('Não foi possível carregar os componentes necessários.');
     }
   })();
