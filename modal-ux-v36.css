@@ -1,0 +1,95 @@
+/* JuHelo v36 — UX central dos modais no iPhone */
+
+/* Evita o Safari ampliar a página ao focar inputs menores que 16px. */
+.field input,
+.field select,
+.form-grid select,
+.form-grid textarea,
+.auth-card input,
+.settings-panel input,
+.settings-panel select {
+  font-size:16px !important;
+}
+
+/* Controles de formulário com altura consistente e confortável. */
+.field input,
+.field select,
+.form-grid select {
+  min-height:60px !important;
+  height:60px;
+  padding:0 16px !important;
+  line-height:1.2;
+  border-radius:18px !important;
+}
+
+.field select,
+.form-grid select {
+  font-weight:750;
+}
+
+/* Impede a página atrás do modal de continuar rolando no iOS/Safari. */
+html:has(body > .modal-backdrop),
+html:has(body > .settings-overlay),
+body:has(> .modal-backdrop),
+body:has(> .settings-overlay) {
+  overflow:hidden !important;
+  overscroll-behavior:none !important;
+  height:100dvh !important;
+  max-height:100dvh !important;
+}
+
+.modal-backdrop,
+.settings-overlay {
+  overflow:hidden !important;
+  overscroll-behavior:contain !important;
+  touch-action:pan-y;
+}
+
+.modal-card,
+.settings-panel {
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain !important;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+}
+
+/* Mantém o modal dentro da área visível quando o teclado aparece. */
+@media (max-width:560px) {
+  .modal-backdrop,
+  .settings-overlay {
+    align-items:end;
+    padding:max(8px,env(safe-area-inset-top)) 10px max(8px,env(safe-area-inset-bottom));
+  }
+
+  .modal-card,
+  .settings-panel {
+    width:100%;
+    max-height:calc(100dvh - max(16px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)));
+    border-radius:28px;
+  }
+
+  .modal-card {
+    padding:20px;
+  }
+
+  .modal-head {
+    top:-20px;
+    margin:-20px -20px 18px;
+    padding:20px 20px 14px;
+  }
+
+  .field input,
+  .field select,
+  .form-grid select {
+    min-height:60px !important;
+    height:60px;
+  }
+}
+
+/* O foco deve destacar o campo, sem provocar transformação/zoom visual. */
+.field input:focus,
+.field select:focus,
+.form-grid select:focus {
+  transform:none !important;
+}
