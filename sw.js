@@ -1,5 +1,5 @@
-const CACHE='juhelo-uiux-01';
-const CORE=['./','./index.html','./app-v31.css?v=40','./design-system.css?v=uiux1','./modal-ux-v36.css?v=40','./picker-v40.css?v=40','./app-v31.js?v=40','./modal-ux-v36.js?v=40','./picker-v40.js?v=40','./boot-v40.js?v=40','./supabase-proxy-v33.js?v=40','./manifest.webmanifest?v=uiux1','./assets/icon.svg'];
+const CACHE='juhelo-uiux-02';
+const CORE=['./','./index.html','./app-v31.css?v=40','./design-system.css?v=uiux2','./app-shell.css?v=uiux2','./modal-ux-v36.css?v=40','./picker-v40.css?v=40','./app-v31.js?v=40','./modal-ux-v36.js?v=40','./picker-v40.js?v=40','./boot-v40.js?v=40','./supabase-proxy-v33.js?v=40','./manifest.webmanifest?v=uiux2','./assets/icon.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(CORE.map(url=>cache.add(url)))));
