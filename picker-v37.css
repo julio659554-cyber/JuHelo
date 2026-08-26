@@ -1,13 +1,13 @@
-/* JuHelo v37 — picker próprio + polish mobile */
+/* JuHelo v38 — picker próprio refinado */
 
-/* Home: Resultado do mês era repetição do saldo principal. */
+/* Home: remove o resultado duplicado do saldo principal. */
 .home-intro + .balance-card .mini-grid .result{display:none!important}
 
-/* CTA principal de páginas como Caixinhas/Metas ocupa o bloco inteiro. */
+/* CTAs de página ocupam toda a largura útil. */
 .page-action{display:block!important}
 .page-action .create-btn{width:100%!important;max-width:none!important;min-width:0!important}
 
-/* Scroll continua funcionando, mas sem barra visual. */
+/* Scroll continua funcional, mas sem barra visual. */
 html,body,#app,.page,.modal-card,.settings-panel,.jh-picker-list,.chart-wrap{
   scrollbar-width:none!important;
   -ms-overflow-style:none!important;
@@ -24,126 +24,95 @@ body::-webkit-scrollbar,
 html,body{touch-action:manipulation}
 button,input,textarea,select{touch-action:manipulation}
 
-/* O select continua no DOM para FormData/handlers, mas o visual é do JuHelo. */
-select{
-  -webkit-appearance:none!important;
-  appearance:none!important;
-  cursor:pointer;
-}
-.field:has(> select),
-.period-card label:has(> select){position:relative}
-.field:has(> select)::after,
-.period-card label:has(> select)::after{
-  content:'⌄';
-  position:absolute;
-  right:17px;
-  bottom:18px;
-  color:var(--muted);
-  font-size:22px;
-  font-weight:800;
-  line-height:1;
-  pointer-events:none;
+/* O select nativo permanece apenas como estado/FormData; o visual é do JuHelo. */
+select{-webkit-appearance:none!important;appearance:none!important;cursor:pointer}
+.field:has(> select),.period-card label:has(> select){position:relative}
+.field:has(> select)::after,.period-card label:has(> select)::after{
+  content:'⌄';position:absolute;right:17px;bottom:18px;color:var(--muted);
+  font-size:22px;font-weight:800;line-height:1;pointer-events:none
 }
 .field>select,.form-grid select,.period-card select{padding-right:48px!important}
 .month-control{position:relative}
-.month-control::after{
-  content:'⌄';
-  margin-left:auto;
-  color:var(--purple);
-  font-size:24px;
-  font-weight:850;
-  pointer-events:none;
-}
+.month-control::after{content:'⌄';margin-left:auto;color:var(--purple);font-size:24px;font-weight:850;pointer-events:none}
 .month-control select{padding-right:6px!important;cursor:pointer}
 
-/* Picker */
+/* Overlay */
 .jh-picker-overlay{
-  position:fixed;
-  z-index:220;
-  inset:0;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  padding:20px 14px max(14px,env(safe-area-inset-bottom));
-  background:rgba(8,6,12,.62);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  overscroll-behavior:none;
+  position:fixed;z-index:220;inset:0;display:flex;align-items:flex-end;justify-content:center;
+  padding:18px 14px max(18px,env(safe-area-inset-bottom));
+  background:rgba(7,5,11,.70);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  overscroll-behavior:none
 }
+
+/* Sheet no padrão da referência: compacto, arredondado e com lista centralizada. */
 .jh-picker-sheet{
-  width:min(100%,560px);
-  max-height:min(78dvh,720px);
-  display:grid;
-  grid-template-rows:auto minmax(0,1fr) auto;
-  overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:30px;
-  background:var(--surface);
-  box-shadow:0 30px 90px rgba(0,0,0,.42);
+  width:min(calc(100% - 12px),560px);
+  max-height:min(74dvh,720px);
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  overflow:hidden;border:1px solid var(--line);border-radius:30px;
+  background:var(--surface);box-shadow:0 34px 90px rgba(0,0,0,.46)
 }
 .jh-picker-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  padding:20px 20px 15px;
-  border-bottom:1px solid var(--line);
+  min-height:104px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:22px 22px 18px;border-bottom:1px solid var(--line)
 }
-.jh-picker-head div{display:grid;gap:4px}
-.jh-picker-head strong{font-size:20px;letter-spacing:-.025em}
-.jh-picker-head span{font-size:12px;color:var(--muted)}
+.jh-picker-head div{display:grid;gap:6px;min-width:0}
+.jh-picker-head strong{font-size:25px;line-height:1.05;letter-spacing:-.035em}
+.jh-picker-head span{font-size:14px;color:var(--muted)}
 .jh-picker-close{
-  width:44px;height:44px;border:1px solid var(--line);border-radius:15px;
-  background:var(--surface2);color:var(--muted);font-size:26px;line-height:1
+  flex:0 0 auto;width:50px;height:50px;border:1px solid var(--line);border-radius:17px;
+  background:var(--surface2);color:var(--muted);font-size:30px;line-height:1;display:grid;place-items:center
 }
+
+/* Cerca de 6–7 opções ficam visíveis no celular. */
 .jh-picker-list{
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-  padding:10px;
+  overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:18px 14px 14px;scroll-padding-block:18px
 }
 .jh-picker-item{
-  width:100%;
-  min-height:58px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  padding:10px 15px;
-  border:1px solid transparent;
-  border-radius:17px;
-  background:transparent;
-  color:var(--text);
-  text-align:left;
-  font-size:16px;
-  font-weight:700;
+  width:100%;min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:12px 16px;border:1px solid transparent;border-radius:18px;background:transparent;
+  color:var(--text);text-align:left;font-size:18px;font-weight:760;letter-spacing:-.015em
 }
-.jh-picker-item + .jh-picker-item{margin-top:3px}
+.jh-picker-item + .jh-picker-item{margin-top:4px}
+.jh-picker-item:active{background:var(--surface2)}
 .jh-picker-item.is-selected{
-  background:var(--purpleSoft);
-  border-color:color-mix(in srgb,var(--purple) 35%,var(--line));
-  color:var(--purple2);
+  min-height:70px;background:color-mix(in srgb,var(--purple) 15%,var(--surface2));
+  border-color:color-mix(in srgb,var(--purple) 48%,var(--line));color:var(--purple2);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--purple) 10%,transparent)
 }
 .jh-picker-check{
-  width:28px;height:28px;border-radius:10px;display:grid;place-items:center;
-  background:var(--purple);color:#fff;font-size:16px;font-weight:900;opacity:0
+  flex:0 0 auto;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;
+  background:var(--purple);color:#fff;font-size:24px;font-weight:900;opacity:0
 }
 .jh-picker-item.is-selected .jh-picker-check{opacity:1}
+
+/* Rodapé fixo e alto, como no exemplo. */
 .jh-picker-actions{
-  display:grid;
-  grid-template-columns:1fr 1.35fr;
-  gap:10px;
-  padding:14px 16px 16px;
-  border-top:1px solid var(--line);
-  background:color-mix(in srgb,var(--surface) 96%,transparent);
+  display:grid;grid-template-columns:.92fr 1.28fr;gap:12px;
+  padding:16px 18px max(18px,env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);background:var(--surface)
 }
 .jh-picker-actions button{
-  min-height:54px;border-radius:17px;font-size:15px;font-weight:850
+  min-height:62px;border-radius:20px;font-size:17px;font-weight:850;letter-spacing:-.01em
 }
 .jh-picker-cancel{border:1px solid var(--line);background:var(--surface2);color:var(--muted)}
-.jh-picker-confirm{border:0;background:var(--purple);color:#fff}
+.jh-picker-confirm{border:0;background:var(--purple);color:#fff;box-shadow:0 10px 24px color-mix(in srgb,var(--purple) 20%,transparent)}
 
 html.jh-picker-open,body.jh-picker-open{overflow:hidden!important;overscroll-behavior:none!important}
+
+@media(max-width:430px){
+  .jh-picker-overlay{padding:12px 10px max(12px,env(safe-area-inset-bottom))}
+  .jh-picker-sheet{width:100%;max-height:76dvh;border-radius:28px}
+  .jh-picker-head{min-height:98px;padding:20px 20px 16px}
+  .jh-picker-head strong{font-size:23px}
+  .jh-picker-list{padding:14px 12px 12px}
+  .jh-picker-item{min-height:64px;font-size:17px;padding:10px 14px}
+  .jh-picker-item.is-selected{min-height:68px}
+  .jh-picker-actions{padding:14px 14px max(14px,env(safe-area-inset-bottom));gap:10px}
+  .jh-picker-actions button{min-height:58px}
+}
 
 @media(min-width:700px){
   .jh-picker-overlay{align-items:center}
