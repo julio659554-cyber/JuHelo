@@ -1,0 +1,246 @@
+/* JuHelo — UI canônica das telas. Etapa 3: Home. */
+
+/* Shared page typography that screen migrations can reuse. */
+.section-label{
+  margin:var(--jh-space-10) var(--jh-space-1) var(--jh-space-4);
+  color:var(--jh-muted);
+  font-size:var(--jh-font-lg);
+  font-weight:var(--jh-weight-semibold);
+  letter-spacing:var(--jh-tracking-title);
+}
+
+/* HOME */
+.home-intro{
+  margin:0 var(--jh-space-1) var(--jh-space-8);
+}
+.home-intro h2{
+  margin:0;
+  max-width:680px;
+  color:var(--jh-text);
+  font-size:clamp(36px,7vw,var(--jh-font-display));
+  line-height:var(--jh-leading-tight);
+  letter-spacing:-.048em;
+  font-weight:var(--jh-weight-bold);
+}
+.home-intro p{
+  margin:var(--jh-space-3) 0 0;
+  max-width:620px;
+  color:var(--jh-muted);
+  font-size:var(--jh-font-lg);
+  line-height:var(--jh-leading-body);
+  font-weight:var(--jh-weight-regular);
+}
+
+.balance-card{
+  position:relative;
+  margin-bottom:var(--jh-space-8);
+  padding:var(--jh-space-7);
+  border:1px solid var(--jh-card-border);
+  border-radius:var(--jh-radius-xl);
+  background:var(--jh-card-bg);
+  box-shadow:var(--jh-card-shadow);
+}
+.eyebrow{
+  display:block;
+  color:var(--jh-green);
+  font-size:var(--jh-font-xs);
+  font-weight:var(--jh-weight-bold);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.big-balance{
+  display:block;
+  margin:var(--jh-space-2) 0 var(--jh-space-1);
+  color:var(--jh-text);
+  font-size:clamp(40px,9vw,56px);
+  line-height:1;
+  letter-spacing:-.052em;
+  font-weight:var(--jh-weight-bold);
+  white-space:nowrap;
+}
+.balance-card>small{
+  color:var(--jh-muted);
+  font-size:var(--jh-font-sm);
+  font-weight:var(--jh-weight-medium);
+}
+.eye-btn{
+  position:absolute;
+  right:var(--jh-space-5);
+  top:var(--jh-space-5);
+  width:var(--jh-touch-min);
+  height:var(--jh-touch-min);
+  border:1px solid var(--jh-border);
+  border-radius:var(--jh-radius-sm);
+  background:var(--jh-surface-subtle);
+  color:var(--jh-muted);
+  display:grid;
+  place-items:center;
+  box-shadow:none;
+  transition:background var(--jh-duration-base) var(--jh-ease),color var(--jh-duration-base) var(--jh-ease),transform var(--jh-duration-fast) var(--jh-ease);
+}
+.eye-btn:active{transform:scale(.96)}
+.eye-btn svg{width:var(--jh-icon-md);height:var(--jh-icon-md)}
+
+.mini-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:var(--jh-space-3);
+  margin-top:var(--jh-space-7);
+}
+.mini-grid article{
+  min-width:0;
+  padding:var(--jh-space-4);
+  border:1px solid var(--jh-border);
+  border-radius:var(--jh-radius-lg);
+  background:var(--jh-surface-subtle);
+  box-shadow:none;
+}
+.mini-grid article>span{
+  display:flex;
+  align-items:center;
+  gap:var(--jh-space-3);
+  color:var(--jh-muted);
+}
+.mini-grid article svg{
+  width:40px;
+  height:40px;
+  padding:10px;
+  border-radius:var(--jh-radius-sm);
+  flex:0 0 auto;
+}
+.mini-grid .income svg{background:var(--jh-green-soft);color:var(--jh-green)}
+.mini-grid .expense svg{background:var(--jh-red-soft);color:var(--jh-red)}
+.mini-grid em{
+  font-style:normal;
+  color:var(--jh-muted);
+  font-size:var(--jh-font-xs);
+  font-weight:var(--jh-weight-bold);
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+.mini-grid strong{
+  display:block;
+  margin-top:var(--jh-space-2);
+  color:var(--jh-text);
+  font-size:var(--jh-font-xl);
+  font-weight:var(--jh-weight-semibold);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.mini-grid .income,.mini-grid .expense{border-color:var(--jh-border)}
+.mini-grid .income strong{color:var(--jh-green)}
+.mini-grid .expense strong{color:var(--jh-red)}
+
+/* Redundant with Saldo do mês; kept out of layout even while legacy renderer still emits it. */
+.home-intro + .balance-card .mini-grid .result{display:none!important}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:var(--jh-space-3);
+}
+.quick-card{
+  min-height:92px;
+  padding:var(--jh-space-4);
+  border:1px solid var(--jh-border);
+  border-radius:var(--jh-radius-lg);
+  background:var(--jh-surface);
+  box-shadow:var(--jh-shadow-xs);
+  display:flex;
+  align-items:center;
+  gap:var(--jh-space-3);
+  text-align:left;
+  transition:transform var(--jh-duration-fast) var(--jh-ease),border-color var(--jh-duration-base) var(--jh-ease),background var(--jh-duration-base) var(--jh-ease);
+}
+.quick-card:active{transform:scale(.985)}
+.quick-card>span{
+  flex:0 0 auto;
+  width:44px;
+  height:44px;
+  border-radius:var(--jh-radius-sm);
+  display:grid;
+  place-items:center;
+}
+.quick-card>span svg{width:var(--jh-icon-md);height:var(--jh-icon-md)}
+.quick-card.expense>span{background:var(--jh-red-soft);color:var(--jh-red)}
+.quick-card.income>span{background:var(--jh-green-soft);color:var(--jh-green)}
+.quick-card.boxes>span,.quick-card.goals>span,.quick-card.recurring>span{background:var(--jh-accent-soft);color:var(--jh-accent)}
+.quick-card div{min-width:0;display:grid;gap:3px}
+.quick-card strong{
+  color:var(--jh-text);
+  font-size:var(--jh-font-base);
+  line-height:1.2;
+  font-weight:var(--jh-weight-semibold);
+}
+.quick-card small{
+  color:var(--jh-muted);
+  font-size:var(--jh-font-sm);
+  line-height:1.2;
+  font-weight:var(--jh-weight-regular);
+}
+
+.home-lists{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:var(--jh-space-4);
+  margin-top:var(--jh-space-10);
+}
+.list-card{
+  padding:var(--jh-space-5);
+  border:1px solid var(--jh-border);
+  border-radius:var(--jh-radius-xl);
+  background:var(--jh-surface);
+  box-shadow:var(--jh-shadow-xs);
+}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:var(--jh-space-3);margin-bottom:var(--jh-space-2)}
+.list-head h2{
+  margin:0;
+  color:var(--jh-text)!important;
+  font-size:var(--jh-font-xl);
+  line-height:1.2;
+  font-weight:var(--jh-weight-semibold);
+  letter-spacing:var(--jh-tracking-title);
+}
+.list-head span{
+  min-width:28px;
+  height:28px;
+  padding:0 8px;
+  border-radius:var(--jh-radius-pill);
+  display:grid;
+  place-items:center;
+  background:var(--jh-surface-subtle);
+  color:var(--jh-muted);
+  font-size:var(--jh-font-xs);
+  font-weight:var(--jh-weight-semibold);
+}
+
+@media(max-width:560px){
+  .home-intro{margin-bottom:var(--jh-space-7)}
+  .home-intro h2{font-size:38px}
+  .home-intro p{font-size:var(--jh-font-base)}
+  .balance-card{padding:var(--jh-space-6)}
+  .big-balance{font-size:clamp(38px,11vw,50px)}
+  .mini-grid{margin-top:var(--jh-space-6)}
+  .mini-grid article{padding:var(--jh-space-3)}
+  .mini-grid article svg{width:38px;height:38px;padding:9px}
+  .mini-grid strong{font-size:19px}
+  .section-label{margin-top:var(--jh-space-8);font-size:17px}
+  .quick-card{min-height:86px;padding:var(--jh-space-3)}
+  .home-lists{margin-top:var(--jh-space-8)}
+}
+
+@media(max-width:390px){
+  .home-intro h2{font-size:34px}
+  .balance-card{padding:20px}
+  .mini-grid{gap:10px}
+  .mini-grid article{padding:12px}
+  .mini-grid article>span{gap:8px}
+  .mini-grid article svg{width:36px;height:36px;padding:8px}
+  .mini-grid strong{font-size:17px}
+  .quick-grid{gap:10px}
+  .quick-card{padding:11px;gap:10px}
+  .quick-card>span{width:40px;height:40px}
+  .quick-card strong{font-size:15px}
+  .quick-card small{font-size:12px}
+}
