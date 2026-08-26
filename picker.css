@@ -1,21 +1,16 @@
 /* JuHelo — seletor canônico em popover ancorado. */
 
-/* Select permanece como fonte de valor/FormData, mas não abre UI nativa. */
-select{
-  -webkit-appearance:none;
-  appearance:none;
-}
-.jh-select-host{
+select{-webkit-appearance:none;appearance:none}
+
+/* Hosts são reconhecíveis mesmo antes do JS enriquecer acessibilidade. */
+.month-control,.field:has(>select),.period-card label:has(>select),.jh-select-host{
   position:relative;
   cursor:pointer;
   touch-action:manipulation;
 }
-.jh-select-host select{
-  pointer-events:none;
-  touch-action:none;
-  user-select:none;
-}
-.jh-select-host::after{
+.jh-select-host select{pointer-events:none;touch-action:none;user-select:none}
+
+.field:has(>select)::after,.period-card label:has(>select)::after,.jh-select-host::after{
   content:'⌄';
   position:absolute;
   right:16px;
@@ -27,14 +22,20 @@ select{
   pointer-events:none;
   transition:transform var(--jh-duration-base) var(--jh-ease),color var(--jh-duration-base) var(--jh-ease);
 }
-.jh-select-host[aria-expanded="true"]::after{transform:rotate(180deg);color:var(--jh-accent)}
-.month-control.jh-select-host::after{
+.month-control::after,.month-control.jh-select-host::after{
+  content:'⌄';
   position:static;
   margin-left:auto;
   color:var(--jh-accent);
+  font-size:20px;
+  font-weight:var(--jh-weight-bold);
+  line-height:1;
+  pointer-events:none;
+  transition:transform var(--jh-duration-base) var(--jh-ease),color var(--jh-duration-base) var(--jh-ease);
 }
-.jh-select-host select{padding-right:44px!important}
-.month-control.jh-select-host select{padding-right:4px!important}
+.jh-select-host[aria-expanded="true"]::after{transform:rotate(180deg);color:var(--jh-accent)}
+.field>select,.form-grid select,.period-card select{padding-right:44px}
+.month-control select{padding-right:4px}
 
 .jh-select-popover{
   position:fixed;
@@ -55,7 +56,6 @@ select{
 }
 .jh-select-popover::-webkit-scrollbar{display:none}
 .jh-select-popover.opens-above{transform-origin:bottom center}
-
 .jh-select-option{
   width:100%;
   min-height:50px;
@@ -75,11 +75,7 @@ select{
 }
 .jh-select-option + .jh-select-option{margin-top:2px}
 .jh-select-option:active,.jh-select-option:focus-visible{background:var(--jh-surface-subtle)}
-.jh-select-option.is-selected{
-  background:var(--jh-accent-soft);
-  border-color:color-mix(in srgb,var(--jh-accent) 28%,var(--jh-border));
-  color:var(--jh-accent-strong);
-}
+.jh-select-option.is-selected{background:var(--jh-accent-soft);border-color:color-mix(in srgb,var(--jh-accent) 28%,var(--jh-border));color:var(--jh-accent-strong)}
 .jh-select-option i{
   flex:0 0 auto;
   width:26px;
@@ -96,13 +92,6 @@ select{
 }
 .jh-select-option.is-selected i{visibility:visible}
 
-@keyframes jh-popover-in{
-  from{opacity:0;transform:translateY(-4px) scale(.985)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
-
-@media(max-width:430px){
-  .jh-select-popover{padding:6px;border-radius:var(--jh-radius-md)}
-  .jh-select-option{min-height:48px;font-size:15px;padding:8px 11px}
-}
+@keyframes jh-popover-in{from{opacity:0;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:430px){.jh-select-popover{padding:6px;border-radius:var(--jh-radius-md)}.jh-select-option{min-height:48px;font-size:15px;padding:8px 11px}}
 @media(prefers-reduced-motion:reduce){.jh-select-popover{animation:none}}
