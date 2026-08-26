@@ -1,5 +1,5 @@
-const CACHE='juhelo-v35';
-const CORE=['./','./index.html','./app-v31.css?v=35','./app-v31.js?v=35','./boot-v35.js?v=35','./supabase-proxy-v33.js?v=35','./manifest.webmanifest?v=35','./assets/icon.svg'];
+const CACHE='juhelo-v36';
+const CORE=['./','./index.html','./app-v31.css?v=36','./modal-ux-v36.css?v=36','./app-v31.js?v=36','./modal-ux-v36.js?v=36','./boot-v36.js?v=36','./supabase-proxy-v33.js?v=36','./manifest.webmanifest?v=36','./assets/icon.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(CORE.map(url=>cache.add(url)))));
