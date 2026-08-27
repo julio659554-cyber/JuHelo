@@ -1,67 +1,145 @@
-/* JuHelo Design System — fonte canônica de tokens, resets e primitives. */
+/* JuHelo Design System — premium, delicado e financeiro. */
 
 :root{
-  --jh-bg:#f8f7fa;--jh-bg-soft:#fbfafc;--jh-surface:#ffffff;--jh-surface-subtle:#fcfbfd;--jh-surface-elevated:#ffffff;
-  --jh-text:#18141f;--jh-text-soft:#514a59;--jh-muted:#81798a;--jh-muted-soft:#a49daa;
-  --jh-border:rgba(38,29,49,.085);--jh-border-strong:rgba(38,29,49,.15);
-  --jh-accent:#7b57e6;--jh-accent-strong:#6541cd;--jh-accent-soft:#f1ecff;--jh-accent-soft-2:#f7f3ff;
-  --jh-green:#16886a;--jh-green-strong:#0f7358;--jh-green-soft:#e8f7f1;
-  --jh-red:#d15470;--jh-red-strong:#b43d59;--jh-red-soft:#fcedf0;
-  --jh-warning:#a66b20;--jh-warning-soft:#fff5e6;
+  /* Light: neutro, quente e muito leve. */
+  --jh-bg:#fbfafc;
+  --jh-bg-soft:#f8f7f9;
+  --jh-surface:#ffffff;
+  --jh-surface-subtle:#f8f7fa;
+  --jh-surface-elevated:#ffffff;
+  --jh-text:#18151d;
+  --jh-text-soft:#4f4a54;
+  --jh-muted:#77717d;
+  --jh-muted-soft:#a59faa;
+  --jh-border:rgba(32,26,38,.065);
+  --jh-border-strong:rgba(32,26,38,.105);
 
+  /* Marca como acento, não como fundo dominante. */
+  --jh-accent:#7858e8;
+  --jh-accent-strong:#6545cf;
+  --jh-accent-soft:#f1edfc;
+  --jh-accent-soft-2:#f7f4ff;
+  --jh-green:#198d6d;
+  --jh-green-strong:#117356;
+  --jh-green-soft:#edf8f4;
+  --jh-red:#d25770;
+  --jh-red-strong:#b84059;
+  --jh-red-soft:#fcf0f3;
+  --jh-warning:#a56b27;
+  --jh-warning-soft:#fff7e9;
+
+  /* Tipografia menos pesada. */
   --jh-font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --jh-font-xs:11px;--jh-font-sm:13px;--jh-font-md:15px;--jh-font-base:16px;--jh-font-lg:18px;--jh-font-xl:22px;--jh-font-2xl:28px;--jh-font-3xl:36px;--jh-font-display:44px;
-  --jh-weight-regular:500;--jh-weight-medium:600;--jh-weight-semibold:700;--jh-weight-bold:800;
-  --jh-leading-tight:1.08;--jh-leading-title:1.18;--jh-leading-body:1.48;
-  --jh-tracking-tight:-.035em;--jh-tracking-title:-.025em;
+  --jh-font-xs:11px;
+  --jh-font-sm:13px;
+  --jh-font-md:15px;
+  --jh-font-base:16px;
+  --jh-font-lg:17px;
+  --jh-font-xl:20px;
+  --jh-font-2xl:25px;
+  --jh-font-3xl:32px;
+  --jh-font-display:40px;
+  --jh-weight-regular:400;
+  --jh-weight-medium:500;
+  --jh-weight-semibold:650;
+  --jh-weight-bold:750;
+  --jh-leading-tight:1.08;
+  --jh-leading-title:1.18;
+  --jh-leading-body:1.48;
+  --jh-tracking-tight:-.032em;
+  --jh-tracking-title:-.02em;
 
+  /* Escala de 4px. */
   --jh-space-1:4px;--jh-space-2:8px;--jh-space-3:12px;--jh-space-4:16px;--jh-space-5:20px;--jh-space-6:24px;--jh-space-7:28px;--jh-space-8:32px;--jh-space-10:40px;--jh-space-12:48px;
-  --jh-radius-xs:10px;--jh-radius-sm:14px;--jh-radius-md:18px;--jh-radius-lg:22px;--jh-radius-xl:26px;--jh-radius-2xl:30px;--jh-radius-pill:999px;
 
-  --jh-shadow-xs:0 1px 2px rgba(29,20,39,.025),0 4px 14px rgba(29,20,39,.025);
-  --jh-shadow-sm:0 8px 28px rgba(29,20,39,.04),0 2px 8px rgba(29,20,39,.022);
-  --jh-shadow-md:0 14px 40px rgba(29,20,39,.07),0 4px 12px rgba(29,20,39,.035);
-  --jh-shadow-float:0 20px 58px rgba(29,20,39,.11),0 6px 18px rgba(29,20,39,.045);
+  /* Radius menores deixam o produto mais refinado. */
+  --jh-radius-xs:9px;
+  --jh-radius-sm:12px;
+  --jh-radius-md:16px;
+  --jh-radius-lg:19px;
+  --jh-radius-xl:23px;
+  --jh-radius-2xl:27px;
+  --jh-radius-pill:999px;
 
-  --jh-control-sm:44px;--jh-control-md:52px;--jh-control-lg:56px;--jh-touch-min:44px;
-  --jh-icon-sm:18px;--jh-icon-md:22px;--jh-icon-lg:24px;
-  --jh-content-max:760px;--jh-page-gutter:20px;
+  /* Elevação quase imperceptível. */
+  --jh-shadow-xs:0 1px 2px rgba(28,22,34,.018),0 5px 16px rgba(28,22,34,.024);
+  --jh-shadow-sm:0 8px 24px rgba(28,22,34,.032),0 2px 7px rgba(28,22,34,.018);
+  --jh-shadow-md:0 14px 38px rgba(28,22,34,.055),0 3px 10px rgba(28,22,34,.024);
+  --jh-shadow-float:0 20px 54px rgba(28,22,34,.10),0 5px 16px rgba(28,22,34,.035);
 
-  --jh-ease:cubic-bezier(.2,.8,.2,1);--jh-duration-fast:120ms;--jh-duration-base:180ms;--jh-duration-slow:260ms;
+  --jh-control-sm:42px;
+  --jh-control-md:50px;
+  --jh-control-lg:54px;
+  --jh-touch-min:44px;
+  --jh-icon-sm:17px;
+  --jh-icon-md:20px;
+  --jh-icon-lg:23px;
+  --jh-content-max:720px;
+  --jh-page-gutter:20px;
 
-  --jh-card-bg:var(--jh-surface);--jh-card-border:var(--jh-border);--jh-card-shadow:var(--jh-shadow-xs);
-  --jh-control-bg:var(--jh-surface-subtle);--jh-control-border:var(--jh-border-strong);
-  --jh-focus-ring:0 0 0 4px color-mix(in srgb,var(--jh-accent) 12%,transparent);
-  --jh-nav-bg:rgba(255,255,255,.91);--jh-overlay:rgba(13,10,17,.48);--jh-toast-bg:#28212f;
-  --jh-skeleton-base:#ece9f0;--jh-skeleton-highlight:#f6f4f8;
+  --jh-ease:cubic-bezier(.2,.8,.2,1);
+  --jh-duration-fast:120ms;
+  --jh-duration-base:180ms;
+  --jh-duration-slow:260ms;
 
-  /* Compatibility aliases used by the single app renderer during migration. */
+  --jh-card-bg:var(--jh-surface);
+  --jh-card-border:var(--jh-border);
+  --jh-card-shadow:var(--jh-shadow-xs);
+  --jh-control-bg:var(--jh-surface-subtle);
+  --jh-control-border:var(--jh-border-strong);
+  --jh-focus-ring:0 0 0 3px color-mix(in srgb,var(--jh-accent) 11%,transparent);
+  --jh-nav-bg:rgba(255,255,255,.94);
+  --jh-overlay:rgba(12,10,15,.42);
+  --jh-toast-bg:#28242d;
+  --jh-skeleton-base:#ece9ef;
+  --jh-skeleton-highlight:#f6f4f8;
+
+  /* Compatibilidade temporária com o único renderer. */
   --bg:var(--jh-bg);--surface:var(--jh-surface);--surface2:var(--jh-surface-subtle);--text:var(--jh-text);--muted:var(--jh-muted);
   --line:var(--jh-border);--line2:var(--jh-border-strong);--purple:var(--jh-accent);--purple2:var(--jh-accent-strong);--purpleSoft:var(--jh-accent-soft);
   --green:var(--jh-green);--greenSoft:var(--jh-green-soft);--red:var(--jh-red);--redSoft:var(--jh-red-soft);
   --shadow:var(--jh-shadow-sm);--shadowFloat:var(--jh-shadow-float);--nav:var(--jh-nav-bg);
 
-  font-family:var(--jh-font);color-scheme:light;
+  font-family:var(--jh-font);
+  color-scheme:light;
 }
 
 html[data-theme="dark"]{
-  --jh-bg:#0e0c12;--jh-bg-soft:#111017;--jh-surface:#17141c;--jh-surface-subtle:#1b1821;--jh-surface-elevated:#201c27;
-  --jh-text:#f7f4fa;--jh-text-soft:#d5ceda;--jh-muted:#a59eac;--jh-muted-soft:#777080;
-  --jh-border:rgba(246,240,252,.085);--jh-border-strong:rgba(246,240,252,.14);
-  --jh-accent:#a17cff;--jh-accent-strong:#c4a9ff;--jh-accent-soft:#292036;--jh-accent-soft-2:#211a2b;
-  --jh-green:#58c7a6;--jh-green-strong:#7ad7bc;--jh-green-soft:#12352c;
-  --jh-red:#ef7990;--jh-red-strong:#ff9aac;--jh-red-soft:#3d2028;
-  --jh-warning:#e8b065;--jh-warning-soft:#382a17;
+  --jh-bg:#0c0c0f;
+  --jh-bg-soft:#101014;
+  --jh-surface:#151519;
+  --jh-surface-subtle:#1a1a1f;
+  --jh-surface-elevated:#1d1d22;
+  --jh-text:#f5f3f7;
+  --jh-text-soft:#cfccd3;
+  --jh-muted:#98939f;
+  --jh-muted-soft:#6f6a75;
+  --jh-border:rgba(255,255,255,.065);
+  --jh-border-strong:rgba(255,255,255,.11);
+  --jh-accent:#9a80f7;
+  --jh-accent-strong:#b9a4ff;
+  --jh-accent-soft:#272232;
+  --jh-accent-soft-2:#201c28;
+  --jh-green:#58c3a0;
+  --jh-green-strong:#78d2b4;
+  --jh-green-soft:#143129;
+  --jh-red:#ed7a91;
+  --jh-red-strong:#ff9aad;
+  --jh-red-soft:#382127;
+  --jh-warning:#e2ad68;
+  --jh-warning-soft:#332717;
   --jh-shadow-xs:0 1px 2px rgba(0,0,0,.08),0 5px 16px rgba(0,0,0,.07);
-  --jh-shadow-sm:0 9px 28px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.09);
-  --jh-shadow-md:0 16px 42px rgba(0,0,0,.22),0 5px 14px rgba(0,0,0,.12);
-  --jh-shadow-float:0 22px 60px rgba(0,0,0,.34),0 8px 22px rgba(0,0,0,.18);
-  --jh-nav-bg:rgba(23,20,28,.92);--jh-overlay:rgba(4,3,7,.62);--jh-toast-bg:#27212e;
-  --jh-skeleton-base:#1c1823;--jh-skeleton-highlight:#27212f;
+  --jh-shadow-sm:0 9px 26px rgba(0,0,0,.13),0 2px 8px rgba(0,0,0,.08);
+  --jh-shadow-md:0 16px 42px rgba(0,0,0,.21),0 4px 12px rgba(0,0,0,.10);
+  --jh-shadow-float:0 22px 58px rgba(0,0,0,.32),0 7px 20px rgba(0,0,0,.16);
+  --jh-nav-bg:rgba(21,21,25,.94);
+  --jh-overlay:rgba(0,0,0,.58);
+  --jh-toast-bg:#28252d;
+  --jh-skeleton-base:#1b1b20;
+  --jh-skeleton-highlight:#25252b;
   color-scheme:dark;
 }
 
-/* Universal reset now lives here; no legacy stylesheet is required. */
 *,*::before,*::after{box-sizing:border-box}
 :where(html,body){font-family:var(--jh-font)}
 :where(button,input,textarea,select){font:inherit;color:inherit}
@@ -70,7 +148,7 @@ html[data-theme="dark"]{
 :where(a){color:inherit}
 :where(button,[role="button"],input,textarea,select):focus-visible{outline:none;box-shadow:var(--jh-focus-ring)}
 :where(button,[role="button"]){-webkit-tap-highlight-color:transparent}
-:where(button:disabled,input:disabled,textarea:disabled,select:disabled){cursor:not-allowed;opacity:.52}
+:where(button:disabled,input:disabled,textarea:disabled,select:disabled){cursor:not-allowed;opacity:.5}
 
 .jh-card{background:var(--jh-card-bg);border:1px solid var(--jh-card-border);border-radius:var(--jh-radius-xl);box-shadow:var(--jh-card-shadow)}
 .jh-card--flat{box-shadow:none}.jh-card--elevated{box-shadow:var(--jh-shadow-md)}
@@ -78,12 +156,12 @@ html[data-theme="dark"]{
 .jh-btn:active:not(:disabled){transform:scale(.985)}
 .jh-btn--primary{background:var(--jh-accent);color:#fff}.jh-btn--secondary{background:var(--jh-accent-soft);color:var(--jh-accent-strong)}
 .jh-btn--ghost{background:var(--jh-control-bg);border-color:var(--jh-border);color:var(--jh-text-soft)}
-.jh-btn--danger{background:var(--jh-red-soft);border-color:color-mix(in srgb,var(--jh-red) 20%,var(--jh-border));color:var(--jh-red)}
+.jh-btn--danger{background:var(--jh-red-soft);border-color:color-mix(in srgb,var(--jh-red) 18%,var(--jh-border));color:var(--jh-red)}
 .jh-control{width:100%;min-height:var(--jh-control-lg);padding:0 var(--jh-space-4);border:1px solid var(--jh-control-border);border-radius:var(--jh-radius-md);background:var(--jh-control-bg);color:var(--jh-text);font-size:var(--jh-font-base);transition:border-color var(--jh-duration-base) var(--jh-ease),box-shadow var(--jh-duration-base) var(--jh-ease),background var(--jh-duration-base) var(--jh-ease)}
-.jh-control:focus{border-color:color-mix(in srgb,var(--jh-accent) 55%,var(--jh-border));box-shadow:var(--jh-focus-ring)}
-.jh-label{display:grid;gap:var(--jh-space-2);color:var(--jh-muted);font-size:var(--jh-font-sm);font-weight:var(--jh-weight-semibold)}
+.jh-control:focus{border-color:color-mix(in srgb,var(--jh-accent) 45%,var(--jh-border));box-shadow:var(--jh-focus-ring)}
+.jh-label{display:grid;gap:var(--jh-space-2);color:var(--jh-muted);font-size:var(--jh-font-sm);font-weight:var(--jh-weight-medium)}
 .jh-helper{color:var(--jh-muted);font-size:var(--jh-font-sm);line-height:var(--jh-leading-body)}
-.jh-popover{background:color-mix(in srgb,var(--jh-surface-elevated) 97%,transparent);border:1px solid var(--jh-border);border-radius:var(--jh-radius-lg);box-shadow:var(--jh-shadow-float);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.jh-popover{background:color-mix(in srgb,var(--jh-surface-elevated) 98%,transparent);border:1px solid var(--jh-border);border-radius:var(--jh-radius-lg);box-shadow:var(--jh-shadow-float);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .jh-modal{background:var(--jh-surface);border:1px solid var(--jh-border);border-radius:var(--jh-radius-2xl);box-shadow:var(--jh-shadow-float)}
 .jh-navbar{background:var(--jh-nav-bg);border:1px solid var(--jh-border);border-radius:var(--jh-radius-xl);box-shadow:var(--jh-shadow-md);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .jh-toast{background:var(--jh-toast-bg);color:#fff;border-radius:var(--jh-radius-md);box-shadow:var(--jh-shadow-float)}
@@ -91,5 +169,5 @@ html[data-theme="dark"]{
 @keyframes jh-design-shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
 
 @media(max-width:560px){:root{--jh-page-gutter:18px}}
-@media(max-width:390px){:root{--jh-page-gutter:14px}}
+@media(max-width:390px){:root{--jh-page-gutter:16px}}
 @media(prefers-reduced-motion:reduce){:root{--jh-duration-fast:0ms;--jh-duration-base:0ms;--jh-duration-slow:0ms}.jh-skeleton{animation:none}}
