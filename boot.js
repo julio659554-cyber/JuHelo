@@ -95,7 +95,7 @@
   (async()=>{
     try{
       await loadSupabase();
-      await import('./app-v31.js?v=uiux11');
+      await import('./app-v31.js?v=uiux12');
       if(document.readyState==='complete'&&'serviceWorker'in navigator){
         navigator.serviceWorker.register('./sw.js').catch(console.warn);
       }
