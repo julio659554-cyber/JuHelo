@@ -22,18 +22,18 @@ jobs:
 
       - name: Ensure canonical active styles only
         run: |
-          grep -q 'design-system.css?v=uiux10' index.html
-          grep -q 'app-shell.css?v=uiux10' index.html
-          grep -q 'app-ui.css?v=uiux10' index.html
-          grep -q 'forms.css?v=uiux10' index.html
-          grep -q 'picker.css?v=uiux10' index.html
-          grep -q 'interactions.css?v=uiux10' index.html
+          grep -q 'design-system.css?v=uiux11' index.html
+          grep -q 'app-shell.css?v=uiux11' index.html
+          grep -q 'app-ui.css?v=uiux11' index.html
+          grep -q 'forms.css?v=uiux11' index.html
+          grep -q 'picker.css?v=uiux11' index.html
+          grep -q 'interactions.css?v=uiux11' index.html
           ! grep -q 'app-v31.css' index.html
           ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
 
       - name: Ensure one renderer and no redesign observers
         run: |
-          grep -q "app-v31.js?v=uiux10" boot.js
+          grep -q "app-v31.js?v=uiux11" boot.js
           ! grep -q 'MutationObserver' app-v31.js
           ! grep -q 'MutationObserver' boot.js
           ! grep -q 'MutationObserver' form-ux.js
@@ -50,19 +50,19 @@ jobs:
 
       - name: Check PWA final asset graph
         run: |
-          grep -q "juhelo-uiux-10" sw.js
-          grep -q "design-system.css?v=uiux10" sw.js
-          grep -q "app-shell.css?v=uiux10" sw.js
-          grep -q "app-ui.css?v=uiux10" sw.js
-          grep -q "forms.css?v=uiux10" sw.js
-          grep -q "picker.css?v=uiux10" sw.js
-          grep -q "interactions.css?v=uiux10" sw.js
-          grep -q "form-ux.js?v=uiux10" sw.js
-          grep -q "picker.js?v=uiux10" sw.js
-          grep -q "boot.js?v=uiux10" sw.js
+          grep -q "juhelo-uiux-11" sw.js
+          grep -q "design-system.css?v=uiux11" sw.js
+          grep -q "app-shell.css?v=uiux11" sw.js
+          grep -q "app-ui.css?v=uiux11" sw.js
+          grep -q "forms.css?v=uiux11" sw.js
+          grep -q "picker.css?v=uiux11" sw.js
+          grep -q "interactions.css?v=uiux11" sw.js
+          grep -q "form-ux.js?v=uiux11" sw.js
+          grep -q "picker.js?v=uiux11" sw.js
+          grep -q "boot.js?v=uiux11" sw.js
           ! grep -q 'app-v31.css' sw.js
 
       - name: Check build marker
         run: |
-          grep -q 'juhelo-build" content="uiux-10' index.html
-          grep -q 'data-juhelo-build="uiux-10"' index.html
+          grep -q 'juhelo-build" content="uiux-11' index.html
+          grep -q 'data-juhelo-build="uiux-11"' index.html
