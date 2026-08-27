@@ -95,8 +95,7 @@
   (async()=>{
     try{
       await loadSupabase();
-      await import('./app-v31.js?v=uiux10');
-      /* Se o módulo entrou depois do load, garante registro do PWA. */
+      await import('./app-v31.js?v=uiux11');
       if(document.readyState==='complete'&&'serviceWorker'in navigator){
         navigator.serviceWorker.register('./sw.js').catch(console.warn);
       }
