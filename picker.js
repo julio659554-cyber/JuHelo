@@ -3,6 +3,7 @@
   let popover = null;
   let activeSelect = null;
   let activeHost = null;
+  let closeTimer = null;
 
   const hostSelector = '.month-control,.field,.period-card label';
 
@@ -20,20 +21,21 @@
 
   function enhance(select) {
     if (!(select instanceof HTMLSelectElement) || select.multiple) return null;
-    if (select.dataset.jhPicker === '1') return hostFor(select);
-
     const host = hostFor(select);
     if (!host) return null;
 
-    select.dataset.jhPicker = '1';
-    select.tabIndex = -1;
-    select.setAttribute('aria-hidden','true');
+    if (select.dataset.jhPicker !== '1') {
+      select.dataset.jhPicker = '1';
+      select.tabIndex = -1;
+      select.setAttribute('aria-hidden','true');
+      select.setAttribute('data-native-disabled','true');
+    }
 
     host.classList.add('jh-select-host');
     host.tabIndex = host.tabIndex >= 0 ? host.tabIndex : 0;
     host.setAttribute('role','button');
     host.setAttribute('aria-haspopup','listbox');
-    host.setAttribute('aria-expanded','false');
+    if (!host.hasAttribute('aria-expanded')) host.setAttribute('aria-expanded','false');
 
     const label = host.classList.contains('month-control')
       ? 'Selecionar mês'
@@ -51,14 +53,23 @@
     return select;
   }
 
-  function closePopover({focus=false}={}) {
-    const host = activeHost;
+  function finishClose(host,focus) {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     popover?.remove();
     popover = null;
     if (host) host.setAttribute('aria-expanded','false');
     activeSelect = null;
     activeHost = null;
     if (focus) host?.focus?.({preventScroll:true});
+  }
+
+  function closePopover({focus=false,animate=true}={}) {
+    const host = activeHost;
+    const node = popover;
+    if (!node) return finishClose(host,focus);
+    if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return finishClose(host,focus);
+    node.classList.add('is-closing');
+    closeTimer = setTimeout(()=>finishClose(host,focus),150);
   }
 
   function applyValue(value) {
@@ -121,7 +132,7 @@
       closePopover({focus:true});
       return;
     }
-    closePopover();
+    closePopover({animate:false});
 
     activeSelect = select;
     activeHost = host;
@@ -155,12 +166,26 @@
     root.querySelectorAll?.('select').forEach(enhance);
   }
 
+  /* pointerdown abre o picker antes de qualquer default action de label/select. */
   document.addEventListener('pointerdown',event=>{
     const select = selectFromHost(event.target);
     if (!select) return;
     event.preventDefault();
     event.stopPropagation();
     openPopover(select);
+  },true);
+
+  /* iOS pode ativar um select descendente no click do label. Bloqueamos esse default também. */
+  document.addEventListener('click',event=>{
+    if (event.target instanceof Element && event.target.closest('.jh-select-popover')) return;
+    const select = selectFromHost(event.target);
+    if (select) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    if (popover) closePopover();
+    queueMicrotask(()=>enhanceWithin(document));
   },true);
 
   document.addEventListener('keydown',event=>{
@@ -192,13 +217,16 @@
     openPopover(select);
   },true);
 
-  document.addEventListener('click',event=>{
-    if (popover && !event.target.closest('.jh-select-popover') && !event.target.closest('.jh-select-host')) closePopover();
-    queueMicrotask(()=>enhanceWithin(document));
+  document.addEventListener('focusin',()=>queueMicrotask(()=>enhanceWithin(document)));
+
+  /* Scroll da própria lista nunca fecha o picker; scroll da página fecha. */
+  document.addEventListener('scroll',event=>{
+    if (!popover) return;
+    const target=event.target;
+    if (target===popover || (target instanceof Element && target.closest('.jh-select-popover'))) return;
+    closePopover({animate:false});
   },true);
 
-  document.addEventListener('focusin',()=>queueMicrotask(()=>enhanceWithin(document)));
-  document.addEventListener('scroll',()=>{if(popover)closePopover()},true);
   window.addEventListener('resize',()=>popover&&positionPopover(),{passive:true});
   window.visualViewport?.addEventListener('resize',()=>popover&&positionPopover(),{passive:true});
 
