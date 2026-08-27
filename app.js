@@ -1,895 +1,216 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
 
-const SUPABASE_URL = 'https://fjysngoakqbemhjyfima.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_dIs-fsCy5wKEdFyDbf7Geg_2kZw_4Cp';
-const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const SUPABASE_URL='https://fjysngoakqbemhjyfima.supabase.co';
+const SUPABASE_KEY='sb_publishable_dIs-fsCy5wKEdFyDbf7Geg_2kZw_4Cp';
+const db=createClient(SUPABASE_URL,SUPABASE_KEY);
+const app=document.querySelector('#app');
+const toastRoot=document.querySelector('#toast-root');
+const moneyFmt=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const monthFmt=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'});
+const shortMonthFmt=new Intl.DateTimeFormat('pt-BR',{month:'short',year:'numeric'});
 
-const app = document.querySelector('#app');
-const toastRoot = document.querySelector('#toast-root');
-const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-const monthFmt = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
+const CATEGORIES=Object.freeze({
+  recurring:{label:'Fixos / recorrentes',emoji:'🔁',color:'#8B5CF6',system:true},
+  leisure:{label:'Lazer',emoji:'🎉',color:'#EC4899'},
+  fuel:{label:'Combustível',emoji:'⛽',color:'#F59E0B'},
+  reimbursable:{label:'Reembolsáveis',emoji:'🧾',color:'#3B82F6'},
+  unexpected:{label:'Imprevisto',emoji:'⚠️',color:'#F97316'},
+  health:{label:'Saúde / cuidados',emoji:'🩺',color:'#10B981'},
+  debit_pix:{label:'Compras no débito / Pix',emoji:'💳',color:'#14B8A6'},
+  box:{label:'Caixinha',emoji:'🏦',color:'#6366F1',system:true},
+  uncategorized:{label:'Sem categoria',emoji:'•',color:'#94A3B8',system:true}
+});
+const USER_EXPENSE_CATEGORIES=['leisure','fuel','reimbursable','unexpected','health','debit_pix'];
+const REPORT_CATEGORIES=['recurring',...USER_EXPENSE_CATEGORIES,'box','uncategorized'];
 
-const state = {
-  session: null,
-  profile: null,
-  household: null,
-  members: [],
-  selectedMonth: firstDayISO(new Date()),
-  activeTab: 'home',
-  transactions: [],
-  recurringPlans: [],
-  boxes: [],
-  boxBalances: [],
-  boxMovements: [],
-  goals: [],
-  monthlySummary: [],
-  loading: true,
+const state={
+  session:null,profile:null,household:null,members:[],loading:true,
+  tab:'home',txMonth:monthISO(new Date()),transactions:[],boxes:[],boxBalances:[],goals:[],
+  reportStart:`${new Date().getFullYear()}-01-01`,reportEnd:monthISO(new Date()),
+  reportRows:[],reportTransactions:[],reportCategory:'all',reportLoading:false,
+  valuesHidden:false
 };
 
-const icons = { home: '⌂', transactions: '↕', boxes: '▣', reports: '▥', goals: '◎' };
+const ICON={
+  home:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-6h5v6"/>',
+  transactions:'<path d="M7 4v16"/><path d="m3.5 7.5 3.5-3.5 3.5 3.5"/><path d="M17 20V4"/><path d="m13.5 16.5 3.5 3.5 3.5-3.5"/>',
+  boxes:'<path d="M4 8.5h16v10.5H4z"/><path d="M7 8.5V6h10v2.5"/><path d="M9 12h6"/>',
+  reports:'<path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20V8"/>',
+  goals:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m14.8 9.2 5-5"/><path d="M16.5 4.2h3.3v3.3"/>',
+  income:'<path d="M5 17l5-5 4 4 5-5"/><path d="M14 11h5v5"/>',
+  expense:'<path d="M5 7l5 5 4-4 5 5"/><path d="M14 13h5V8"/>',
+  recurring:'<path d="M20 7h-5V2"/><path d="M20 7a8 8 0 1 0 1 7"/>',
+  calendar:'<rect x="4" y="5.5" width="16" height="14" rx="3"/><path d="M8 3v5M16 3v5M4 10h16"/>',
+  eye:'<path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/>',
+  moon:'<path d="M20.5 14.2A8 8 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
+  system:'<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'
+};
 
-function firstDayISO(date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-01`;
+function svg(path,cls=''){return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function monthISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`}
+function monthText(iso){const t=monthFmt.format(new Date(`${String(iso).slice(0,10)}T12:00:00`));return t.charAt(0).toUpperCase()+t.slice(1)}
+function monthShort(iso){return shortMonthFmt.format(new Date(`${String(iso).slice(0,10)}T12:00:00`)).replace('.','').replace(' de ',' ')}
+function money(v){return moneyFmt.format(Number(v||0))}
+function parseMoney(v){
+  let s=String(v??'').trim().replace(/\s/g,'').replace(/^R\$/i,'');
+  if(!s)return NaN;
+  if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');
+  else if(s.includes(','))s=s.replace(',','.');
+  const n=Number(s.replace(/[^0-9.-]/g,''));return Number.isFinite(n)?n:NaN;
 }
-function esc(value = '') {
-  return String(value).replace(/[&<>'"]/g, c => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-  }[c]));
+function currentMonth(){return monthISO(new Date())}
+function initials(name='JH'){return String(name).trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'JH'}
+function displayName(){return state.profile?.display_name||state.session?.user?.user_metadata?.display_name||state.session?.user?.email?.split('@')[0]||'JuHelo'}
+function householdId(){return state.household?.id||null}
+function toast(msg,type=''){const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=msg;toastRoot.appendChild(el);setTimeout(()=>el.remove(),3200)}
+function setBusy(btn,busy,label='Salvando…'){if(!btn)return;if(busy){btn.dataset.oldText=btn.textContent;btn.textContent=label;btn.disabled=true}else{btn.textContent=btn.dataset.oldText||btn.textContent;btn.disabled=false}}
+function safeError(err,fallback='Não foi possível concluir agora.'){console.warn(err);toast(err?.message||fallback,'error')}
+function summary(){const income=state.transactions.filter(t=>t.direction==='income').reduce((s,t)=>s+Number(t.amount||0),0);const expense=state.transactions.filter(t=>t.direction==='expense').reduce((s,t)=>s+Number(t.amount||0),0);return{income,expense,result:income-expense}}
+function balanceFor(boxId){return Number(state.boxBalances.find(b=>b.box_id===boxId)?.balance||0)}
+function upsertTx(tx){const i=state.transactions.findIndex(x=>x.id===tx.id);if(i>=0)state.transactions[i]=tx;else state.transactions.unshift(tx)}
+function categoryFor(tx){
+  if(tx?.direction==='income')return null;
+  const key=tx?.kind==='recurring'?'recurring':tx?.kind==='box_contribution'?'box':tx?.category||'uncategorized';
+  return {key,...(CATEGORIES[key]||CATEGORIES.uncategorized)};
 }
-function money(v) { return brl.format(Number(v || 0)); }
-function monthLabel(iso) {
-  const text = monthFmt.format(new Date(`${iso}T12:00:00`));
-  return text.charAt(0).toUpperCase() + text.slice(1);
+function categoryOptions(selected=''){
+  return `<fieldset class="category-field"><legend>Categoria</legend><div class="category-grid">${USER_EXPENSE_CATEGORIES.map(key=>{const c=CATEGORIES[key];return `<button type="button" class="category-choice ${selected===key?'is-selected':''}" data-category="${key}" style="--cat:${c.color}"><span>${c.emoji}</span><strong>${esc(c.label)}</strong><i>✓</i></button>`}).join('')}</div></fieldset>`;
 }
-function toast(message, type = '') {
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
-  el.textContent = message;
-  toastRoot.appendChild(el);
-  setTimeout(() => el.remove(), 3400);
-}
-function authName() {
-  return state.profile?.display_name || state.session?.user?.email?.split('@')[0] || 'JuHelo';
-}
-function initials(name) {
-  return (name || 'JH').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || 'JH';
-}
-function pct(v, t) {
-  return !t ? 0 : Math.max(0, Math.min(100, Math.round((Number(v) / Number(t)) * 100)));
-}
-function householdId() { return state.household?.id; }
-function boxBalance(boxId) {
-  return Number(state.boxBalances.find(x => x.box_id === boxId)?.balance || 0);
-}
-function currentTransactions(direction) {
-  return state.transactions.filter(t => t.month === state.selectedMonth && (!direction || t.direction === direction));
-}
-function summary() {
-  const income = currentTransactions('income').reduce((s, t) => s + Number(t.amount), 0);
-  const expense = currentTransactions('expense').reduce((s, t) => s + Number(t.amount), 0);
-  return { income, expense, result: income - expense };
-}
-function recurringPlan(tx) {
-  return tx?.recurring_plan_id ? state.recurringPlans.find(p => p.id === tx.recurring_plan_id) : null;
-}
+function categoryReadonly(key){const c=CATEGORIES[key];return `<div class="category-readonly" style="--cat:${c.color}"><span>${c.emoji}</span><div><small>Categoria</small><strong>${esc(c.label)}</strong></div></div>`}
 
-function render() {
-  if (state.loading) return renderSplash();
-  if (!state.session) return renderAuth();
-  if (!state.household) return renderOnboarding();
-  renderApp();
+function applyTheme(pref){
+  localStorage.setItem('juhelo-theme-preference',pref);
+  const dark=pref==='dark'||(pref==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const theme=dark?'dark':'light';document.documentElement.dataset.theme=theme;document.documentElement.dataset.themePreference=pref;document.documentElement.style.colorScheme=theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#0c0c0f':'#fbfafc');
 }
-function renderSplash() {
-  app.innerHTML = `<div class="splash"><div class="brand-mark">♡</div><div class="brand-name"><span>Ju</span>Helo</div><p>finanças do casal</p></div>`;
-}
-function topbar() {
-  return `<header class="topbar">
-    <div class="brand-inline">
-      <div class="mini-logo">♡</div>
-      <div><span style="color:var(--purple)">Ju</span>Helo</div>
-    </div>
-    <div class="user-chip">
-      <span>${esc(authName())}</span>
-      <div class="avatar">${esc(initials(authName()))}</div>
-    </div>
-  </header>`;
-}
-function nav() {
-  return `<nav class="bottom-nav">
-    ${[['home','Início'],['transactions','Movimentações'],['boxes','Caixinhas'],['reports','Relatórios'],['goals','Metas']]
-      .map(([id,label]) => `<button class="nav-item ${state.activeTab === id ? 'active' : ''}" data-tab="${id}">
-        <span class="nav-icon">${icons[id]}</span><span>${label}</span>
-      </button>`).join('')}
-  </nav>`;
-}
-function monthSelect() {
-  const base = new Date(`${state.selectedMonth}T12:00:00`);
-  let out = '';
-  for (let i = -18; i <= 18; i++) {
-    const d = new Date(base.getFullYear(), base.getMonth() + i, 1);
-    const iso = firstDayISO(d);
-    out += `<option value="${iso}" ${iso === state.selectedMonth ? 'selected' : ''}>${esc(monthLabel(iso))}</option>`;
-  }
-  return `<select class="month-select" id="month-select">${out}</select>`;
-}
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if((localStorage.getItem('juhelo-theme-preference')||'light')==='system')applyTheme('system')});
 
-function renderAuth(mode = 'login') {
-  const signup = mode === 'signup';
-  app.innerHTML = `<main class="page narrow">
-    <div class="topbar"><div class="brand-inline"><div class="mini-logo">♡</div><div><span style="color:var(--purple)">Ju</span>Helo</div></div></div>
-    <section class="auth-card">
-      <h1>${signup ? 'Criar sua conta' : 'Entrar no JuHelo'}</h1>
-      <p>${signup ? 'Depois você cria ou entra no espaço financeiro do casal.' : 'Suas finanças do casal em um lugar simples.'}</p>
-      <form id="auth-form" class="form-grid">
-        ${signup ? '<div class="field"><label>Seu nome</label><input class="input" name="name" required></div>' : ''}
-        <div class="field"><label>E-mail</label><input class="input" type="email" name="email" required></div>
-        <div class="field"><label>Senha</label><input class="input" type="password" name="password" minlength="6" required></div>
-        <button class="btn primary block">${signup ? 'Criar conta' : 'Entrar'}</button>
-      </form>
-      <div class="auth-switch">${signup ? 'Já tem uma conta?' : 'Ainda não tem conta?'} <button class="link-btn" id="switch-auth">${signup ? 'Entrar' : 'Criar conta'}</button></div>
-    </section>
-  </main>`;
-  document.querySelector('#switch-auth').onclick = () => renderAuth(signup ? 'login' : 'signup');
-  document.querySelector('#auth-form').onsubmit = async e => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    try {
-      if (signup) {
-        const { error } = await supabase.auth.signUp({
-          email: fd.get('email').trim(),
-          password: fd.get('password'),
-          options: { data: { display_name: fd.get('name').trim() } }
-        });
-        if (error) throw error;
-        toast('Conta criada. Confira o e-mail se a confirmação estiver ativa.');
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: fd.get('email').trim(),
-          password: fd.get('password')
-        });
-        if (error) throw error;
-      }
-    } catch (err) {
-      toast(err.message || 'Falha na autenticação.', 'error');
-    }
-  };
-}
-
-function renderOnboarding() {
-  app.innerHTML = `<main class="page narrow">${topbar()}
-    <section class="auth-card">
-      <div class="brand-mark" style="width:58px;height:58px;font-size:36px;margin:0 0 18px">♡</div>
-      <h1>Nosso dinheiro</h1>
-      <p>Crie o JuHelo de vocês ou entre usando o código de convite do parceiro.</p>
-      <div class="form-grid">
-        <button class="btn primary" id="create-household">Criar nosso JuHelo</button>
-        <div class="separator"><span></span>ou<span></span></div>
-        <div class="field"><label>Código do parceiro</label><input id="invite-code" class="input" placeholder="Ex.: A1B2C3D4"></div>
-        <button class="btn soft" id="join-household">Entrar com código</button>
-        <button class="btn ghost" id="logout-onboarding">Sair</button>
-      </div>
-    </section>
-  </main>`;
-  document.querySelector('#create-household').onclick = async () => {
-    const { error } = await supabase.rpc('create_household', { p_name: 'JuHelo' });
-    if (error) return toast(error.message, 'error');
-    await loadAll();
-    toast('JuHelo criado 💜');
-  };
-  document.querySelector('#join-household').onclick = async () => {
-    const code = document.querySelector('#invite-code').value.trim();
-    if (!code) return toast('Digite o código.', 'error');
-    const { error } = await supabase.rpc('join_household', { p_invite_code: code });
-    if (error) return toast(error.message, 'error');
-    await loadAll();
-    toast('Você entrou no JuHelo 💜');
-  };
-  document.querySelector('#logout-onboarding').onclick = () => supabase.auth.signOut();
-}
-
-function transactionRow(tx) {
-  const recurring = tx.kind === 'recurring';
-  const box = tx.kind === 'box_contribution';
-  return `<div class="row">
-    <div class="row-icon">${tx.direction === 'income' ? '↗' : box ? '▣' : recurring ? '↻' : '↘'}</div>
-    <div class="row-main">
-      <div class="row-title">${esc(tx.description)}</div>
-      <div class="row-sub">${box ? 'Caixinha' : recurring ? 'Gasto fixo' : tx.direction === 'income' ? 'Receita' : 'Despesa'}</div>
-    </div>
-    <div class="row-value">${money(tx.amount)}</div>
-    <button class="icon-btn edit-tx" data-id="${tx.id}" aria-label="Editar">✎</button>
-  </div>`;
-}
-function list(items) {
-  return items.length ? `<div class="list">${items.map(transactionRow).join('')}</div>` : '<div class="empty">Nenhum lançamento neste mês.</div>';
-}
-
-function home() {
-  const s = summary();
-  const boxesTotal = state.boxBalances.reduce((sum, x) => sum + Number(x.balance || 0), 0);
-  const completed = state.goals.filter(g => g.is_completed).length;
-  return `<section class="hero">
-    <div class="hero-row">
-      <div>
-        <div class="eyebrow">Saldo do mês</div>
-        <div class="balance">${money(s.result)}</div>
-        <div class="eyebrow">Receitas menos despesas</div>
-      </div>
-      ${monthSelect()}
-    </div>
-  </section>
-
-  <div class="kpi-grid">
-    <div class="kpi income"><div class="label">Receitas</div><div class="value">${money(s.income)}</div></div>
-    <div class="kpi expense"><div class="label">Despesas</div><div class="value">${money(s.expense)}</div></div>
-    <div class="kpi"><div class="label">Resultado do mês</div><div class="value">${money(s.result)}</div></div>
-  </div>
-
-  <div class="quick-actions">
-    <button class="quick expense" data-action="new-expense">＋<small>Despesa</small></button>
-    <button class="quick income" data-action="new-income">＋<small>Receita</small></button>
-    <button class="quick box" data-action="box-add">＋<small>Caixinha</small></button>
-    <button class="quick goal" data-action="new-goal">＋<small>Meta</small></button>
-  </div>
-
-  <div class="overview-strip">
-    <button class="mini-summary" data-tab="boxes"><span>Caixinhas</span><strong>${money(boxesTotal)}</strong></button>
-    <button class="mini-summary" data-tab="goals"><span>Metas</span><strong>${completed}/${state.goals.length}</strong></button>
-    <button class="mini-summary" data-action="household-info"><span>Casal</span><strong>${state.members.length}/2</strong></button>
-  </div>
-
-  <div class="grid-2">
-    <section class="panel">
-      <div class="panel-head"><h2>Despesas</h2><button class="link-btn" data-tab="transactions">Ver todas</button></div>
-      ${list(currentTransactions('expense').slice(0, 6))}
-    </section>
-    <section class="panel">
-      <div class="panel-head"><h2>Receitas</h2><button class="link-btn" data-tab="transactions">Ver todas</button></div>
-      ${list(currentTransactions('income').slice(0, 6))}
-    </section>
-  </div>`;
-}
-
-function transactions() {
-  const s = summary();
-  return `<div class="section-title">
-    <div><h1>Movimentações</h1><p>${esc(monthLabel(state.selectedMonth))}</p></div>
-    ${monthSelect()}
-  </div>
-  <div class="quick-actions">
-    <button class="quick expense" data-action="new-expense">＋<small>Despesa</small></button>
-    <button class="quick income" data-action="new-income">＋<small>Receita</small></button>
-    <button class="quick box" data-action="box-add">＋<small>Caixinha</small></button>
-    <button class="quick goal" data-action="new-recurring">↻<small>Gasto fixo</small></button>
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi income"><div class="label">Receitas</div><div class="value">${money(s.income)}</div></div>
-    <div class="kpi expense"><div class="label">Despesas</div><div class="value">${money(s.expense)}</div></div>
-    <div class="kpi"><div class="label">Saldo</div><div class="value">${money(s.result)}</div></div>
-  </div>
-  <section class="panel">${list(currentTransactions())}</section>`;
-}
-
-function boxes() {
-  return `<div class="section-title">
-    <div><h1>Caixinhas</h1><p>Dinheiro separado para os planos de vocês.</p></div>
-    <button class="btn soft" data-action="new-box">＋ Nova caixinha</button>
-  </div>
-  <div class="card-grid">
-    ${state.boxes.length ? state.boxes.map(b => {
-      const balance = boxBalance(b.id);
-      const p = pct(balance, b.target_amount);
-      const recent = state.boxMovements.filter(m => m.box_id === b.id).slice(0, 2);
-      return `<article class="box-card">
-        <div class="box-top">
-          <div>
-            <div class="box-name">${esc(b.name)}</div>
-            <span class="pill">${b.target_amount ? `Meta ${money(b.target_amount)}` : 'Sem meta definida'}</span>
-          </div>
-          <button class="icon-btn edit-box" data-id="${b.id}" aria-label="Editar caixinha">✎</button>
-        </div>
-        <div class="box-balance">${money(balance)}</div>
-        <div class="row-sub">Saldo atual</div>
-        ${b.target_amount ? `<div class="progress"><span style="width:${p}%"></span></div><div class="row-sub progress-copy">${p}% da meta</div>` : ''}
-        ${recent.length ? `<div class="box-preview">${recent.map(m => `<div><span>${esc(m.description || (m.movement_type === 'withdrawal' ? 'Retirada' : 'Depósito'))}</span><strong class="${m.movement_type === 'withdrawal' ? 'negative' : 'positive'}">${m.movement_type === 'withdrawal' ? '−' : '+'}${money(m.amount)}</strong></div>`).join('')}</div>` : ''}
-        <div class="actions-inline">
-          <button class="btn soft add-box" data-id="${b.id}">Adicionar</button>
-          <button class="btn ghost withdraw-box" data-id="${b.id}">Retirar</button>
-          <button class="btn ghost history-box" data-id="${b.id}">Histórico</button>
-        </div>
-      </article>`;
-    }).join('') : '<div class="panel empty">Crie a primeira caixinha de vocês.</div>'}
-  </div>`;
-}
-
-function goals() {
-  const balances = new Map(state.boxBalances.map(x => [x.box_id, Number(x.balance || 0)]));
-  return `<div class="section-title">
-    <div><h1>Metas</h1><p>Um checklist para os planos do casal.</p></div>
-    <button class="btn soft" data-action="new-goal">＋ Nova meta</button>
-  </div>
-  <section class="panel">
-    ${state.goals.length ? state.goals.map(g => {
-      const linkedBalance = g.box_id ? balances.get(g.box_id) || 0 : 0;
-      const progress = g.target_amount ? pct(linkedBalance, g.target_amount) : null;
-      return `<div class="goal-row">
-        <button class="check ${g.is_completed ? 'done' : ''}" data-goal="${g.id}">${g.is_completed ? '✓' : ''}</button>
-        <div class="goal-content">
-          <div class="row-title">${esc(g.title)}</div>
-          <div class="row-sub">${g.target_amount ? `Meta financeira: ${money(g.target_amount)}${g.box_id ? ` · Guardado ${money(linkedBalance)}` : ''}` : g.notes ? esc(g.notes) : 'Checklist do casal'}</div>
-          ${progress !== null ? `<div class="progress compact"><span style="width:${progress}%"></span></div>` : ''}
-        </div>
-        <button class="icon-btn edit-goal" data-id="${g.id}">✎</button>
-      </div>`;
-    }).join('') : '<div class="empty">Nenhuma meta criada ainda.</div>'}
-  </section>`;
-}
-
-function reports() {
-  const year = Number(state.selectedMonth.slice(0, 4));
-  const rows = state.monthlySummary.filter(x => Number(String(x.month).slice(0, 4)) === year);
-  const income = rows.reduce((s, x) => s + Number(x.total_income), 0);
-  const expense = rows.reduce((s, x) => s + Number(x.total_expense), 0);
-  const boxSaved = state.transactions
-    .filter(t => Number(String(t.month).slice(0, 4)) === year && t.kind === 'box_contribution')
-    .reduce((s, t) => s + Number(t.amount), 0);
-  const max = Math.max(1, ...rows.flatMap(x => [Number(x.total_income), Number(x.total_expense)]));
-  const bars = Array.from({ length: 12 }, (_, i) => {
-    const iso = `${year}-${String(i + 1).padStart(2, '0')}-01`;
-    const r = rows.find(x => x.month === iso) || { total_income: 0, total_expense: 0 };
-    return `<div class="chart-col">
-      <div class="bar income" style="height:${Math.round(Number(r.total_income) / max * 100)}%"></div>
-      <div class="bar expense" style="height:${Math.round(Number(r.total_expense) / max * 100)}%"></div>
-      <span class="chart-label">${String(i + 1).padStart(2, '0')}</span>
-    </div>`;
-  }).join('');
-  return `<div class="section-title">
-    <div><h1>Relatórios</h1><p>Visão anual do dinheiro de vocês.</p></div>
-    <div class="year-switch"><button data-year="-1">‹</button><strong>${year}</strong><button data-year="1">›</button></div>
-  </div>
-  <div class="kpi-grid report-kpis">
-    <div class="kpi income"><div class="label">Receitas no ano</div><div class="value">${money(income)}</div></div>
-    <div class="kpi expense"><div class="label">Despesas no ano</div><div class="value">${money(expense)}</div></div>
-    <div class="kpi"><div class="label">Saldo acumulado</div><div class="value">${money(income - expense)}</div></div>
-    <div class="kpi purple"><div class="label">Guardado em caixinhas</div><div class="value">${money(boxSaved)}</div></div>
-  </div>
-  <section class="panel">
-    <div class="panel-head"><div><h2>Receita x despesa</h2><div class="row-sub">Verde = receita · Rosa = despesa</div></div></div>
-    <div class="chart">${bars}</div>
-  </section>
-  <section class="panel report-table">
-    <div class="panel-head"><h2>Mês a mês</h2></div>
-    ${Array.from({length:12}, (_, i) => {
-      const iso = `${year}-${String(i + 1).padStart(2, '0')}-01`;
-      const r = rows.find(x => x.month === iso) || { total_income: 0, total_expense: 0, month_result: 0 };
-      return `<div class="report-row"><span>${esc(monthLabel(iso).replace(` de ${year}`, ''))}</span><span class="positive">${money(r.total_income)}</span><span class="negative">${money(r.total_expense)}</span><strong>${money(r.month_result)}</strong></div>`;
-    }).join('')}
-  </section>`;
-}
-
-function renderApp() {
-  const content = state.activeTab === 'home' ? home()
-    : state.activeTab === 'transactions' ? transactions()
-    : state.activeTab === 'boxes' ? boxes()
-    : state.activeTab === 'reports' ? reports()
-    : goals();
-  app.innerHTML = `<main class="page">${topbar()}${content}</main>${nav()}`;
-  bind();
-}
-
-function modal(title, body, onMount) {
-  const wrap = document.createElement('div');
-  wrap.className = 'modal-backdrop';
-  wrap.innerHTML = `<section class="modal-card"><div class="modal-head"><h2>${esc(title)}</h2><button class="icon-btn" data-close>×</button></div>${body}</section>`;
-  document.body.appendChild(wrap);
-  wrap.querySelector('[data-close]').onclick = () => wrap.remove();
-  wrap.onclick = e => { if (e.target === wrap) wrap.remove(); };
-  onMount?.(wrap);
-}
-
-function bind() {
-  document.querySelectorAll('[data-tab]').forEach(el => {
-    el.onclick = () => { state.activeTab = el.dataset.tab; render(); };
-  });
-
-  const month = document.querySelector('#month-select');
-  if (month) month.onchange = async () => {
-    state.selectedMonth = month.value;
-    await ensureRecurring();
-    await refresh();
-    render();
-  };
-
-  document.querySelectorAll('[data-action="new-expense"]').forEach(el => el.onclick = () => openTx(null, 'expense'));
-  document.querySelectorAll('[data-action="new-income"]').forEach(el => el.onclick = () => openTx(null, 'income'));
-  document.querySelectorAll('[data-action="new-box"]').forEach(el => el.onclick = () => openBox());
-  document.querySelectorAll('[data-action="box-add"]').forEach(el => el.onclick = () => openBoxAdd());
-  document.querySelectorAll('[data-action="new-goal"]').forEach(el => el.onclick = () => openGoal());
-  document.querySelectorAll('[data-action="new-recurring"]').forEach(el => el.onclick = openRecurring);
-  document.querySelectorAll('[data-action="household-info"]').forEach(el => el.onclick = openHouseholdInfo);
-
-  document.querySelectorAll('.edit-tx').forEach(el => {
-    el.onclick = () => {
-      const tx = state.transactions.find(t => t.id === el.dataset.id);
-      if (tx?.kind === 'recurring') openRecurringEdit(tx);
-      else openTx(tx);
-    };
-  });
-  document.querySelectorAll('.add-box').forEach(el => el.onclick = () => openBoxAdd(el.dataset.id));
-  document.querySelectorAll('.withdraw-box').forEach(el => el.onclick = () => openWithdraw(el.dataset.id));
-  document.querySelectorAll('.history-box').forEach(el => el.onclick = () => openBoxHistory(el.dataset.id));
-  document.querySelectorAll('.edit-box').forEach(el => el.onclick = () => openBox(state.boxes.find(b => b.id === el.dataset.id)));
-
-  document.querySelectorAll('[data-goal]').forEach(el => el.onclick = async () => {
-    const g = state.goals.find(x => x.id === el.dataset.goal);
-    const { error } = await supabase.from('goals')
-      .update({ is_completed: !g.is_completed, completed_at: !g.is_completed ? new Date().toISOString() : null })
-      .eq('id', g.id);
-    if (error) return toast(error.message, 'error');
-    await loadGoals();
-    render();
-  });
-  document.querySelectorAll('.edit-goal').forEach(el => el.onclick = () => openGoal(state.goals.find(g => g.id === el.dataset.id)));
-
-  document.querySelectorAll('[data-year]').forEach(el => el.onclick = async () => {
-    const d = new Date(`${state.selectedMonth}T12:00:00`);
-    d.setFullYear(d.getFullYear() + Number(el.dataset.year));
-    state.selectedMonth = firstDayISO(d);
-    await refresh();
-    render();
-  });
-}
-
-function openTx(tx = null, preset = 'expense') {
-  let dir = tx?.direction || preset;
-  modal(tx ? 'Editar lançamento' : dir === 'income' ? 'Nova receita' : 'Nova despesa',
-    `<form id="f" class="form-grid">
-      <div class="segmented">
-        <button type="button" data-dir="expense" class="${dir === 'expense' ? 'active' : ''}">Despesa</button>
-        <button type="button" data-dir="income" class="${dir === 'income' ? 'active' : ''}">Receita</button>
-      </div>
-      <div class="field"><label>Descrição</label><input class="input" name="description" value="${esc(tx?.description || '')}" required></div>
-      <div class="field"><label>Valor</label><input class="input" name="amount" type="number" step="0.01" min="0.01" value="${tx?.amount || ''}" required></div>
-      <div class="field"><label>Mês</label><input class="input" name="month" type="month" value="${(tx?.month || state.selectedMonth).slice(0,7)}" required></div>
-      ${tx ? '<button class="btn red" type="button" id="del">Excluir lançamento</button>' : ''}
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">Salvar</button></div>
-    </form>`,
-    w => {
-      w.querySelectorAll('[data-dir]').forEach(b => b.onclick = () => {
-        dir = b.dataset.dir;
-        w.querySelectorAll('[data-dir]').forEach(x => x.classList.toggle('active', x === b));
-      });
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      if (tx) w.querySelector('#del').onclick = async () => {
-        if (!confirm('Excluir este lançamento?')) return;
-        const { error } = await supabase.from('transactions').delete().eq('id', tx.id);
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await refresh();
-        render();
-      };
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const payload = {
-          household_id: householdId(),
-          direction: dir,
-          kind: tx?.kind || 'regular',
-          description: fd.get('description').trim(),
-          amount: Number(fd.get('amount')),
-          month: `${fd.get('month')}-01`,
-          updated_by: state.session.user.id
-        };
-        let error;
-        if (tx) ({ error } = await supabase.from('transactions').update(payload).eq('id', tx.id));
-        else ({ error } = await supabase.from('transactions').insert({ ...payload, created_by: state.session.user.id }));
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await refresh();
-        render();
-      };
-    });
-}
-
-function openRecurringEdit(tx) {
-  const plan = recurringPlan(tx);
-  modal('Editar gasto fixo',
-    `<form id="f" class="form-grid">
-      <div class="field"><label>Descrição</label><input class="input" name="description" value="${esc(tx.description)}" required></div>
-      <div class="field"><label>Valor</label><input class="input" name="amount" type="number" step="0.01" min="0.01" value="${tx.amount}" required></div>
-      <div class="field">
-        <label>Aplicar alteração</label>
-        <select class="input" name="scope">
-          <option value="this_month">Somente ${esc(monthLabel(tx.month))}</option>
-          <option value="future">Deste mês em diante</option>
-          <option value="all">Todos os meses da série</option>
-        </select>
-      </div>
-      <div class="recurring-note">Série atual: ${plan ? `${esc(monthLabel(plan.start_month))}${plan.end_month ? ` até ${esc(monthLabel(plan.end_month))}` : ' · sem data final'}` : 'gasto fixo'}</div>
-      <button class="btn red" type="button" id="del">Excluir gasto fixo</button>
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">Salvar</button></div>
-    </form>`,
-    w => {
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const { error } = await supabase.rpc('edit_recurring_expense', {
-          p_transaction_id: tx.id,
-          p_scope: fd.get('scope'),
-          p_description: fd.get('description').trim(),
-          p_amount: Number(fd.get('amount'))
-        });
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await refresh();
-        render();
-        toast('Gasto fixo atualizado.');
-      };
-      w.querySelector('#del').onclick = () => openRecurringDelete(tx, w);
-    });
-}
-
-function openRecurringDelete(tx, previousModal) {
-  previousModal?.remove();
-  modal('Excluir gasto fixo',
-    `<div class="form-grid">
-      <p class="modal-copy">Como você quer excluir <strong>${esc(tx.description)}</strong>?</p>
-      <button class="scope-card" data-scope="this_month"><strong>Só este mês</strong><span>Os próximos meses continuam normalmente.</span></button>
-      <button class="scope-card" data-scope="future"><strong>Deste mês em diante</strong><span>Mantém apenas os meses anteriores.</span></button>
-      <button class="scope-card danger" data-scope="all"><strong>Toda a série</strong><span>Remove todos os meses desse gasto fixo.</span></button>
-    </div>`,
-    w => {
-      w.querySelectorAll('[data-scope]').forEach(btn => btn.onclick = async () => {
-        const scope = btn.dataset.scope;
-        if (scope === 'all' && !confirm('Excluir toda a série deste gasto fixo?')) return;
-        const { error } = await supabase.rpc('delete_recurring_expense', {
-          p_transaction_id: tx.id,
-          p_scope: scope
-        });
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await refresh();
-        render();
-        toast('Gasto fixo atualizado.');
-      });
-    });
-}
-
-function openBox(box = null) {
-  modal(box ? 'Editar caixinha' : 'Nova caixinha',
-    `<form id="f" class="form-grid">
-      <div class="field"><label>Nome</label><input class="input" name="name" value="${esc(box?.name || '')}" required></div>
-      <div class="field"><label>Meta de valor (opcional)</label><input class="input" name="target" type="number" step="0.01" min="0.01" value="${box?.target_amount || ''}"></div>
-      ${box ? '<button class="btn ghost" type="button" id="archive">Arquivar caixinha</button>' : ''}
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">${box ? 'Salvar' : 'Criar'}</button></div>
-    </form>`,
-    w => {
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      if (box) w.querySelector('#archive').onclick = async () => {
-        if (boxBalance(box.id) !== 0) return toast('Zere o saldo antes de arquivar.', 'error');
-        const { error } = await supabase.from('boxes').update({ is_archived: true }).eq('id', box.id);
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await loadBoxes();
-        render();
-      };
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const target = fd.get('target');
-        const payload = { name: fd.get('name').trim(), target_amount: target ? Number(target) : null };
-        let error;
-        if (box) ({ error } = await supabase.from('boxes').update(payload).eq('id', box.id));
-        else ({ error } = await supabase.from('boxes').insert({
-          household_id: householdId(), ...payload, created_by: state.session.user.id
-        }));
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await loadBoxes();
-        render();
-      };
-    });
-}
-
-function openBoxAdd(boxId = '') {
-  if (!state.boxes.length) return toast('Crie uma caixinha primeiro.', 'error');
-  modal('Adicionar à caixinha',
-    `<form id="f" class="form-grid">
-      <div class="field"><label>Caixinha</label><select class="input" name="box">${state.boxes.map(b => `<option value="${b.id}" ${b.id === boxId ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select></div>
-      <div class="field"><label>Valor</label><input class="input" name="amount" type="number" step="0.01" min="0.01" required></div>
-      <div class="field"><label>Mês</label><input class="input" name="month" type="month" value="${state.selectedMonth.slice(0,7)}" required></div>
-      <div class="field"><label>Descrição (opcional)</label><input class="input" name="description" placeholder="Ex.: Reserva do mês"></div>
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">Adicionar</button></div>
-    </form>`,
-    w => {
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const { error } = await supabase.rpc('add_box_contribution', {
-          p_box_id: fd.get('box'),
-          p_amount: Number(fd.get('amount')),
-          p_month: `${fd.get('month')}-01`,
-          p_description: fd.get('description').trim() || null
-        });
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await refresh();
-        render();
-        toast('Valor guardado na caixinha.');
-      };
-    });
-}
-
-function openWithdraw(boxId) {
-  const box = state.boxes.find(b => b.id === boxId);
-  modal('Retirar da caixinha',
-    `<form id="f" class="form-grid">
-      <div class="recurring-note">Saldo disponível em ${esc(box?.name || 'caixinha')}: <strong>${money(boxBalance(boxId))}</strong></div>
-      <div class="field"><label>Valor</label><input class="input" name="amount" type="number" step="0.01" min="0.01" required></div>
-      <div class="field"><label>Mês</label><input class="input" name="month" type="month" value="${state.selectedMonth.slice(0,7)}" required></div>
-      <div class="field"><label>Descrição (opcional)</label><input class="input" name="description"></div>
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">Retirar</button></div>
-    </form>`,
-    w => {
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const { error } = await supabase.rpc('withdraw_from_box', {
-          p_box_id: boxId,
-          p_amount: Number(fd.get('amount')),
-          p_month: `${fd.get('month')}-01`,
-          p_description: fd.get('description').trim() || null
-        });
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await loadBoxes();
-        await loadBoxMovements();
-        render();
-        toast('Retirada registrada.');
-      };
-    });
-}
-
-function openBoxHistory(boxId) {
-  const box = state.boxes.find(b => b.id === boxId);
-  const moves = state.boxMovements.filter(m => m.box_id === boxId);
-  modal(`Histórico · ${box?.name || 'Caixinha'}`,
-    `<div class="history-list">
-      <div class="history-balance"><span>Saldo atual</span><strong>${money(boxBalance(boxId))}</strong></div>
-      ${moves.length ? moves.map(m => `<div class="history-row">
-        <div><strong>${esc(m.description || (m.movement_type === 'withdrawal' ? 'Retirada' : 'Depósito'))}</strong><span>${esc(monthLabel(m.month))}</span></div>
-        <strong class="${m.movement_type === 'withdrawal' ? 'negative' : 'positive'}">${m.movement_type === 'withdrawal' ? '−' : '+'}${money(m.amount)}</strong>
-      </div>`).join('') : '<div class="empty">Nenhuma movimentação nessa caixinha.</div>'}
-    </div>`);
-}
-
-function openGoal(goal = null) {
-  modal(goal ? 'Editar meta' : 'Nova meta',
-    `<form id="f" class="form-grid">
-      <div class="field"><label>Meta</label><input class="input" name="title" value="${esc(goal?.title || '')}" required></div>
-      <div class="field"><label>Observação</label><input class="input" name="notes" value="${esc(goal?.notes || '')}"></div>
-      <div class="field"><label>Caixinha vinculada</label><select class="input" name="box"><option value="">Nenhuma</option>${state.boxes.map(b => `<option value="${b.id}" ${goal?.box_id === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select></div>
-      <div class="field"><label>Valor alvo</label><input class="input" name="target" type="number" step="0.01" min="0.01" value="${goal?.target_amount || ''}"></div>
-      ${goal ? '<button class="btn red" type="button" id="del">Excluir meta</button>' : ''}
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">Salvar</button></div>
-    </form>`,
-    w => {
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      if (goal) w.querySelector('#del').onclick = async () => {
-        if (!confirm('Excluir esta meta?')) return;
-        const { error } = await supabase.from('goals').delete().eq('id', goal.id);
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await loadGoals();
-        render();
-      };
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const payload = {
-          household_id: householdId(),
-          title: fd.get('title').trim(),
-          notes: fd.get('notes').trim() || null,
-          box_id: fd.get('box') || null,
-          target_amount: fd.get('target') ? Number(fd.get('target')) : null
-        };
-        let error;
-        if (goal) ({ error } = await supabase.from('goals').update(payload).eq('id', goal.id));
-        else ({ error } = await supabase.from('goals').insert({ ...payload, created_by: state.session.user.id }));
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await loadGoals();
-        render();
-      };
-    });
-}
-
-function openRecurring() {
-  modal('Novo gasto fixo',
-    `<form id="f" class="form-grid">
-      <div class="field"><label>Descrição</label><input class="input" name="description" required></div>
-      <div class="field"><label>Valor</label><input class="input" name="amount" type="number" step="0.01" min="0.01" required></div>
-      <div class="field"><label>Começa em</label><input class="input" name="start" type="month" value="${state.selectedMonth.slice(0,7)}" required></div>
-      <div class="field"><label>Vai até (opcional)</label><input class="input" name="end" type="month"><div class="row-sub">Vazio = sem data final.</div></div>
-      <div class="modal-actions"><button class="btn ghost" type="button" data-cancel>Cancelar</button><button class="btn primary">Criar gasto fixo</button></div>
-    </form>`,
-    w => {
-      w.querySelector('[data-cancel]').onclick = () => w.remove();
-      w.querySelector('#f').onsubmit = async e => {
-        e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const end = fd.get('end');
-        if (end && `${end}-01` < `${fd.get('start')}-01`) return toast('O mês final não pode ser anterior ao inicial.', 'error');
-        const { error } = await supabase.rpc('create_recurring_expense', {
-          p_household_id: householdId(),
-          p_description: fd.get('description').trim(),
-          p_amount: Number(fd.get('amount')),
-          p_start_month: `${fd.get('start')}-01`,
-          p_end_month: end ? `${end}-01` : null
-        });
-        if (error) return toast(error.message, 'error');
-        w.remove();
-        await refresh();
-        render();
-        toast('Gasto fixo criado.');
-      };
-    });
-}
-
-function openHouseholdInfo() {
-  modal('Nosso JuHelo',
-    `<div class="form-grid">
-      <div class="invite-card"><span>Código para a segunda pessoa</span><strong>${esc(state.household.invite_code)}</strong><button class="btn soft" id="copy-code">Copiar código</button></div>
-      <div class="members-list">
-        ${state.members.map(m => `<div class="member-row"><div class="avatar">${esc(initials(m.profile?.display_name || 'JH'))}</div><div><strong>${esc(m.profile?.display_name || 'Pessoa')}</strong><span>${m.role === 'owner' ? 'Criou o JuHelo' : 'Participante'}</span></div></div>`).join('')}
-      </div>
-      <button class="btn ghost" id="logout">Sair da conta</button>
-    </div>`,
-    w => {
-      w.querySelector('#copy-code').onclick = async () => {
-        try {
-          await navigator.clipboard.writeText(state.household.invite_code);
-          toast('Código copiado.');
-        } catch {
-          toast(`Código: ${state.household.invite_code}`);
-        }
-      };
-      w.querySelector('#logout').onclick = async () => {
-        await supabase.auth.signOut();
-        w.remove();
-      };
-    });
-}
-
-async function loadProfile() {
-  const { data, error } = await supabase.from('profiles').select('*').eq('id', state.session.user.id).maybeSingle();
-  if (error) throw error;
-  state.profile = data;
-}
-async function loadHousehold() {
-  const { data: member, error } = await supabase.from('household_members')
-    .select('household_id').eq('user_id', state.session.user.id).maybeSingle();
-  if (error) throw error;
-  if (!member) { state.household = null; state.members = []; return; }
-
-  const { data, error: h } = await supabase.from('households').select('*').eq('id', member.household_id).single();
-  if (h) throw h;
-  state.household = data;
-
-  const { data: members, error: me } = await supabase.from('household_members')
-    .select('user_id,role,joined_at').eq('household_id', member.household_id).order('joined_at');
-  if (me) throw me;
-
-  const ids = (members || []).map(m => m.user_id);
-  let profiles = [];
-  if (ids.length) {
-    const { data: p, error: pe } = await supabase.from('profiles').select('id,display_name,avatar_url').in('id', ids);
-    if (pe) throw pe;
-    profiles = p || [];
-  }
-  state.members = (members || []).map(m => ({ ...m, profile: profiles.find(p => p.id === m.user_id) || null }));
-}
-async function loadTransactions() {
-  if (!state.household) return;
-  const year = Number(state.selectedMonth.slice(0, 4));
-  const { data, error } = await supabase.from('transactions').select('*')
-    .eq('household_id', householdId())
-    .gte('month', `${year - 1}-01-01`).lte('month', `${year + 1}-12-01`)
-    .order('month', { ascending: false }).order('created_at', { ascending: false });
-  if (error) throw error;
-  state.transactions = data || [];
-}
-async function loadRecurringPlans() {
-  if (!state.household) return;
-  const { data, error } = await supabase.from('recurring_plans').select('*')
-    .eq('household_id', householdId()).order('start_month', { ascending: false });
-  if (error) throw error;
-  state.recurringPlans = data || [];
-}
-async function loadBoxes() {
-  if (!state.household) return;
-  const [{ data: boxes, error: e1 }, { data: balances, error: e2 }] = await Promise.all([
-    supabase.from('boxes').select('*').eq('household_id', householdId()).eq('is_archived', false).order('created_at'),
-    supabase.from('box_balances').select('*').eq('household_id', householdId())
+async function loadContext(){
+  if(!state.session)return;
+  const [{data:profile,error:pe},{data:membership,error:me}]=await Promise.all([
+    db.from('profiles').select('id,display_name,avatar_url').eq('id',state.session.user.id).maybeSingle(),
+    db.from('household_members').select('household_id,role,joined_at').eq('user_id',state.session.user.id).maybeSingle()
   ]);
-  if (e1) throw e1;
-  if (e2) throw e2;
-  state.boxes = boxes || [];
-  state.boxBalances = balances || [];
-}
-async function loadBoxMovements() {
-  if (!state.household) return;
-  const { data, error } = await supabase.from('box_movements').select('*')
-    .eq('household_id', householdId()).order('month', { ascending: false }).order('created_at', { ascending: false });
-  if (error) throw error;
-  state.boxMovements = data || [];
-}
-async function loadGoals() {
-  if (!state.household) return;
-  const { data, error } = await supabase.from('goals').select('*')
-    .eq('household_id', householdId()).order('sort_order').order('created_at');
-  if (error) throw error;
-  state.goals = data || [];
-}
-async function loadSummary() {
-  if (!state.household) return;
-  const { data, error } = await supabase.from('monthly_summary').select('*')
-    .eq('household_id', householdId()).order('month');
-  if (error) throw error;
-  state.monthlySummary = data || [];
-}
-async function ensureRecurring() {
-  if (!state.household) return;
-  const { error } = await supabase.rpc('ensure_recurring_for_month', {
-    p_household_id: householdId(),
-    p_month: state.selectedMonth
-  });
-  if (error) console.warn('ensure_recurring_for_month', error);
-}
-async function refresh() {
-  await Promise.all([
-    loadTransactions(), loadRecurringPlans(), loadBoxes(), loadBoxMovements(), loadGoals(), loadSummary()
+  if(pe)throw pe;if(me)throw me;state.profile=profile||null;
+  if(!membership){state.household=null;state.members=[];return}
+  const [{data:household,error:he},{data:memberRows,error:mre}]=await Promise.all([
+    db.from('households').select('id,name,invite_code,created_at').eq('id',membership.household_id).single(),
+    db.from('household_members').select('user_id,role,joined_at').eq('household_id',membership.household_id).order('joined_at')
   ]);
+  if(he)throw he;if(mre)throw mre;state.household=household;
+  const ids=(memberRows||[]).map(x=>x.user_id);let profiles=[];
+  if(ids.length){const{data,error}=await db.from('profiles').select('id,display_name,avatar_url').in('id',ids);if(error)throw error;profiles=data||[]}
+  state.members=(memberRows||[]).map(m=>({...m,profile:profiles.find(p=>p.id===m.user_id)||null}));
 }
-async function loadAll() {
-  state.loading = true;
-  render();
-  try {
-    await loadProfile();
-    await loadHousehold();
-    if (state.household) {
-      await ensureRecurring();
-      await refresh();
-    }
-  } catch (err) {
-    console.error(err);
-    toast(err.message || 'Falha ao carregar dados.', 'error');
-  } finally {
-    state.loading = false;
-    render();
-  }
+async function ensureRecurring(month){if(!householdId())return;const{error}=await db.rpc('ensure_recurring_for_month',{p_household_id:householdId(),p_month:month});if(error)console.warn('ensure recurring',error)}
+async function loadTransactions(month=state.txMonth){if(!householdId())return;const{data,error}=await db.from('transactions').select('*').eq('household_id',householdId()).eq('month',month).order('created_at',{ascending:false});if(error)throw error;state.transactions=data||[]}
+async function loadBoxes(){if(!householdId())return;const[{data:b,error:be},{data:bal,error:bae}]=await Promise.all([db.from('boxes').select('id,name,target_amount,target_date,is_archived,created_at').eq('household_id',householdId()).eq('is_archived',false).order('created_at'),db.from('box_balances').select('box_id,balance').eq('household_id',householdId())]);if(be)throw be;if(bae)throw bae;state.boxes=b||[];state.boxBalances=bal||[]}
+async function loadGoals(){if(!householdId())return;const{data,error}=await db.from('goals').select('id,title,notes,due_date,is_completed,completed_at,sort_order,created_at').eq('household_id',householdId()).order('is_completed').order('sort_order').order('created_at');if(error)throw error;state.goals=data||[]}
+async function loadReport(start=state.reportStart,end=state.reportEnd){
+  if(!householdId())return;
+  state.reportLoading=true;render();
+  try{
+    const [{data:rows,error:re},{data:tx,error:te}]=await Promise.all([
+      db.from('monthly_summary').select('month,total_income,total_expense,month_result').eq('household_id',householdId()).gte('month',start).lte('month',end).order('month'),
+      db.from('transactions').select('month,amount,category,kind,direction').eq('household_id',householdId()).eq('direction','expense').gte('month',start).lte('month',end).order('month')
+    ]);
+    if(re)throw re;if(te)throw te;state.reportRows=rows||[];state.reportTransactions=tx||[];
+  }catch(e){safeError(e,'Não foi possível carregar o relatório.')}finally{state.reportLoading=false;render()}
 }
-async function init() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(console.warn));
-  }
-  const { data: { session } } = await supabase.auth.getSession();
-  state.session = session;
-  supabase.auth.onAuthStateChange(async (_event, s) => {
-    state.session = s;
-    if (s) await loadAll();
-    else {
-      state.profile = null;
-      state.household = null;
-      state.members = [];
-      state.loading = false;
-      render();
-    }
-  });
-  if (session) await loadAll();
-  else { state.loading = false; render(); }
+async function syncMonth(renderAfter=true){try{await ensureRecurring(state.txMonth);await loadTransactions(state.txMonth);if(renderAfter)render()}catch(e){safeError(e,'Os dados foram salvos, mas a atualização da tela falhou.')}}
+async function boot(){state.loading=true;render();try{await loadContext();if(state.household){state.txMonth=currentMonth();await ensureRecurring(state.txMonth);await Promise.all([loadTransactions(),loadBoxes(),loadGoals()])}}catch(e){safeError(e,'Falha ao carregar o JuHelo.')}finally{state.loading=false;render()}}
+
+function avatarStack(){const members=state.members.length?state.members.slice(0,2):[{user_id:state.session?.user?.id,profile:{display_name:displayName()}}];return `<button class="couple-stack" data-settings-open aria-label="Abrir ajustes">${members.map((m,i)=>{const n=m.profile?.display_name||(m.user_id===state.session?.user?.id?displayName():'Pessoa');return `<span class="couple-avatar a${i+1}">${esc(initials(n))}</span>`}).join('')}${members.length>1?'<i></i>':''}</button>`}
+function topbar(title){return `<header class="topbar"><h1>${esc(title)}</h1>${avatarStack()}</header>`}
+function nav(){const items=[['home','Início'],['transactions','Movimentos'],['boxes','Caixinhas'],['reports','Relatórios'],['goals','Metas']];return `<nav class="bottom-nav">${items.map(([id,label])=>`<button class="nav-item ${state.tab===id?'active':''}" data-tab="${id}" aria-label="${label}"><span class="nav-icon">${svg(ICON[id])}</span><span>${label}</span></button>`).join('')}</nav>`}
+function monthOptions(selected,span=18){const base=new Date(`${selected}T12:00:00`);let out='';for(let i=-span;i<=span;i++){const d=new Date(base.getFullYear(),base.getMonth()+i,1),iso=monthISO(d);out+=`<option value="${iso}" ${iso===selected?'selected':''}>${esc(monthText(iso))}</option>`}return out}
+function monthControl(){return `<label class="month-control">${svg(ICON.calendar)}<select id="month-select">${monthOptions(state.txMonth)}</select></label>`}
+function moneyVisible(v){return state.valuesHidden?'R$ •••••':money(v)}
+function actionButton(type,label,sub,action){return `<button class="quick-card ${type}" data-action="${action}"><span>${svg(ICON[type]||ICON.goals)}</span><div><strong>${label}</strong><small>${sub}</small></div></button>`}
+
+function txRow(tx){
+  if(tx.direction==='income')return `<div class="tx-row"><span class="tx-icon income">${svg(ICON.income)}</span><div class="tx-copy"><strong>${esc(tx.description)}</strong><small>Receita</small></div><b>${money(tx.amount)}</b><button class="more-btn" data-edit-tx="${tx.id}" aria-label="Opções">•••</button></div>`;
+  const cat=categoryFor(tx);
+  return `<div class="tx-row"><span class="tx-icon category" style="--cat:${cat.color}">${cat.emoji}</span><div class="tx-copy"><strong>${esc(tx.description)}</strong><small>${esc(cat.label)}</small></div><b>${money(tx.amount)}</b><button class="more-btn" data-edit-tx="${tx.id}" aria-label="Opções">•••</button></div>`;
 }
+function txList(items,label,type){return `<section class="list-card ${type}"><div class="list-head"><h2>${label}</h2><span>${items.length}</span></div>${items.length?items.map(txRow).join(''):`<div class="empty">Nenhuma ${type==='income'?'receita':'despesa'} neste mês.</div>`}</section>`}
+function homeView(){const s=summary();const expenses=state.transactions.filter(t=>t.direction==='expense').slice(0,5),income=state.transactions.filter(t=>t.direction==='income').slice(0,5);return `${topbar('Início')}<section class="home-intro"><h2>Seu mês até agora</h2><p>Veja entradas, saídas e o resultado do mês.</p></section><section class="balance-card"><button class="eye-btn" data-hide-values aria-label="${state.valuesHidden?'Mostrar valores':'Ocultar valores'}">${svg(ICON.eye)}</button><span class="eyebrow">Saldo do mês</span><strong class="big-balance">${moneyVisible(s.result)}</strong><small>Atualizado agora há pouco</small><div class="mini-grid"><article class="income"><span>${svg(ICON.income)}<em>Receitas</em></span><strong>${moneyVisible(s.income)}</strong></article><article class="expense"><span>${svg(ICON.expense)}<em>Despesas</em></span><strong>${moneyVisible(s.expense)}</strong></article></div></section><h3 class="section-label">Ações rápidas</h3><div class="quick-grid">${actionButton('expense','Despesa','Novo gasto','new-expense')}${actionButton('income','Receita','Nova entrada','new-income')}</div><div class="home-lists">${txList(expenses,'Despesas','expense')}${txList(income,'Receitas','income')}</div>`}
+function transactionsView(){const s=summary(),expenses=state.transactions.filter(t=>t.direction==='expense'),income=state.transactions.filter(t=>t.direction==='income');return `${topbar('Movimentações')}${monthControl()}<section class="balance-card tx-balance"><span class="eyebrow">Saldo do mês</span><strong class="big-balance">${money(s.result)}</strong><small>Receitas menos despesas do período selecionado</small><div class="mini-grid"><article class="income"><em>Receitas</em><strong>${money(s.income)}</strong></article><article class="expense"><em>Despesas</em><strong>${money(s.expense)}</strong></article></div></section><h3 class="section-label">Ações rápidas</h3><div class="quick-grid">${actionButton('expense','Despesa','Novo gasto','new-expense')}${actionButton('income','Receita','Nova entrada','new-income')}${actionButton('boxes','Caixinha','Guardar valor','box-add')}${actionButton('recurring','Gasto fixo','Nova recorrência','new-recurring')}</div><div class="extract-grid">${txList(expenses,'Despesas','expense')}${txList(income,'Receitas','income')}</div>`}
+function boxesView(){return `${topbar('Caixinhas')}<div class="page-action"><button class="create-btn" data-action="new-box">+ Nova caixinha</button></div><div class="boxes-list">${state.boxes.length?state.boxes.map(b=>{const bal=balanceFor(b.id),target=Number(b.target_amount||0),pct=target?Math.max(0,Math.min(100,Math.round(bal/target*100))):0;return `<article class="box-card-v31" data-box="${b.id}"><span class="box-glyph">${svg(ICON.boxes)}</span><div class="box-title"><strong>${esc(b.name)}</strong><small>${target?`Meta ${money(target)}`:'Sem meta definida'}</small></div><button class="more-btn" data-edit-box="${b.id}" aria-label="Opções">•••</button><div class="box-balance-v31"><strong>${money(bal)}</strong><small>Saldo atual</small></div>${target?`<div class="progress-meta"><span>${pct}% da meta</span><span>${b.target_date?`Até ${esc(monthShort(b.target_date))}`:'Sem prazo'}</span></div><div class="progress"><i style="width:${pct}%"></i></div><p>${bal>=target?'Meta atingida.':`Faltam ${money(Math.max(0,target-bal))} para o objetivo.`}</p>`:''}<div class="box-actions"><button class="primary" data-box-add="${b.id}">Adicionar</button><button data-box-withdraw="${b.id}">Retirar</button><button data-box-history="${b.id}">Histórico</button></div></article>`}).join(''):'<div class="empty-card">Crie a primeira caixinha de vocês.</div>'}</div>`}
+function goalsView(){const pending=state.goals.filter(g=>!g.is_completed),done=state.goals.filter(g=>g.is_completed);return `${topbar('Metas')}<div class="page-action"><button class="create-btn" data-action="new-goal">+ Nova meta</button></div><section class="goals-card"><div class="goals-head"><span>${pending.length} ${pending.length===1?'pendente':'pendentes'}</span><span>${done.length} ${done.length===1?'concluída':'concluídas'}</span></div>${state.goals.length?[...pending,...done].map(g=>`<div class="goal-row-v31 ${g.is_completed?'completed':''}"><button class="goal-check ${g.is_completed?'done':''}" data-goal-toggle="${g.id}">${g.is_completed?'✓':''}</button><div><strong>${esc(g.title)}</strong>${g.notes?`<small>${esc(g.notes)}</small>`:''}<span>${g.due_date?monthShort(g.due_date):'Sem prazo'}</span></div><button class="more-btn" data-edit-goal="${g.id}" aria-label="Opções">•••</button></div>`).join(''):'<div class="empty">Nenhuma meta ainda.</div>'}</section>`}
+
+function addMonths(iso,n){const d=new Date(`${iso}T12:00:00`);return monthISO(new Date(d.getFullYear(),d.getMonth()+n,1))}
+function reportOptions(selected){const now=currentMonth();let out='';for(let i=-36;i<=12;i++){const m=addMonths(now,i);out+=`<option value="${m}" ${m===selected?'selected':''}>${esc(monthShort(m))}</option>`}return out}
+function reportMonths(){const months=[];let c=state.reportStart;while(c<=state.reportEnd&&months.length<60){months.push(c);c=addMonths(c,1)}return months}
+function chartSvg(rows){const months=reportMonths(),map=new Map(rows.map(r=>[String(r.month).slice(0,10),r])),data=months.map(m=>({m,income:Number(map.get(m)?.total_income||0),expense:Number(map.get(m)?.total_expense||0)}));const W=640,H=230,L=24,R=14,T=18,B=38,max=Math.max(1,...data.flatMap(x=>[x.income,x.expense])),pw=W-L-R,ph=H-T-B,x=i=>data.length===1?L+pw/2:L+i/(data.length-1)*pw,y=v=>T+ph-(v/max)*ph,line=k=>data.map((d,i)=>`${x(i)},${y(d[k])}`).join(' ');return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Receitas e despesas"><line x1="${L}" y1="${T+ph}" x2="${W-R}" y2="${T+ph}" class="guide"/><polyline class="line income" points="${line('income')}"/><polyline class="line expense" points="${line('expense')}"/>${data.map((d,i)=>`<circle class="dot income" cx="${x(i)}" cy="${y(d.income)}" r="3"/><circle class="dot expense" cx="${x(i)}" cy="${y(d.expense)}" r="3"/>${(data.length<=8||i%2===0||i===data.length-1)?`<text x="${x(i)}" y="${H-11}" text-anchor="middle">${esc(monthShort(d.m).split(' ')[0])}</text>`:''}`).join('')}</svg>`}
+function categoryBreakdown(){const totals=new Map(REPORT_CATEGORIES.map(k=>[k,0]));for(const tx of state.reportTransactions){const key=tx.kind==='recurring'?'recurring':tx.kind==='box_contribution'?'box':tx.category||'uncategorized';totals.set(key,(totals.get(key)||0)+Number(tx.amount||0))}return REPORT_CATEGORIES.map(key=>({key,...CATEGORIES[key],amount:totals.get(key)||0})).filter(x=>x.amount>.005).sort((a,b)=>b.amount-a.amount)}
+function donutSvg(items){const total=items.reduce((s,x)=>s+x.amount,0),r=58,circ=2*Math.PI*r;let offset=0;const segments=items.map(item=>{const len=total?item.amount/total*circ:0;const out=`<circle cx="90" cy="90" r="${r}" fill="none" stroke="${item.color}" stroke-width="25" stroke-dasharray="${len} ${Math.max(0,circ-len)}" stroke-dashoffset="${-offset}" transform="rotate(-90 90 90)"/>`;offset+=len;return out}).join('');return `<div class="category-donut"><svg viewBox="0 0 180 180" role="img" aria-label="Despesas por categoria"><circle cx="90" cy="90" r="${r}" fill="none" class="donut-track" stroke-width="25"/>${segments}</svg><div class="donut-center"><span>Total</span><strong>${money(total)}</strong></div></div>`}
+function categoryBarsSvg(){const months=reportMonths(),selected=state.reportCategory,cat=selected==='all'?null:CATEGORIES[selected],data=months.map(m=>({m,amount:state.reportTransactions.filter(t=>String(t.month).slice(0,10)===m&&(selected==='all'||(t.kind==='recurring'?'recurring':t.kind==='box_contribution'?'box':t.category||'uncategorized')===selected)).reduce((s,t)=>s+Number(t.amount||0),0)}));const W=640,H=245,L=28,R=12,T=18,B=40,max=Math.max(1,...data.map(d=>d.amount)),pw=W-L-R,ph=H-T-B,slot=pw/Math.max(1,data.length),bw=Math.min(42,slot*.58),y=v=>T+ph-(v/max)*ph,color=cat?.color||'#7C5CE6';return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Despesas por mês"><line x1="${L}" y1="${T+ph}" x2="${W-R}" y2="${T+ph}" class="guide"/>${data.map((d,i)=>{const x=L+i*slot+(slot-bw)/2,h=Math.max(0,T+ph-y(d.amount));return `<rect x="${x}" y="${y(d.amount)}" width="${bw}" height="${h}" rx="6" fill="${color}" opacity="${d.amount?'.88':'.16'}"/><text x="${x+bw/2}" y="${H-11}" text-anchor="middle">${esc(monthShort(d.m).split(' ')[0])}</text>`}).join('')}</svg>`}
+function reportsView(){
+  const income=state.reportRows.reduce((s,r)=>s+Number(r.total_income||0),0),expense=state.reportRows.reduce((s,r)=>s+Number(r.total_expense||0),0),breakdown=categoryBreakdown(),totalCat=breakdown.reduce((s,x)=>s+x.amount,0),filterLabel=state.reportCategory==='all'?'Todas as categorias':CATEGORIES[state.reportCategory]?.label||'Categoria';
+  return `${topbar('Relatórios')}<section class="period-card"><span>Período</span><div><label>De<select data-report-start>${reportOptions(state.reportStart)}</select></label><b>→</b><label>Até<select data-report-end>${reportOptions(state.reportEnd)}</select></label></div><div class="period-presets"><button data-preset="3">3 meses</button><button data-preset="6">6 meses</button><button data-preset="year">Este ano</button></div></section>${state.reportLoading?'<div class="loading-card">Carregando relatório…</div>':`<section class="balance-card report-balance"><span class="eyebrow">Saldo no período</span><strong class="big-balance">${money(income-expense)}</strong><small>${monthShort(state.reportStart)} até ${monthShort(state.reportEnd)}</small><div class="mini-grid"><article class="income"><em>Receitas</em><strong>${money(income)}</strong></article><article class="expense"><em>Despesas</em><strong>${money(expense)}</strong></article></div></section><section class="category-report-card"><div class="report-card-head"><div><h2>Despesas por categoria</h2><p>Veja onde o dinheiro saiu no período.</p></div></div>${breakdown.length?`<div class="category-donut-layout">${donutSvg(breakdown)}<div class="category-legend">${breakdown.map(item=>`<div class="category-legend-row"><span class="legend-dot" style="--cat:${item.color}">${item.emoji}</span><div><strong>${esc(item.label)}</strong><small>${totalCat?Math.round(item.amount/totalCat*100):0}%</small></div><b>${money(item.amount)}</b></div>`).join('')}</div></div>`:'<div class="empty">Sem despesas no período selecionado.</div>'}</section><section class="category-report-card"><div class="report-card-head"><div><h2>Evolução por categoria</h2><p>${esc(filterLabel)} · comparação mês a mês.</p></div></div><div class="category-filter"><button class="${state.reportCategory==='all'?'active':''}" data-category-filter="all">Todas</button>${REPORT_CATEGORIES.map(key=>{const c=CATEGORIES[key];return `<button class="${state.reportCategory===key?'active':''}" data-category-filter="${key}" style="--cat:${c.color}"><span>${c.emoji}</span>${esc(c.label)}</button>`}).join('')}</div><div class="category-bars">${categoryBarsSvg()}</div></section><section class="chart-card"><div><h2>Receitas x despesas</h2><p>Evolução geral mês a mês.</p></div><div class="legend"><span class="income">Receitas</span><span class="expense">Despesas</span></div><div class="chart-wrap">${chartSvg(state.reportRows)}</div></section>`}`;
+}
+
+function renderSplash(){app.innerHTML='<div class="splash"><div class="brand-name"><span>Ju</span>Helo</div></div>'}
+function renderAuth(signup=false){app.innerHTML=`<main class="auth-page"><div class="auth-brand"><span>♡</span><strong><i>Ju</i>Helo</strong></div><section class="auth-card"><h1>${signup?'Criar sua conta':'Entrar no JuHelo'}</h1><p>${signup?'Crie sua conta e conecte o JuHelo do casal.':'Suas finanças do casal em um lugar simples.'}</p><form id="auth-form">${signup?'<label>Seu nome<input name="name" autocomplete="name" required></label>':''}<label>E-mail<input name="email" type="email" autocomplete="email" required></label><label>Senha<input name="password" type="password" minlength="6" autocomplete="current-password" required></label><button class="primary-btn">${signup?'Criar conta':'Entrar'}</button></form><button class="auth-switch" data-auth-switch>${signup?'Já tenho uma conta':'Criar uma conta'}</button></section></main>`;app.querySelector('[data-auth-switch]').onclick=()=>renderAuth(!signup);app.querySelector('#auth-form').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('button'),fd=new FormData(e.currentTarget);setBusy(btn,true,signup?'Criando…':'Entrando…');try{if(signup){const{error}=await db.auth.signUp({email:String(fd.get('email')).trim(),password:fd.get('password'),options:{data:{display_name:String(fd.get('name')).trim()}}});if(error)throw error;toast('Conta criada. Confira seu e-mail se necessário.')}else{const{error}=await db.auth.signInWithPassword({email:String(fd.get('email')).trim(),password:fd.get('password')});if(error)throw error}}catch(err){safeError(err,'Falha na autenticação.');setBusy(btn,false)}}}
+function renderOnboarding(){app.innerHTML=`<main class="auth-page"><div class="auth-brand"><span>♡</span><strong><i>Ju</i>Helo</strong></div><section class="auth-card"><h1>Nosso dinheiro</h1><p>Crie o espaço financeiro do casal ou entre com o código da outra pessoa.</p><button class="primary-btn" data-create-household>Criar nosso JuHelo</button><div class="or">ou</div><label>Código do casal<input id="invite-code" maxlength="20" placeholder="Ex.: A1B2C3D4"></label><button class="secondary-btn" data-join-household>Entrar com código</button><button class="ghost-btn" data-logout>Sair</button></section></main>`;app.querySelector('[data-create-household]').onclick=async e=>{setBusy(e.currentTarget,true,'Criando…');const{error}=await db.rpc('create_household',{p_name:'JuHelo'});if(error){safeError(error);return setBusy(e.currentTarget,false)}await boot();toast('JuHelo criado 💜')};app.querySelector('[data-join-household]').onclick=async e=>{const code=app.querySelector('#invite-code').value.trim();if(!code)return toast('Digite o código.','error');setBusy(e.currentTarget,true,'Entrando…');const{error}=await db.rpc('join_household',{p_invite_code:code});if(error){safeError(error);return setBusy(e.currentTarget,false)}await boot();toast('Contas conectadas 💜')};app.querySelector('[data-logout]').onclick=()=>db.auth.signOut()}
+function render(){if(state.loading)return renderSplash();if(!state.session)return renderAuth(false);if(!state.household)return renderOnboarding();let body=state.tab==='home'?homeView():state.tab==='transactions'?transactionsView():state.tab==='boxes'?boxesView():state.tab==='reports'?reportsView():goalsView();app.innerHTML=`<main class="page">${body}</main>${nav()}`;bind()}
+
+function modal(title,body){const wrap=document.createElement('div');wrap.className='modal-backdrop';wrap.innerHTML=`<section class="modal-card" role="dialog" aria-modal="true"><div class="modal-head"><h2>${esc(title)}</h2><button class="close-btn" data-close>×</button></div>${body}</section>`;document.body.appendChild(wrap);const close=()=>wrap.remove();wrap.querySelector('[data-close]').onclick=close;wrap.addEventListener('click',e=>{if(e.target===wrap)close()});return wrap}
+function field(label,name,value='',type='text',extra=''){return `<label class="field">${label}<input name="${name}" type="${type}" value="${esc(value)}" ${extra}></label>`}
+function moneyField(label,name,value=''){return `<label class="field">${label}<input name="${name}" inputmode="decimal" value="${value!==''?esc(String(value).replace('.',',')):''}" placeholder="0,00" required></label>`}
+
+function openTransaction(tx=null,preset='expense'){
+  let direction=tx?.direction||preset;
+  let category=direction==='expense'&&USER_EXPENSE_CATEGORIES.includes(tx?.category)?tx.category:'';
+  const w=modal(tx?'Editar lançamento':direction==='income'?'Nova receita':'Nova despesa',`<form class="form-grid" data-tx-form><div class="segmented"><button type="button" data-dir="expense" class="${direction==='expense'?'active':''}">Despesa</button><button type="button" data-dir="income" class="${direction==='income'?'active':''}">Receita</button></div>${field('Descrição','description',tx?.description||'','text','maxlength="160" required')}${moneyField('Valor','amount',tx?.amount||'')}<div data-category-wrap>${categoryOptions(category)}</div><label class="field">Mês<select name="month">${monthOptions(tx?.month||state.txMonth)}</select></label>${tx?'<button class="danger-btn" type="button" data-delete>Excluir lançamento</button>':''}<div class="modal-actions"><button type="button" class="ghost-btn" data-cancel>Cancelar</button><button class="primary-btn" type="submit">Salvar</button></div></form>`);
+  const syncCategoryUI=()=>{const wrap=w.querySelector('[data-category-wrap]');if(wrap)wrap.hidden=direction!=='expense';w.querySelectorAll('[data-category]').forEach(b=>b.classList.toggle('is-selected',b.dataset.category===category))};
+  w.querySelector('[data-cancel]').onclick=()=>w.remove();
+  w.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>{direction=b.dataset.dir;w.querySelectorAll('[data-dir]').forEach(x=>x.classList.toggle('active',x===b));syncCategoryUI()});
+  w.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category;syncCategoryUI()});
+  syncCategoryUI();
+  w.querySelector('[data-delete]')?.addEventListener('click',async()=>{if(!confirm('Excluir este lançamento?'))return;const{error}=await db.from('transactions').delete().eq('id',tx.id);if(error)return safeError(error);state.transactions=state.transactions.filter(x=>x.id!==tx.id);w.remove();render();toast('Lançamento excluído.');syncMonth(false)});
+  w.querySelector('[data-tx-form]').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,btn=form.querySelector('[type="submit"]'),fd=new FormData(form),amount=parseMoney(fd.get('amount'));if(!amount||amount<=0)return toast('Digite um valor válido.','error');if(direction==='expense'&&!category)return toast('Escolha uma categoria.','error');const payload={household_id:householdId(),direction,kind:tx?.kind||'regular',description:String(fd.get('description')).trim(),amount,month:fd.get('month'),category:direction==='expense'?category:null,updated_by:state.session.user.id};setBusy(btn,true);try{let data,error;if(tx)({data,error}=await db.from('transactions').update(payload).eq('id',tx.id).select().single());else({data,error}=await db.from('transactions').insert({...payload,created_by:state.session.user.id}).select().single());if(error)throw error;if(String(data.month).slice(0,10)===state.txMonth)upsertTx(data);else if(tx)state.transactions=state.transactions.filter(x=>x.id!==tx.id);w.remove();render();toast(tx?'Lançamento atualizado.':'Lançamento salvo.');syncMonth(false).then(()=>render())}catch(err){safeError(err,'Não foi possível salvar o lançamento.');setBusy(btn,false)}};
+}
+
+function openRecurring(tx=null){
+  const editing=!!tx;const w=modal(editing?'Editar gasto fixo':'Novo gasto fixo',`<form class="form-grid" data-rec-form>${categoryReadonly('recurring')}${field('Descrição','description',tx?.description||'','text','required')}${moneyField('Valor','amount',tx?.amount||'')}${editing?`<label class="field">Aplicar alteração<select name="scope"><option value="this_month">Somente este mês</option><option value="future">Deste mês em diante</option><option value="all">Toda a série</option></select></label>`:`<label class="field">Começa em<select name="start">${monthOptions(state.txMonth)}</select></label><label class="field">Vai até <span>opcional</span><select name="end"><option value="">Sem mês final</option>${monthOptions(state.txMonth,36)}</select></label>`}<div class="modal-actions"><button type="button" class="ghost-btn" data-cancel>Cancelar</button><button class="primary-btn">${editing?'Salvar':'Criar gasto fixo'}</button></div></form>`);w.querySelector('[data-cancel]').onclick=()=>w.remove();w.querySelector('[data-rec-form]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('.primary-btn'),fd=new FormData(e.currentTarget),amount=parseMoney(fd.get('amount'));if(!amount||amount<=0)return toast('Digite um valor válido.','error');setBusy(btn,true);try{let error;if(editing)({error}=await db.rpc('edit_recurring_expense',{p_transaction_id:tx.id,p_scope:fd.get('scope'),p_description:String(fd.get('description')).trim(),p_amount:amount}));else{const end=fd.get('end');if(end&&end<fd.get('start'))throw new Error('O mês final não pode ser anterior ao inicial.');({error}=await db.rpc('create_recurring_expense',{p_household_id:householdId(),p_description:String(fd.get('description')).trim(),p_amount:amount,p_start_month:fd.get('start'),p_end_month:end||null}))}if(error)throw error;w.remove();toast(editing?'Gasto fixo atualizado.':'Gasto fixo criado.');await syncMonth(true)}catch(err){safeError(err);setBusy(btn,false)}}
+}
+function openBoxEditor(box=null){const w=modal(box?'Editar caixinha':'Nova caixinha',`<form class="form-grid" data-box-form>${field('Nome','name',box?.name||'','text','required maxlength="100"')}<label class="field">Meta de valor <span>opcional</span><input name="target" inputmode="decimal" value="${box?.target_amount?esc(String(box.target_amount).replace('.',',')):''}" placeholder="0,00"></label><label class="field">Prazo <span>opcional</span><select name="target_date"><option value="">Sem prazo</option>${monthOptions(box?.target_date||state.txMonth,60)}</select></label>${box?'<button type="button" class="ghost-btn" data-archive>Arquivar caixinha</button>':''}<div class="modal-actions"><button type="button" class="ghost-btn" data-cancel>Cancelar</button><button class="primary-btn">Salvar</button></div></form>`);w.querySelector('[data-cancel]').onclick=()=>w.remove();w.querySelector('[data-archive]')?.addEventListener('click',async()=>{if(Math.abs(balanceFor(box.id))>.005)return toast('Zere o saldo antes de arquivar.','error');const{error}=await db.from('boxes').update({is_archived:true}).eq('id',box.id);if(error)return safeError(error);w.remove();await loadBoxes();render();toast('Caixinha arquivada.')});w.querySelector('[data-box-form]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('.primary-btn'),fd=new FormData(e.currentTarget),target=fd.get('target')?parseMoney(fd.get('target')):null,payload={name:String(fd.get('name')).trim(),target_amount:Number.isFinite(target)?target:null,target_date:fd.get('target_date')||null};setBusy(btn,true);try{let error;if(box)({error}=await db.from('boxes').update(payload).eq('id',box.id));else({error}=await db.from('boxes').insert({...payload,household_id:householdId(),created_by:state.session.user.id}));if(error)throw error;w.remove();await loadBoxes();render();toast(box?'Caixinha atualizada.':'Caixinha criada.')}catch(err){safeError(err);setBusy(btn,false)}}}
+function openBoxAdd(boxId=''){if(!state.boxes.length)return toast('Crie uma caixinha primeiro.','error');const w=modal('Adicionar à caixinha',`<form class="form-grid" data-add-box>${categoryReadonly('box')}<label class="field">Caixinha<select name="box">${state.boxes.map(b=>`<option value="${b.id}" ${b.id===boxId?'selected':''}>${esc(b.name)}</option>`).join('')}</select></label>${moneyField('Valor','amount')}<label class="field">Mês<select name="month">${monthOptions(state.txMonth)}</select></label>${field('Descrição (opcional)','description','','text','maxlength="160"')}<div class="modal-actions"><button type="button" class="ghost-btn" data-cancel>Cancelar</button><button class="primary-btn">Adicionar</button></div></form>`);w.querySelector('[data-cancel]').onclick=()=>w.remove();w.querySelector('[data-add-box]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('.primary-btn'),fd=new FormData(e.currentTarget),amount=parseMoney(fd.get('amount'));if(!amount||amount<=0)return toast('Digite um valor válido.','error');setBusy(btn,true,'Adicionando…');try{const{error}=await db.rpc('add_box_contribution',{p_box_id:fd.get('box'),p_amount:amount,p_month:fd.get('month'),p_description:String(fd.get('description')).trim()||null});if(error)throw error;w.remove();toast('Valor guardado na caixinha.');await Promise.all([loadBoxes(),loadTransactions(state.txMonth)]);render()}catch(err){safeError(err);setBusy(btn,false)}}}
+function openWithdraw(box){const bal=balanceFor(box.id),w=modal('Retirar da caixinha',`<form class="form-grid" data-withdraw><div class="balance-note">Saldo disponível: <strong>${money(bal)}</strong></div>${moneyField('Valor','amount')}<label class="field">Mês<select name="month">${monthOptions(state.txMonth)}</select></label>${field('Descrição (opcional)','description')}<div class="modal-actions"><button type="button" class="ghost-btn" data-cancel>Cancelar</button><button class="primary-btn">Retirar</button></div></form>`);w.querySelector('[data-cancel]').onclick=()=>w.remove();w.querySelector('[data-withdraw]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('.primary-btn'),fd=new FormData(e.currentTarget),amount=parseMoney(fd.get('amount'));if(!amount||amount<=0)return toast('Digite um valor válido.','error');if(amount>bal)return toast('Saldo insuficiente.','error');setBusy(btn,true,'Retirando…');try{const{error}=await db.rpc('withdraw_from_box',{p_box_id:box.id,p_amount:amount,p_month:fd.get('month'),p_description:String(fd.get('description')).trim()||null});if(error)throw error;w.remove();toast('Retirada registrada.');await loadBoxes();render()}catch(err){safeError(err);setBusy(btn,false)}}}
+async function openBoxHistory(box){const w=modal(`Histórico · ${box.name}`,'<div class="loading-card">Carregando histórico…</div>');const{data,error}=await db.from('box_movements').select('movement_type,amount,month,description,created_at').eq('household_id',householdId()).eq('box_id',box.id).order('created_at',{ascending:false}).limit(100);if(error){w.querySelector('.modal-card').insertAdjacentHTML('beforeend','<div class="empty">Não foi possível carregar.</div>');return}const body=w.querySelector('.loading-card');body.outerHTML=`<div class="history-balance"><span>Saldo atual</span><strong>${money(balanceFor(box.id))}</strong></div><div class="history-list">${data?.length?data.map(m=>`<div class="history-row"><div><strong>${esc(m.description||(m.movement_type==='withdrawal'?'Retirada':'Depósito'))}</strong><small>${monthShort(m.month)}</small></div><b class="${m.movement_type==='withdrawal'?'negative':'positive'}">${m.movement_type==='withdrawal'?'−':'+'}${money(m.amount)}</b></div>`).join(''):'<div class="empty">Nenhuma movimentação ainda.</div>'}</div>`}
+function openGoal(goal=null){const w=modal(goal?'Editar meta':'Nova meta',`<form class="form-grid" data-goal-form>${field('Meta','title',goal?.title||'','text','required maxlength="120"')}${field('Observação (opcional)','notes',goal?.notes||'','text','maxlength="400"')}<label class="field">Prazo <span>opcional</span><select name="due_date"><option value="">Sem prazo</option>${monthOptions(goal?.due_date||state.txMonth,60)}</select></label>${goal?'<button type="button" class="danger-btn" data-delete>Excluir meta</button>':''}<div class="modal-actions"><button type="button" class="ghost-btn" data-cancel>Cancelar</button><button class="primary-btn">Salvar</button></div></form>`);w.querySelector('[data-cancel]').onclick=()=>w.remove();w.querySelector('[data-delete]')?.addEventListener('click',async()=>{if(!confirm('Excluir esta meta?'))return;const{error}=await db.from('goals').delete().eq('id',goal.id);if(error)return safeError(error);state.goals=state.goals.filter(g=>g.id!==goal.id);w.remove();render();toast('Meta excluída.')});w.querySelector('[data-goal-form]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('.primary-btn'),fd=new FormData(e.currentTarget),payload={title:String(fd.get('title')).trim(),notes:String(fd.get('notes')).trim()||null,due_date:fd.get('due_date')||null,box_id:null,target_amount:null,auto_complete:false};setBusy(btn,true);try{let data,error;if(goal)({data,error}=await db.from('goals').update(payload).eq('id',goal.id).select().single());else({data,error}=await db.from('goals').insert({...payload,household_id:householdId(),created_by:state.session.user.id}).select().single());if(error)throw error;const idx=state.goals.findIndex(g=>g.id===data.id);if(idx>=0)state.goals[idx]=data;else state.goals.push(data);w.remove();render();toast(goal?'Meta atualizada.':'Meta criada.')}catch(err){safeError(err);setBusy(btn,false)}}}
+function openSettings(){const pref=localStorage.getItem('juhelo-theme-preference')||'light',w=document.createElement('div');w.className='settings-overlay';w.innerHTML=`<section class="settings-panel"><div class="settings-head"><div><span class="settings-avatar">${esc(initials(displayName()))}</span><div><h2>Ajustes</h2><p>${esc(state.session.user.email||'')}</p></div></div><button class="close-btn" data-close>×</button></div><nav class="settings-tabs"><button class="active" data-stab="profile">Perfil</button><button data-stab="couple">Casal</button><button data-stab="security">Segurança</button><button data-stab="theme">Tema</button></nav><div class="settings-content"><section class="settings-section active" data-ssection="profile"><h3>Seu perfil</h3><p>Como sua conta aparece dentro do JuHelo.</p><form data-profile-form class="form-grid">${field('Nome','display_name',displayName(),'text','required')}<button class="primary-btn">Salvar nome</button></form></section><section class="settings-section" data-ssection="couple"><h3>Contas conectadas</h3><p>${state.members.length===2?'O casal está conectado.':'Compartilhe o código para conectar a segunda pessoa.'}</p><div class="members-settings">${state.members.map(m=>`<div><span>${esc(initials(m.profile?.display_name||'JH'))}</span><div><strong>${esc(m.profile?.display_name||'Pessoa')}</strong><small>${m.user_id===state.session.user.id?'Você':m.role==='owner'?'Criou o JuHelo':'Parceiro(a)'}</small></div></div>`).join('')}</div><div class="invite-card"><span>Código do casal</span><strong>${esc(state.household.invite_code||'')}</strong><button class="secondary-btn" data-copy>Copiar código</button></div></section><section class="settings-section" data-ssection="security"><h3>Segurança</h3><form data-password-form class="form-grid">${field('Nova senha','password','','password','minlength="8" required')}${field('Confirmar senha','confirm','','password','minlength="8" required')}<button class="primary-btn">Atualizar senha</button></form><button class="danger-btn" data-logout>Sair deste dispositivo</button></section><section class="settings-section" data-ssection="theme"><h3>Aparência</h3><p>Escolha como o JuHelo aparece neste aparelho.</p><div class="theme-options">${[['light','Claro','Visual claro e suave','sun'],['dark','Escuro','Confortável em ambientes escuros','moon'],['system','Sistema','Segue o tema do aparelho','system']].map(([id,n,d,ic])=>`<button class="theme-option ${pref===id?'selected':''}" data-theme="${id}"><span>${svg(ICON[ic])}</span><div><strong>${n}</strong><small>${d}</small></div><i>${pref===id?'✓':''}</i></button>`).join('')}</div></section></div></section>`;document.body.appendChild(w);const close=()=>w.remove();w.querySelector('[data-close]').onclick=close;w.addEventListener('click',e=>{if(e.target===w)close()});w.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>{w.querySelectorAll('[data-stab]').forEach(x=>x.classList.toggle('active',x===b));w.querySelectorAll('[data-ssection]').forEach(s=>s.classList.toggle('active',s.dataset.ssection===b.dataset.stab))});w.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>{applyTheme(b.dataset.theme);w.querySelectorAll('[data-theme]').forEach(x=>{x.classList.toggle('selected',x===b);x.querySelector('i').textContent=x===b?'✓':''})});w.querySelector('[data-copy]').onclick=async()=>{try{await navigator.clipboard.writeText(state.household.invite_code);toast('Código copiado.')}catch{toast(`Código: ${state.household.invite_code}`)}};w.querySelector('[data-profile-form]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('button'),name=String(new FormData(e.currentTarget).get('display_name')).trim();if(name.length<2)return toast('Digite um nome válido.','error');setBusy(btn,true);const[{error:pe},{error:ae}]=await Promise.all([db.from('profiles').update({display_name:name}).eq('id',state.session.user.id),db.auth.updateUser({data:{display_name:name}})]);if(pe||ae){safeError(pe||ae);return setBusy(btn,false)}state.profile={...(state.profile||{}),display_name:name};toast('Nome atualizado.');close();render()};w.querySelector('[data-password-form]').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('button'),fd=new FormData(e.currentTarget);if(fd.get('password')!==fd.get('confirm'))return toast('As senhas não coincidem.','error');setBusy(btn,true,'Atualizando…');const{error}=await db.auth.updateUser({password:fd.get('password')});if(error){safeError(error);return setBusy(btn,false)}toast('Senha atualizada.');e.currentTarget.reset();setBusy(btn,false)};w.querySelector('[data-logout]').onclick=()=>db.auth.signOut()}
+
+async function switchTab(tab){state.tab=tab;if(tab==='home'){if(state.txMonth!==currentMonth()){state.txMonth=currentMonth();await syncMonth(false)}render()}else if(tab==='transactions'){render()}else if(tab==='boxes'){try{await loadBoxes()}catch(e){safeError(e)}render()}else if(tab==='goals'){try{await loadGoals()}catch(e){safeError(e)}render()}else if(tab==='reports'){render();if(!state.reportRows.length)loadReport()}}
+function bind(){
+  app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+  app.querySelectorAll('[data-settings-open]').forEach(b=>b.onclick=openSettings);
+  app.querySelector('[data-hide-values]')?.addEventListener('click',()=>{state.valuesHidden=!state.valuesHidden;render()});
+  const ms=app.querySelector('#month-select');if(ms)ms.onchange=async()=>{state.txMonth=ms.value;render();await syncMonth(true)};
+  app.querySelectorAll('[data-action="new-expense"]').forEach(b=>b.onclick=()=>openTransaction(null,'expense'));
+  app.querySelectorAll('[data-action="new-income"]').forEach(b=>b.onclick=()=>openTransaction(null,'income'));
+  app.querySelectorAll('[data-action="new-recurring"]').forEach(b=>b.onclick=()=>openRecurring());
+  app.querySelectorAll('[data-action="box-add"]').forEach(b=>b.onclick=()=>openBoxAdd());
+  app.querySelectorAll('[data-action="new-box"]').forEach(b=>b.onclick=()=>openBoxEditor());
+  app.querySelectorAll('[data-action="new-goal"]').forEach(b=>b.onclick=()=>openGoal());
+  app.querySelectorAll('[data-edit-tx]').forEach(b=>b.onclick=()=>{const tx=state.transactions.find(t=>t.id===b.dataset.editTx);if(!tx)return;if(tx.kind==='recurring')return openRecurring(tx);if(tx.kind==='box_contribution')return toast('Aportes são gerenciados pela aba Caixinhas.');openTransaction(tx)});
+  app.querySelectorAll('[data-edit-box]').forEach(b=>b.onclick=()=>openBoxEditor(state.boxes.find(x=>x.id===b.dataset.editBox)));
+  app.querySelectorAll('[data-box-add]').forEach(b=>b.onclick=()=>openBoxAdd(b.dataset.boxAdd));
+  app.querySelectorAll('[data-box-withdraw]').forEach(b=>b.onclick=()=>openWithdraw(state.boxes.find(x=>x.id===b.dataset.boxWithdraw)));
+  app.querySelectorAll('[data-box-history]').forEach(b=>b.onclick=()=>openBoxHistory(state.boxes.find(x=>x.id===b.dataset.boxHistory)));
+  app.querySelectorAll('[data-goal-toggle]').forEach(b=>b.onclick=async()=>{const g=state.goals.find(x=>x.id===b.dataset.goalToggle),done=!g.is_completed;g.is_completed=done;g.completed_at=done?new Date().toISOString():null;render();const{data,error}=await db.from('goals').update({is_completed:done,completed_at:g.completed_at}).eq('id',g.id).select('id').single();if(error||!data){g.is_completed=!done;render();safeError(error||new Error('Meta não foi atualizada.'))}else toast(done?'Meta concluída ✓':'Meta reaberta.')});
+  app.querySelectorAll('[data-edit-goal]').forEach(b=>b.onclick=()=>openGoal(state.goals.find(x=>x.id===b.dataset.editGoal)));
+  app.querySelector('[data-report-start]')?.addEventListener('change',e=>{state.reportStart=e.target.value;if(state.reportStart>state.reportEnd)state.reportEnd=state.reportStart;loadReport()});
+  app.querySelector('[data-report-end]')?.addEventListener('change',e=>{state.reportEnd=e.target.value;if(state.reportEnd<state.reportStart)state.reportStart=state.reportEnd;loadReport()});
+  app.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const p=b.dataset.preset,end=currentMonth();state.reportEnd=end;if(p==='year')state.reportStart=`${new Date().getFullYear()}-01-01`;else state.reportStart=addMonths(end,-(Number(p)-1));loadReport()});
+  app.querySelectorAll('[data-category-filter]').forEach(b=>b.onclick=()=>{state.reportCategory=b.dataset.categoryFilter;render()});
+}
+
+db.auth.onAuthStateChange(async(event,session)=>{const old=state.session?.user?.id;state.session=session;if(!session){state.profile=null;state.household=null;state.members=[];state.transactions=[];state.boxes=[];state.boxBalances=[];state.goals=[];state.reportRows=[];state.reportTransactions=[];state.loading=false;render();return}if(event==='TOKEN_REFRESHED'||event==='INITIAL_SESSION')return;if(event==='USER_UPDATED'&&old===session.user.id){try{await loadContext();render()}catch(e){safeError(e)}return}if(event==='SIGNED_IN'||old!==session.user.id)await boot()});
+async function init(){if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn));const{data:{session}}=await db.auth.getSession();state.session=session;if(session)await boot();else{state.loading=false;render()}}
 init();
