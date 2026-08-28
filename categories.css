@@ -8,25 +8,42 @@
   line-height:1;
 }
 
+/* Receita usa linguagem visual por emoji, como as categorias de despesa. */
+.tx-icon.income svg,.quick-card.income>span svg,.mini-grid article.income>span svg{display:none}
+.tx-icon.income::before{content:'💰';font-size:18px;line-height:1}
+.quick-card.income>span::before{content:'💰';font-size:19px;line-height:1}
+.mini-grid article.income>span::before{content:'💰';font-size:15px;line-height:1}
+
 .category-field{min-width:0;margin:0;padding:0;border:0}
 .category-field legend{margin:0 0 9px;padding:0;color:var(--jh-text-soft);font-size:13px;font-weight:var(--jh-weight-semibold)}
-.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
 .category-choice{
-  position:relative;min-width:0;min-height:58px;padding:9px 34px 9px 10px;
-  border:1px solid var(--jh-border);border-radius:15px;background:var(--jh-surface-subtle);color:var(--jh-text);
-  display:grid;grid-template-columns:30px minmax(0,1fr);align-items:center;gap:8px;text-align:left;
+  position:relative;
+  min-width:0;
+  min-height:88px;
+  padding:9px 4px 8px;
+  border:1px solid var(--jh-border);
+  border-radius:14px;
+  background:var(--jh-surface-subtle);
+  color:var(--jh-text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-align:center;
   transition:border-color var(--jh-duration-base) var(--jh-ease),background var(--jh-duration-base) var(--jh-ease),transform var(--jh-duration-fast) var(--jh-ease)
 }
-.category-choice.is-wide{grid-column:1/-1}
-.category-choice:active{transform:scale(.985)}
-.category-choice>span{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--cat) 13%,var(--jh-surface));font-size:16px}
-.category-choice strong{min-width:0;color:var(--jh-text);font-size:12px;line-height:1.22;font-weight:var(--jh-weight-medium)}
+.category-choice.is-wide{grid-column:auto}
+.category-choice:active{transform:scale(.975)}
+.category-choice>span{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--cat) 13%,var(--jh-surface));font-size:17px;flex:0 0 auto}
+.category-choice strong{min-width:0;width:100%;color:var(--jh-text);font-size:10px;line-height:1.12;font-weight:var(--jh-weight-medium);overflow-wrap:anywhere}
 .category-choice i{
-  position:absolute;right:9px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:7px;
-  display:grid;place-items:center;background:var(--cat);color:#fff;font-size:11px;font-style:normal;font-weight:700;
+  position:absolute;right:5px;top:5px;width:17px;height:17px;border-radius:6px;
+  display:grid;place-items:center;background:var(--cat);color:#fff;font-size:9px;font-style:normal;font-weight:700;
   opacity:0;scale:.8;transition:opacity var(--jh-duration-fast) var(--jh-ease),scale var(--jh-duration-fast) var(--jh-ease)
 }
-.category-choice.is-recommended:not(.is-selected){border-color:color-mix(in srgb,var(--cat) 30%,var(--jh-border));background:color-mix(in srgb,var(--cat) 4%,var(--jh-surface-subtle))}
+.category-choice.is-recommended:not(.is-selected){border-color:var(--jh-border);background:var(--jh-surface-subtle)}
 .category-choice.is-selected{border-color:color-mix(in srgb,var(--cat) 55%,var(--jh-border));background:color-mix(in srgb,var(--cat) 9%,var(--jh-surface))}
 .category-choice.is-selected i{opacity:1;scale:1}
 .category-choice.is-selected strong{color:color-mix(in srgb,var(--cat) 70%,var(--jh-text))}
@@ -41,7 +58,9 @@
 .category-readonly strong{color:var(--jh-text);font-size:13px;font-weight:var(--jh-weight-medium)}
 
 [data-expense-details]{display:grid;gap:14px}
-.card-select-field .card-use-hint{display:block;margin-top:7px;color:var(--jh-muted);font-size:11px;line-height:1.35;font-weight:var(--jh-weight-regular)}
+/* Cartões são configurados somente em Ajustes. O campo legado fica fora da UI dos lançamentos. */
+.card-select-field{display:none!important}
+.card-select-field .card-use-hint{display:none!important}
 
 .category-report-card{margin-bottom:18px;padding:18px;border:1px solid var(--jh-border);border-radius:20px;background:var(--jh-surface);box-shadow:none}
 .report-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px}
@@ -78,7 +97,7 @@
 .chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0;height:auto}
 
 /* ========================= CARTÕES / AJUSTES ========================= */
-.settings-tabs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.settings-tabs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
 .settings-tabs::-webkit-scrollbar{display:none}
 .card-settings-form{display:grid;gap:16px;margin-top:18px}
 .card-settings-list{display:grid;gap:12px}
@@ -106,8 +125,11 @@
   .chart-wrap svg{min-width:0}
 }
 @media(max-width:390px){
-  .category-grid{grid-template-columns:1fr 1fr}
-  .category-choice.is-wide{grid-column:1/-1}
+  .category-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .category-choice{min-height:84px;padding:8px 3px 7px;border-radius:13px}
+  .category-choice.is-wide{grid-column:auto}
+  .category-choice>span{width:30px;height:30px;font-size:16px}
+  .category-choice strong{font-size:9px;line-height:1.08}
   .category-donut-layout{grid-template-columns:1fr}
   .category-donut{width:150px;margin:0 auto 4px}
   .card-purpose-grid{gap:6px}
