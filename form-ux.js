@@ -57,8 +57,19 @@
     render(input, initial);
   }
 
+  function enhanceHomeListActions(root = document) {
+    root.querySelectorAll?.('.home-lists .list-head > span').forEach(trigger => {
+      const card = trigger.closest('.list-card');
+      const isIncome = card?.classList.contains('income');
+      trigger.setAttribute('role', 'button');
+      trigger.tabIndex = 0;
+      trigger.setAttribute('aria-label', isIncome ? 'Ver todas receitas' : 'Ver todas despesas');
+    });
+  }
+
   function scan(root = document) {
     root.querySelectorAll?.('input').forEach(attach);
+    enhanceHomeListActions(root);
   }
 
   function moveCaretToEnd(input) {
@@ -80,14 +91,26 @@
     moveCaretToEnd(input);
   }
 
+  function openFullTransactions(type) {
+    const nav = document.querySelector('[data-tab="transactions"]');
+    if (!nav) return;
+    nav.click();
+    setTimeout(() => {
+      const target = document.querySelector(`.extract-grid .list-card.${type}`);
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
   /* Modais são inseridos dinamicamente. Eventos delegados mantêm o fluxo sem observers. */
   document.addEventListener('pointerdown', () => queueMicrotask(() => scan(document)), true);
 
   document.addEventListener('focusin', (event) => {
     const input = event.target;
-    if (!(input instanceof HTMLInputElement)) return;
-    attach(input);
-    if (input.dataset.currencyMask === '1') moveCaretToEnd(input);
+    if (input instanceof HTMLInputElement) {
+      attach(input);
+      if (input.dataset.currencyMask === '1') moveCaretToEnd(input);
+    }
+    queueMicrotask(() => enhanceHomeListActions(document));
   });
 
   document.addEventListener('input', (event) => {
@@ -95,6 +118,37 @@
     if (input instanceof HTMLInputElement && input.dataset.currencyMask === '1') {
       maskTypedValue(input);
     }
+  });
+
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target) return;
+
+    const seeAll = target.closest('.home-lists .list-head > span');
+    if (seeAll) {
+      event.preventDefault();
+      const type = seeAll.closest('.list-card')?.classList.contains('income') ? 'income' : 'expense';
+      openFullTransactions(type);
+      return;
+    }
+
+    const directionButton = target.closest('[data-dir]');
+    if (directionButton) {
+      queueMicrotask(() => {
+        const modal = directionButton.closest('.modal-backdrop');
+        const heading = modal?.querySelector('.modal-head h2');
+        if (!heading || !/^Nova (despesa|receita)$/i.test(heading.textContent.trim())) return;
+        heading.textContent = directionButton.dataset.dir === 'income' ? 'Nova receita' : 'Nova despesa';
+      });
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target?.matches('.home-lists .list-head > span')) return;
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    target.click();
   });
 
   /* FormData precisa receber número puro, mas o usuário sempre vê BRL. */
