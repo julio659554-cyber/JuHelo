@@ -28,6 +28,25 @@ button[data-old-text]:disabled::before{
 }
 @keyframes jh-spin{to{transform:rotate(360deg)}}
 
+/* Na Home, o contador vira uma ação explícita para abrir o extrato completo. */
+.home-lists .list-head>span{
+  width:auto;
+  min-width:0;
+  height:30px;
+  padding:0 2px 0 8px;
+  border-radius:10px;
+  background:transparent;
+  color:var(--jh-accent-strong);
+  font-size:0;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.home-lists .list-card.expense .list-head>span::after{content:'Ver todas despesas';font-size:11px;font-weight:var(--jh-weight-semibold);white-space:nowrap}
+.home-lists .list-card.income .list-head>span::after{content:'Ver todas receitas';font-size:11px;font-weight:var(--jh-weight-semibold);white-space:nowrap}
+.home-lists .list-head>span:active{background:var(--jh-accent-soft)}
+.extract-grid .list-card{scroll-margin-top:18px}
+
 /* Toast */
 .toast{animation:jh-toast-in var(--jh-duration-slow) var(--jh-ease) both}
 @keyframes jh-toast-in{
