@@ -22,19 +22,19 @@ jobs:
 
       - name: Ensure canonical active styles only
         run: |
-          grep -q 'design-system.css?v=uiux16' index.html
-          grep -q 'app-shell.css?v=uiux16' index.html
-          grep -q 'app-ui.css?v=uiux16' index.html
-          grep -q 'forms.css?v=uiux16' index.html
-          grep -q 'categories.css?v=uiux16' index.html
-          grep -q 'picker.css?v=uiux16' index.html
-          grep -q 'interactions.css?v=uiux16' index.html
+          grep -q 'design-system.css?v=uiux17' index.html
+          grep -q 'app-shell.css?v=uiux17' index.html
+          grep -q 'app-ui.css?v=uiux17' index.html
+          grep -q 'forms.css?v=uiux17' index.html
+          grep -q 'categories.css?v=uiux17' index.html
+          grep -q 'picker.css?v=uiux17' index.html
+          grep -q 'interactions.css?v=uiux17' index.html
           ! grep -q 'app-v31.css' index.html
           ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
 
       - name: Ensure one renderer and no redesign observers
         run: |
-          grep -q "app.js?v=uiux16" boot.js
+          grep -q "app.js?v=uiux17" boot.js
           ! grep -q 'app-v31.js' boot.js
           ! grep -q 'MutationObserver' app.js
           ! grep -q 'MutationObserver' boot.js
@@ -62,10 +62,21 @@ jobs:
           grep -q "neq('kind','box_contribution')" app.js
           grep -q "data-preset=\"month\"" app.js
           ! grep -q "REPORT_CATEGORIES=.*'box'" app.js
-          grep -q 'category-choice.is-wide' categories.css
+          grep -q 'grid-template-columns:repeat(4,minmax(0,1fr))' categories.css
+          grep -q '.category-choice.is-wide{grid-column:auto}' categories.css
+          grep -q '.card-select-field{display:none!important}' categories.css
+          grep -q "content:'💰'" categories.css
           grep -q 'card-setting' categories.css
           grep -q '.chart-wrap{width:100%;overflow:hidden' categories.css
           grep -q '.chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0' categories.css
+
+      - name: Ensure settings horizontal tabs
+        run: |
+          grep -q '.settings-tabs{' forms.css
+          grep -q 'display:flex;' forms.css
+          grep -q 'overflow-x:auto;' forms.css
+          grep -q 'white-space:nowrap;' forms.css
+          grep -q 'scroll-snap-type:x proximity;' forms.css
 
       - name: Ensure canonical form and picker behavior
         run: |
@@ -85,22 +96,22 @@ jobs:
 
       - name: Check PWA final asset graph
         run: |
-          grep -q "juhelo-uiux-16" sw.js
-          grep -q "design-system.css?v=uiux16" sw.js
-          grep -q "app-shell.css?v=uiux16" sw.js
-          grep -q "app-ui.css?v=uiux16" sw.js
-          grep -q "forms.css?v=uiux16" sw.js
-          grep -q "categories.css?v=uiux16" sw.js
-          grep -q "picker.css?v=uiux16" sw.js
-          grep -q "interactions.css?v=uiux16" sw.js
-          grep -q "app.js?v=uiux16" sw.js
-          grep -q "form-ux.js?v=uiux16" sw.js
-          grep -q "picker.js?v=uiux16" sw.js
-          grep -q "boot.js?v=uiux16" sw.js
+          grep -q "juhelo-uiux-17" sw.js
+          grep -q "design-system.css?v=uiux17" sw.js
+          grep -q "app-shell.css?v=uiux17" sw.js
+          grep -q "app-ui.css?v=uiux17" sw.js
+          grep -q "forms.css?v=uiux17" sw.js
+          grep -q "categories.css?v=uiux17" sw.js
+          grep -q "picker.css?v=uiux17" sw.js
+          grep -q "interactions.css?v=uiux17" sw.js
+          grep -q "app.js?v=uiux17" sw.js
+          grep -q "form-ux.js?v=uiux17" sw.js
+          grep -q "picker.js?v=uiux17" sw.js
+          grep -q "boot.js?v=uiux17" sw.js
           ! grep -q 'app-v31.js' sw.js
           ! grep -q 'app-v31.css' sw.js
 
       - name: Check build marker
         run: |
-          grep -q 'juhelo-build" content="uiux-16' index.html
-          grep -q 'data-juhelo-build="uiux-16"' index.html
+          grep -q 'juhelo-build" content="uiux-17' index.html
+          grep -q 'data-juhelo-build="uiux-17"' index.html
