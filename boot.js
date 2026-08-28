@@ -37,7 +37,7 @@
   (async()=>{
     try{
       await loadSupabase();
-      await import('./app.js?v=uiux13');
+      await import('./app.js?v=uiux14');
       if(document.readyState==='complete'&&'serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(console.warn);
     }catch(error){console.error('JuHelo boot',error);fail('Não foi possível carregar os componentes necessários.')}
   })();
