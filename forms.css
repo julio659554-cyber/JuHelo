@@ -99,8 +99,36 @@ html:has(body>.modal-backdrop),html:has(body>.settings-overlay),body:has(>.modal
 .settings-head h2{margin:0;color:var(--jh-text);font-size:22px;font-weight:var(--jh-weight-semibold);letter-spacing:-.025em}
 .settings-head p{margin:3px 0 0;color:var(--jh-muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
 .settings-avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(145deg,var(--jh-accent-soft-2),var(--jh-green-soft));display:grid;place-items:center;color:var(--jh-accent-strong);font-size:13px;font-weight:var(--jh-weight-semibold)}
-.settings-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin:18px 0;padding:3px;border-radius:15px;background:var(--jh-surface-subtle)}
-.settings-tabs button{min-height:42px;padding:0 4px;border:0;border-radius:12px;background:transparent;color:var(--jh-muted);font-size:11px;font-weight:var(--jh-weight-medium)}
+.settings-tabs{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:4px;
+  margin:18px -2px;
+  padding:3px 2px;
+  border-radius:15px;
+  background:var(--jh-surface-subtle);
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;
+}
+.settings-tabs::-webkit-scrollbar{display:none}
+.settings-tabs button{
+  flex:0 0 auto;
+  min-width:88px;
+  min-height:42px;
+  padding:0 14px;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  color:var(--jh-muted);
+  font-size:11px;
+  font-weight:var(--jh-weight-medium);
+  white-space:nowrap;
+  scroll-snap-align:start;
+}
 .settings-tabs button.active{background:var(--jh-surface);color:var(--jh-text);box-shadow:var(--jh-shadow-xs)}
 .settings-section{display:none}.settings-section.active{display:block}
 .settings-section h3{margin:7px 0 3px;color:var(--jh-text);font-size:18px;font-weight:var(--jh-weight-semibold)}
@@ -137,8 +165,8 @@ html:has(body>.modal-backdrop),html:has(body>.settings-overlay),body:has(>.modal
   .modal-head h2{font-size:21px}
   .settings-panel{padding:18px}
   .settings-head p{max-width:205px}
-  .settings-tabs{overflow:hidden}
-  .settings-tabs button{font-size:10px;padding:0 2px}
+  .settings-tabs{margin-left:-2px;margin-right:-2px;overflow-x:auto}
+  .settings-tabs button{min-width:82px;font-size:10.5px;padding:0 13px}
   .modal-actions{grid-template-columns:1fr 1.2fr}
 }
 @media(max-width:390px){
