@@ -22,30 +22,47 @@ select{-webkit-appearance:none;appearance:none}
   -webkit-tap-highlight-color:transparent;
 }
 
-.field:has(>select)::after,.period-card label:has(>select)::after,.jh-select-host::after{
-  content:'⌄';
+/* Chevron desenhado em CSS para ficar geometricamente centralizado no campo. */
+.field:has(>select)::after,.period-card label:has(>select)::after,.jh-select-host:not(.month-control)::after{
+  content:'';
   position:absolute;
-  right:16px;
-  bottom:17px;
+  right:17px;
+  bottom:27px;
+  width:8px;
+  height:8px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
   color:var(--jh-muted);
-  font-size:20px;
-  font-weight:var(--jh-weight-bold);
-  line-height:1;
   pointer-events:none;
+  transform:translateY(50%) rotate(45deg);
+  transform-origin:center;
   transition:transform 220ms var(--jh-ease),color 180ms var(--jh-ease);
 }
 .month-control::after,.month-control.jh-select-host::after{
-  content:'⌄';
+  content:'';
   position:static;
-  margin-left:auto;
+  flex:0 0 auto;
+  width:8px;
+  height:8px;
+  margin:0 3px 4px auto;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
   color:var(--jh-muted);
-  font-size:18px;
-  font-weight:var(--jh-weight-bold);
-  line-height:1;
   pointer-events:none;
+  transform:rotate(45deg);
+  transform-origin:center;
   transition:transform 220ms var(--jh-ease),color 180ms var(--jh-ease);
 }
-.jh-select-host[aria-expanded="true"]::after{transform:rotate(180deg);color:var(--jh-accent)}
+.field.jh-select-host[aria-expanded="true"]::after,
+.period-card label.jh-select-host[aria-expanded="true"]::after,
+.jh-select-host:not(.month-control)[aria-expanded="true"]::after{
+  transform:translateY(50%) rotate(225deg);
+  color:var(--jh-accent);
+}
+.month-control.jh-select-host[aria-expanded="true"]::after{
+  transform:rotate(225deg);
+  color:var(--jh-accent);
+}
 .field>select,.form-grid select,.period-card select{padding-right:44px}
 .month-control select{padding-right:4px}
 
