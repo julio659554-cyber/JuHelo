@@ -3,7 +3,8 @@
   const EASE = 'cubic-bezier(.2,.8,.2,1)';
   const systemReduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
   const duration = (normal, reduced = 140) => systemReduced() ? reduced : normal;
-  let pendingMeasure = null;
+  let pendingTransactionMeasure = null;
+  let pendingSettings = null;
 
   function afterLayout(callback) {
     requestAnimationFrame(() => requestAnimationFrame(callback));
@@ -28,14 +29,15 @@
   function animateSection(section, direction = 1) {
     if (!section || !section.isConnected) return;
     const reduced = systemReduced();
+    section.getAnimations().forEach(animation => animation.cancel());
     section.animate(
       reduced
-        ? [{ opacity: .55 }, { opacity: 1 }]
+        ? [{ opacity: .72 }, { opacity: 1 }]
         : [
-            { opacity: 0, transform: `translateX(${direction * 12}px)` },
+            { opacity: 0, transform: `translateX(${direction * 10}px)` },
             { opacity: 1, transform: 'translateX(0)' }
           ],
-      { duration: duration(250, 140), easing: EASE }
+      { duration: duration(220, 120), easing: EASE }
     );
   }
 
@@ -47,16 +49,16 @@
         const reduced = systemReduced();
         next.animate(
           reduced
-            ? [{ opacity: .6 }, { opacity: 1 }]
+            ? [{ opacity: .7 }, { opacity: 1 }]
             : [
-                { opacity: 0, transform: 'translateY(9px)' },
+                { opacity: 0, transform: 'translateY(7px)' },
                 { opacity: 1, transform: 'translateY(0)' }
               ],
-          { duration: duration(260, 140), easing: EASE }
+          { duration: duration(230, 120), easing: EASE }
         );
         return;
       }
-      if (performance.now() - started < 1800) requestAnimationFrame(tick);
+      if (performance.now() - started < 1400) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
   }
@@ -86,6 +88,19 @@
     active.scrollIntoView({ behavior: systemReduced() ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
   }
 
+  function stabilizeSettings(panel) {
+    if (!panel) return;
+    const content = panel.querySelector('.settings-content');
+    panel.style.width = '';
+    panel.style.height = '';
+    panel.style.maxWidth = '';
+    panel.style.overflow = '';
+    if (content) {
+      content.style.height = '';
+      content.style.width = '';
+    }
+  }
+
   function closeOverlayAnimated(overlay) {
     if (!overlay?.isConnected) return;
     overlay.classList.add('is-closing');
@@ -102,7 +117,7 @@
     const direction = target.closest('[data-dir]');
     if (direction) {
       const card = direction.closest('.modal-card');
-      if (card) pendingMeasure = { kind: 'transaction', node: card, from: card.getBoundingClientRect().height };
+      if (card) pendingTransactionMeasure = { node: card, from: card.getBoundingClientRect().height };
       return;
     }
 
@@ -113,12 +128,9 @@
       const active = panel?.querySelector('[data-stab].active');
       const fromIndex = buttons.indexOf(active);
       const toIndex = buttons.indexOf(settingsTab);
-      if (panel) pendingMeasure = {
-        kind: 'settings',
-        node: panel,
-        from: panel.getBoundingClientRect().height,
-        direction: toIndex >= fromIndex ? 1 : -1,
-        panel
+      pendingSettings = {
+        panel,
+        direction: toIndex >= fromIndex ? 1 : -1
       };
     }
   }, true);
@@ -142,27 +154,34 @@
     if (!target) return;
 
     if (target.closest('[data-settings-open]')) {
-      afterLayout(() => ensureSettingsIndicator());
+      afterLayout(() => {
+        const panel = document.querySelector('.settings-panel');
+        stabilizeSettings(panel);
+        ensureSettingsIndicator(panel);
+      });
       return;
     }
 
     const direction = target.closest('[data-dir]');
-    if (direction && pendingMeasure?.kind === 'transaction') {
-      const measure = pendingMeasure;
-      pendingMeasure = null;
-      afterLayout(() => animateHeight(measure.node, measure.from, 320));
+    if (direction && pendingTransactionMeasure) {
+      const measure = pendingTransactionMeasure;
+      pendingTransactionMeasure = null;
+      afterLayout(() => animateHeight(measure.node, measure.from, 300));
       return;
     }
 
     const settingsTab = target.closest('[data-stab]');
-    if (settingsTab && pendingMeasure?.kind === 'settings') {
-      const measure = pendingMeasure;
-      pendingMeasure = null;
+    if (settingsTab && pendingSettings) {
+      const measure = pendingSettings;
+      pendingSettings = null;
       afterLayout(() => {
-        animateHeight(measure.node, measure.from, 320);
-        animateSection(measure.panel?.querySelector('.settings-section.active'), measure.direction);
-        const tabs = measure.panel?.querySelector('.settings-tabs');
-        ensureSettingsIndicator(measure.panel);
+        const panel = measure.panel;
+        stabilizeSettings(panel);
+        const content = panel?.querySelector('.settings-content');
+        if (content) content.scrollTop = 0;
+        animateSection(panel?.querySelector('.settings-section.active'), measure.direction);
+        const tabs = panel?.querySelector('.settings-tabs');
+        ensureSettingsIndicator(panel);
         updateSettingsIndicator(tabs, true);
       });
     }
@@ -170,6 +189,7 @@
 
   window.addEventListener('resize', () => {
     document.querySelectorAll('.settings-panel').forEach(panel => {
+      stabilizeSettings(panel);
       const tabs = panel.querySelector('.settings-tabs');
       if (tabs) updateSettingsIndicator(tabs, false);
     });
