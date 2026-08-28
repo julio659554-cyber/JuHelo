@@ -22,19 +22,19 @@ jobs:
 
       - name: Ensure canonical active styles only
         run: |
-          grep -q 'design-system.css?v=uiux17' index.html
-          grep -q 'app-shell.css?v=uiux17' index.html
-          grep -q 'app-ui.css?v=uiux17' index.html
-          grep -q 'forms.css?v=uiux17' index.html
-          grep -q 'categories.css?v=uiux17' index.html
-          grep -q 'picker.css?v=uiux17' index.html
-          grep -q 'interactions.css?v=uiux17' index.html
+          grep -q 'design-system.css?v=uiux18' index.html
+          grep -q 'app-shell.css?v=uiux18' index.html
+          grep -q 'app-ui.css?v=uiux18' index.html
+          grep -q 'forms.css?v=uiux18' index.html
+          grep -q 'categories.css?v=uiux18' index.html
+          grep -q 'picker.css?v=uiux18' index.html
+          grep -q 'interactions.css?v=uiux18' index.html
           ! grep -q 'app-v31.css' index.html
           ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
 
       - name: Ensure one renderer and no redesign observers
         run: |
-          grep -q "app.js?v=uiux17" boot.js
+          grep -q "app.js?v=uiux18" boot.js
           ! grep -q 'app-v31.js' boot.js
           ! grep -q 'MutationObserver' app.js
           ! grep -q 'MutationObserver' boot.js
@@ -62,10 +62,13 @@ jobs:
           grep -q "neq('kind','box_contribution')" app.js
           grep -q "data-preset=\"month\"" app.js
           ! grep -q "REPORT_CATEGORIES=.*'box'" app.js
-          grep -q 'grid-template-columns:repeat(4,minmax(0,1fr))' categories.css
+          grep -q 'grid-template-columns:repeat(2,minmax(0,1fr))' categories.css
           grep -q '.category-choice.is-wide{grid-column:auto}' categories.css
           grep -q '.card-select-field{display:none!important}' categories.css
-          grep -q "content:'💰'" categories.css
+          grep -q '\[data-expense-details\]\[hidden\]{display:none!important}' categories.css
+          grep -q ".tx-icon.income::before{content:'💰'" categories.css
+          ! grep -q 'quick-card.income>span::before' categories.css
+          ! grep -q 'mini-grid article.income>span::before' categories.css
           grep -q 'card-setting' categories.css
           grep -q '.chart-wrap{width:100%;overflow:hidden' categories.css
           grep -q '.chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0' categories.css
@@ -81,12 +84,23 @@ jobs:
       - name: Ensure canonical form and picker behavior
         run: |
           grep -q 'data-currency-mask' form-ux.js
+          grep -q 'openFullTransactions' form-ux.js
+          grep -q 'Ver todas despesas' form-ux.js
+          grep -q 'Ver todas receitas' form-ux.js
           grep -q 'jh-select-popover' picker.js
           grep -q 'aria-haspopup' picker.js
           grep -q 'data-native-disabled' picker.js
           grep -q 'pointer-events:none!important' picker.css
+          grep -q 'bottom:27px' picker.css
+          grep -q 'border-right:2px solid currentColor' picker.css
           grep -q 'font-size:16px' forms.css
           ! grep -q 'gesturestart' picker.js
+
+      - name: Ensure home see-all affordances
+        run: |
+          grep -q "content:'Ver todas despesas'" interactions.css
+          grep -q "content:'Ver todas receitas'" interactions.css
+          grep -q '.extract-grid .list-card{scroll-margin-top:18px}' interactions.css
 
       - name: Ensure animated inline navigation
         run: |
@@ -96,22 +110,22 @@ jobs:
 
       - name: Check PWA final asset graph
         run: |
-          grep -q "juhelo-uiux-17" sw.js
-          grep -q "design-system.css?v=uiux17" sw.js
-          grep -q "app-shell.css?v=uiux17" sw.js
-          grep -q "app-ui.css?v=uiux17" sw.js
-          grep -q "forms.css?v=uiux17" sw.js
-          grep -q "categories.css?v=uiux17" sw.js
-          grep -q "picker.css?v=uiux17" sw.js
-          grep -q "interactions.css?v=uiux17" sw.js
-          grep -q "app.js?v=uiux17" sw.js
-          grep -q "form-ux.js?v=uiux17" sw.js
-          grep -q "picker.js?v=uiux17" sw.js
-          grep -q "boot.js?v=uiux17" sw.js
+          grep -q "juhelo-uiux-18" sw.js
+          grep -q "design-system.css?v=uiux18" sw.js
+          grep -q "app-shell.css?v=uiux18" sw.js
+          grep -q "app-ui.css?v=uiux18" sw.js
+          grep -q "forms.css?v=uiux18" sw.js
+          grep -q "categories.css?v=uiux18" sw.js
+          grep -q "picker.css?v=uiux18" sw.js
+          grep -q "interactions.css?v=uiux18" sw.js
+          grep -q "app.js?v=uiux18" sw.js
+          grep -q "form-ux.js?v=uiux18" sw.js
+          grep -q "picker.js?v=uiux18" sw.js
+          grep -q "boot.js?v=uiux18" sw.js
           ! grep -q 'app-v31.js' sw.js
           ! grep -q 'app-v31.css' sw.js
 
       - name: Check build marker
         run: |
-          grep -q 'juhelo-build" content="uiux-17' index.html
-          grep -q 'data-juhelo-build="uiux-17"' index.html
+          grep -q 'juhelo-build" content="uiux-18' index.html
+          grep -q 'data-juhelo-build="uiux-18"' index.html
