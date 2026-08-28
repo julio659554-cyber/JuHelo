@@ -67,12 +67,17 @@
 .category-bars text{fill:var(--jh-muted);font-size:11px}
 .category-bars .guide{stroke:var(--jh-border);stroke-width:1}
 
+/* O gráfico geral segue a mesma leitura responsiva do gráfico de categorias. */
+.chart-wrap{width:100%;overflow:hidden;margin-top:12px;touch-action:pan-y}
+.chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0;height:auto}
+
 @media(max-width:560px){
   .category-donut-layout{grid-template-columns:135px minmax(0,1fr);gap:13px}
   .category-report-card{padding:16px}
   .category-legend-row{grid-template-columns:30px minmax(0,1fr) auto;gap:7px;padding:7px 0}
   .legend-dot{width:29px;height:29px;border-radius:9px;font-size:14px}
   .category-legend-row strong,.category-legend-row b{font-size:11px}
+  .chart-wrap svg{min-width:0}
 }
 @media(max-width:390px){
   .category-grid{grid-template-columns:1fr}
