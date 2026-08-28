@@ -1,5 +1,5 @@
-const CACHE='juhelo-uiux-17';
-const CORE=['./','./index.html','./design-system.css?v=uiux17','./app-shell.css?v=uiux17','./app-ui.css?v=uiux17','./forms.css?v=uiux17','./categories.css?v=uiux17','./picker.css?v=uiux17','./interactions.css?v=uiux17','./app.js?v=uiux17','./form-ux.js?v=uiux17','./picker.js?v=uiux17','./boot.js?v=uiux17','./supabase-proxy-v33.js?v=uiux17-auth1','./manifest.webmanifest?v=uiux17','./assets/icon.svg'];
+const CACHE='juhelo-uiux-18';
+const CORE=['./','./index.html','./design-system.css?v=uiux18','./app-shell.css?v=uiux18','./app-ui.css?v=uiux18','./forms.css?v=uiux18','./categories.css?v=uiux18','./picker.css?v=uiux18','./interactions.css?v=uiux18','./app.js?v=uiux18','./form-ux.js?v=uiux18','./picker.js?v=uiux18','./boot.js?v=uiux18','./supabase-proxy-v33.js?v=uiux18-auth1','./manifest.webmanifest?v=uiux18','./assets/icon.svg'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(CORE.map(url=>cache.add(url)))));
