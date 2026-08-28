@@ -72,6 +72,11 @@
 .category-bars text{fill:var(--jh-muted);font-size:11px}
 .category-bars .guide{stroke:var(--jh-border);stroke-width:1}
 
+/* O gráfico geral segue a mesma largura fluida do gráfico por categoria. */
+.chart-wrap{width:100%;overflow:hidden;margin-top:12px;scrollbar-width:none}
+.chart-wrap::-webkit-scrollbar{display:none}
+.chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0;height:auto}
+
 /* ========================= CARTÕES / AJUSTES ========================= */
 .settings-tabs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .settings-tabs::-webkit-scrollbar{display:none}
@@ -98,6 +103,7 @@
   .legend-dot{width:29px;height:29px;border-radius:9px;font-size:14px}
   .category-legend-row strong,.category-legend-row b{font-size:11px}
   .card-setting{padding:13px}
+  .chart-wrap svg{min-width:0}
 }
 @media(max-width:390px){
   .category-grid{grid-template-columns:1fr 1fr}
