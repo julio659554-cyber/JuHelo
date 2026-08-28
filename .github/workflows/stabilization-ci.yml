@@ -23,19 +23,19 @@ jobs:
 
       - name: Ensure canonical active styles only
         run: |
-          grep -q 'design-system.css?v=uiux19' index.html
-          grep -q 'app-shell.css?v=uiux19' index.html
-          grep -q 'app-ui.css?v=uiux19' index.html
-          grep -q 'forms.css?v=uiux19' index.html
-          grep -q 'categories.css?v=uiux19' index.html
-          grep -q 'picker.css?v=uiux19' index.html
-          grep -q 'interactions.css?v=uiux19' index.html
+          grep -q 'design-system.css?v=uiux20' index.html
+          grep -q 'app-shell.css?v=uiux20' index.html
+          grep -q 'app-ui.css?v=uiux20' index.html
+          grep -q 'forms.css?v=uiux20' index.html
+          grep -q 'categories.css?v=uiux20' index.html
+          grep -q 'picker.css?v=uiux20' index.html
+          grep -q 'interactions.css?v=uiux20' index.html
           ! grep -q 'app-v31.css' index.html
           ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
 
       - name: Ensure one renderer and no redesign observers
         run: |
-          grep -q "app.js?v=uiux19" boot.js
+          grep -q "app.js?v=uiux20" boot.js
           ! grep -q 'app-v31.js' boot.js
           ! grep -q 'MutationObserver' app.js
           ! grep -q 'MutationObserver' boot.js
@@ -104,17 +104,21 @@ jobs:
           grep -q "content:'Ver todas receitas'" interactions.css
           grep -q '.extract-grid .list-card{scroll-margin-top:18px}' interactions.css
 
-      - name: Ensure canonical motion system
+      - name: Ensure canonical motion system is active at runtime
         run: |
-          grep -q 'motion.js?v=uiux19' index.html
+          grep -q 'motion.js?v=uiux20' index.html
           grep -q 'animateNewPage' motion.js
           grep -q 'animateHeight' motion.js
+          grep -q 'afterLayout' motion.js
+          grep -q 'node: panel' motion.js
           grep -q 'settings-tab-indicator' motion.js
           grep -q 'prefers-reduced-motion' motion.js
           grep -q 'jh-sheet-in' interactions.css
+          grep -q 'jh-overlay-reduced-in' interactions.css
           grep -q 'segmented:has' interactions.css
           grep -q 'settings-tab-indicator' interactions.css
           grep -q 'data-ssection="security"' interactions.css
+          ! grep -q 'modal-backdrop,.settings-overlay,.settings-tab-indicator,.segmented::before{transition:none!important;animation:none!important}' interactions.css
 
       - name: Ensure animated inline navigation
         run: |
@@ -124,23 +128,23 @@ jobs:
 
       - name: Check PWA final asset graph
         run: |
-          grep -q "juhelo-uiux-19" sw.js
-          grep -q "design-system.css?v=uiux19" sw.js
-          grep -q "app-shell.css?v=uiux19" sw.js
-          grep -q "app-ui.css?v=uiux19" sw.js
-          grep -q "forms.css?v=uiux19" sw.js
-          grep -q "categories.css?v=uiux19" sw.js
-          grep -q "picker.css?v=uiux19" sw.js
-          grep -q "interactions.css?v=uiux19" sw.js
-          grep -q "app.js?v=uiux19" sw.js
-          grep -q "form-ux.js?v=uiux19" sw.js
-          grep -q "picker.js?v=uiux19" sw.js
-          grep -q "motion.js?v=uiux19" sw.js
-          grep -q "boot.js?v=uiux19" sw.js
+          grep -q "juhelo-uiux-20" sw.js
+          grep -q "design-system.css?v=uiux20" sw.js
+          grep -q "app-shell.css?v=uiux20" sw.js
+          grep -q "app-ui.css?v=uiux20" sw.js
+          grep -q "forms.css?v=uiux20" sw.js
+          grep -q "categories.css?v=uiux20" sw.js
+          grep -q "picker.css?v=uiux20" sw.js
+          grep -q "interactions.css?v=uiux20" sw.js
+          grep -q "app.js?v=uiux20" sw.js
+          grep -q "form-ux.js?v=uiux20" sw.js
+          grep -q "picker.js?v=uiux20" sw.js
+          grep -q "motion.js?v=uiux20" sw.js
+          grep -q "boot.js?v=uiux20" sw.js
           ! grep -q 'app-v31.js' sw.js
           ! grep -q 'app-v31.css' sw.js
 
       - name: Check build marker
         run: |
-          grep -q 'juhelo-build" content="uiux-19' index.html
-          grep -q 'data-juhelo-build="uiux-19"' index.html
+          grep -q 'juhelo-build" content="uiux-20' index.html
+          grep -q 'data-juhelo-build="uiux-20"' index.html
