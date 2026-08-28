@@ -1,19 +1,24 @@
 /* JuHelo — motion system canônico. Sem MutationObserver. */
 (() => {
   const EASE = 'cubic-bezier(.2,.8,.2,1)';
-  const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const systemReduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+  const duration = (normal, reduced = 140) => systemReduced() ? reduced : normal;
   let pendingMeasure = null;
 
-  function animateHeight(node, from, duration = 280) {
-    if (!node || !node.isConnected || reduced()) return;
+  function afterLayout(callback) {
+    requestAnimationFrame(() => requestAnimationFrame(callback));
+  }
+
+  function animateHeight(node, from, normalDuration = 300) {
+    if (!node || !node.isConnected) return;
     const to = node.getBoundingClientRect().height;
-    if (!Number.isFinite(from) || Math.abs(to - from) < 2) return;
+    if (!Number.isFinite(from) || !Number.isFinite(to) || Math.abs(to - from) < 2) return;
 
     const previousOverflow = node.style.overflow;
     node.style.overflow = 'clip';
     const animation = node.animate(
       [{ height: `${from}px` }, { height: `${to}px` }],
-      { duration, easing: EASE }
+      { duration: duration(normalDuration, 160), easing: EASE }
     );
     const restore = () => { node.style.overflow = previousOverflow; };
     animation.addEventListener('finish', restore, { once: true });
@@ -21,32 +26,37 @@
   }
 
   function animateSection(section, direction = 1) {
-    if (!section || !section.isConnected || reduced()) return;
+    if (!section || !section.isConnected) return;
+    const reduced = systemReduced();
     section.animate(
-      [
-        { opacity: 0, transform: `translateX(${direction * 10}px)` },
-        { opacity: 1, transform: 'translateX(0)' }
-      ],
-      { duration: 230, easing: EASE }
+      reduced
+        ? [{ opacity: .55 }, { opacity: 1 }]
+        : [
+            { opacity: 0, transform: `translateX(${direction * 12}px)` },
+            { opacity: 1, transform: 'translateX(0)' }
+          ],
+      { duration: duration(250, 140), easing: EASE }
     );
   }
 
   function animateNewPage(oldPage) {
-    if (reduced()) return;
     const started = performance.now();
     const tick = () => {
       const next = document.querySelector('#app > .page');
       if (next && next !== oldPage) {
+        const reduced = systemReduced();
         next.animate(
-          [
-            { opacity: 0, transform: 'translateY(8px)' },
-            { opacity: 1, transform: 'translateY(0)' }
-          ],
-          { duration: 240, easing: EASE }
+          reduced
+            ? [{ opacity: .6 }, { opacity: 1 }]
+            : [
+                { opacity: 0, transform: 'translateY(9px)' },
+                { opacity: 1, transform: 'translateY(0)' }
+              ],
+          { duration: duration(260, 140), easing: EASE }
         );
         return;
       }
-      if (performance.now() - started < 1400) requestAnimationFrame(tick);
+      if (performance.now() - started < 1800) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
   }
@@ -73,14 +83,13 @@
     indicator.style.width = `${active.offsetWidth}px`;
     indicator.style.transform = `translateX(${active.offsetLeft}px)`;
     if (!animate) requestAnimationFrame(() => { indicator.style.transition = ''; });
-    active.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+    active.scrollIntoView({ behavior: systemReduced() ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
   }
 
   function closeOverlayAnimated(overlay) {
     if (!overlay?.isConnected) return;
-    if (reduced()) return overlay.remove();
     overlay.classList.add('is-closing');
-    setTimeout(() => overlay.remove(), 190);
+    setTimeout(() => overlay.remove(), duration(210, 130));
   }
 
   document.addEventListener('pointerdown', event => {
@@ -100,15 +109,14 @@
     const settingsTab = target.closest('[data-stab]');
     if (settingsTab) {
       const panel = settingsTab.closest('.settings-panel');
-      const content = panel?.querySelector('.settings-content');
       const buttons = panel ? [...panel.querySelectorAll('[data-stab]')] : [];
       const active = panel?.querySelector('[data-stab].active');
       const fromIndex = buttons.indexOf(active);
       const toIndex = buttons.indexOf(settingsTab);
-      if (content) pendingMeasure = {
+      if (panel) pendingMeasure = {
         kind: 'settings',
-        node: content,
-        from: content.getBoundingClientRect().height,
+        node: panel,
+        from: panel.getBoundingClientRect().height,
         direction: toIndex >= fromIndex ? 1 : -1,
         panel
       };
@@ -134,7 +142,7 @@
     if (!target) return;
 
     if (target.closest('[data-settings-open]')) {
-      queueMicrotask(() => ensureSettingsIndicator());
+      afterLayout(() => ensureSettingsIndicator());
       return;
     }
 
@@ -142,7 +150,7 @@
     if (direction && pendingMeasure?.kind === 'transaction') {
       const measure = pendingMeasure;
       pendingMeasure = null;
-      requestAnimationFrame(() => animateHeight(measure.node, measure.from, 300));
+      afterLayout(() => animateHeight(measure.node, measure.from, 320));
       return;
     }
 
@@ -150,8 +158,8 @@
     if (settingsTab && pendingMeasure?.kind === 'settings') {
       const measure = pendingMeasure;
       pendingMeasure = null;
-      requestAnimationFrame(() => {
-        animateHeight(measure.node, measure.from, 280);
+      afterLayout(() => {
+        animateHeight(measure.node, measure.from, 320);
         animateSection(measure.panel?.querySelector('.settings-section.active'), measure.direction);
         const tabs = measure.panel?.querySelector('.settings-tabs');
         ensureSettingsIndicator(measure.panel);
