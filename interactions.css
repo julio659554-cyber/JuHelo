@@ -47,6 +47,70 @@ button[data-old-text]:disabled::before{
 .home-lists .list-head>span:active{background:var(--jh-accent-soft)}
 .extract-grid .list-card{scroll-margin-top:18px}
 
+/* ========================= MOTION SYSTEM ========================= */
+/* Entrada de modal/settings: curta, suave e com sensação de sheet nativo. */
+.modal-backdrop,.settings-overlay{animation:jh-overlay-in 180ms ease-out both}
+.modal-card,.settings-panel{animation:jh-sheet-in 280ms cubic-bezier(.2,.8,.2,1) both;transform-origin:50% 100%}
+.modal-backdrop.is-closing,.settings-overlay.is-closing{animation:jh-overlay-out 190ms ease-in both}
+.modal-backdrop.is-closing .modal-card,.settings-overlay.is-closing .settings-panel{animation:jh-sheet-out 190ms ease-in both}
+@keyframes jh-overlay-in{from{opacity:0}to{opacity:1}}
+@keyframes jh-overlay-out{from{opacity:1}to{opacity:0}}
+@keyframes jh-sheet-in{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes jh-sheet-out{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(12px) scale(.99)}}
+
+/* Despesa ↔ Receita: indicador desliza em vez de trocar de bloco instantaneamente. */
+.segmented{position:relative;isolation:isolate;overflow:hidden}
+.segmented::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:3px;
+  top:3px;
+  bottom:3px;
+  width:calc(50% - 4.5px);
+  border-radius:12px;
+  background:var(--jh-surface);
+  box-shadow:var(--jh-shadow-xs);
+  transform:translateX(0);
+  transition:transform 280ms cubic-bezier(.2,.8,.2,1),background-color var(--jh-duration-base) var(--jh-ease);
+  pointer-events:none;
+}
+.segmented:has([data-dir="income"].active)::before{transform:translateX(calc(100% + 3px))}
+.segmented button{position:relative;z-index:1;background:transparent!important;box-shadow:none!important;transition:color 210ms ease,transform var(--jh-duration-fast) var(--jh-ease)}
+.segmented button.active{background:transparent!important;box-shadow:none!important}
+
+/* Ajustes: pill real se desloca entre as abas horizontais. */
+.settings-tabs{position:relative;isolation:isolate}
+.settings-tab-indicator{
+  position:absolute;
+  z-index:0;
+  top:3px;
+  bottom:3px;
+  left:0;
+  width:88px;
+  border-radius:12px;
+  background:var(--jh-surface);
+  box-shadow:var(--jh-shadow-xs);
+  pointer-events:none;
+  transition:transform 300ms cubic-bezier(.2,.8,.2,1),width 300ms cubic-bezier(.2,.8,.2,1),background-color var(--jh-duration-base) var(--jh-ease);
+}
+.settings-tabs button{position:relative;z-index:1;background:transparent!important;box-shadow:none!important;transition:color 210ms ease,transform var(--jh-duration-fast) var(--jh-ease)}
+.settings-tabs button.active{background:transparent!important;box-shadow:none!important}
+.settings-content{min-height:0}
+.settings-section.active{transform-origin:50% 0}
+
+/* Segurança: ações com mesma largura e respiro consistente. */
+.settings-section[data-ssection="security"].active{display:grid;gap:14px}
+.settings-section[data-ssection="security"] [data-password-form]{margin:0}
+.settings-section[data-ssection="security"]>.danger-btn{
+  width:100%;
+  min-height:50px;
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
 /* Toast */
 .toast{animation:jh-toast-in var(--jh-duration-slow) var(--jh-ease) both}
 @keyframes jh-toast-in{
@@ -97,6 +161,6 @@ body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.char
 }
 
 @media(prefers-reduced-motion:reduce){
-  button,[role="button"],.toast,.loading-card,body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.chart-card,.modal-card,.settings-panel,.bottom-nav,.quick-card{transition:none!important;animation:none!important}
+  button,[role="button"],.toast,.loading-card,body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.chart-card,.modal-card,.settings-panel,.bottom-nav,.quick-card,.modal-backdrop,.settings-overlay,.settings-tab-indicator,.segmented::before{transition:none!important;animation:none!important}
   button[data-old-text]:disabled::before,.loading-card::before{animation:none}
 }
