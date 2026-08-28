@@ -22,19 +22,19 @@ jobs:
 
       - name: Ensure canonical active styles only
         run: |
-          grep -q 'design-system.css?v=uiux14' index.html
-          grep -q 'app-shell.css?v=uiux14' index.html
-          grep -q 'app-ui.css?v=uiux14' index.html
-          grep -q 'forms.css?v=uiux14' index.html
-          grep -q 'categories.css?v=uiux14' index.html
-          grep -q 'picker.css?v=uiux14' index.html
-          grep -q 'interactions.css?v=uiux14' index.html
+          grep -q 'design-system.css?v=uiux15' index.html
+          grep -q 'app-shell.css?v=uiux15' index.html
+          grep -q 'app-ui.css?v=uiux15' index.html
+          grep -q 'forms.css?v=uiux15' index.html
+          grep -q 'categories.css?v=uiux15' index.html
+          grep -q 'picker.css?v=uiux15' index.html
+          grep -q 'interactions.css?v=uiux15' index.html
           ! grep -q 'app-v31.css' index.html
           ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
 
       - name: Ensure one renderer and no redesign observers
         run: |
-          grep -q "app.js?v=uiux14" boot.js
+          grep -q "app.js?v=uiux15" boot.js
           ! grep -q 'app-v31.js' boot.js
           ! grep -q 'MutationObserver' app.js
           ! grep -q 'MutationObserver' boot.js
@@ -42,9 +42,10 @@ jobs:
           ! grep -q 'MutationObserver' picker.js
           test "$(grep -o 'createClient(' app.js | wc -l)" -eq 1
 
-      - name: Ensure canonical category feature wiring
+      - name: Ensure canonical category and report wiring
         run: |
           grep -q 'const CATEGORIES=Object.freeze' app.js
+          grep -q "uncategorized:{label:'Sem categoria',emoji:'❔'" app.js
           grep -q "category:direction==='expense'?category:null" app.js
           grep -q "kind==='recurring'?'recurring'" app.js
           grep -q 'reportTransactions' app.js
@@ -57,6 +58,8 @@ jobs:
           grep -q 'category-grid' categories.css
           grep -q 'category-donut' categories.css
           grep -q 'category-filter' categories.css
+          grep -q '.chart-wrap{width:100%;overflow:hidden' categories.css
+          grep -q '.chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0' categories.css
 
       - name: Ensure canonical form and picker behavior
         run: |
@@ -76,22 +79,22 @@ jobs:
 
       - name: Check PWA final asset graph
         run: |
-          grep -q "juhelo-uiux-14" sw.js
-          grep -q "design-system.css?v=uiux14" sw.js
-          grep -q "app-shell.css?v=uiux14" sw.js
-          grep -q "app-ui.css?v=uiux14" sw.js
-          grep -q "forms.css?v=uiux14" sw.js
-          grep -q "categories.css?v=uiux14" sw.js
-          grep -q "picker.css?v=uiux14" sw.js
-          grep -q "interactions.css?v=uiux14" sw.js
-          grep -q "app.js?v=uiux14" sw.js
-          grep -q "form-ux.js?v=uiux14" sw.js
-          grep -q "picker.js?v=uiux14" sw.js
-          grep -q "boot.js?v=uiux14" sw.js
+          grep -q "juhelo-uiux-15" sw.js
+          grep -q "design-system.css?v=uiux15" sw.js
+          grep -q "app-shell.css?v=uiux15" sw.js
+          grep -q "app-ui.css?v=uiux15" sw.js
+          grep -q "forms.css?v=uiux15" sw.js
+          grep -q "categories.css?v=uiux15" sw.js
+          grep -q "picker.css?v=uiux15" sw.js
+          grep -q "interactions.css?v=uiux15" sw.js
+          grep -q "app.js?v=uiux15" sw.js
+          grep -q "form-ux.js?v=uiux15" sw.js
+          grep -q "picker.js?v=uiux15" sw.js
+          grep -q "boot.js?v=uiux15" sw.js
           ! grep -q 'app-v31.js' sw.js
           ! grep -q 'app-v31.css' sw.js
 
       - name: Check build marker
         run: |
-          grep -q 'juhelo-build" content="uiux-14' index.html
-          grep -q 'data-juhelo-build="uiux-14"' index.html
+          grep -q 'juhelo-build" content="uiux-15' index.html
+          grep -q 'data-juhelo-build="uiux-15"' index.html
