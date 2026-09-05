@@ -77,8 +77,8 @@ button[data-old-text]:disabled::before{content:"";flex:0 0 auto;width:15px;heigh
 
 :where(button,[role="button"],a,input,textarea):focus-visible{outline:none;box-shadow:var(--jh-focus-ring)}
 .empty,.empty-card{transition:color var(--jh-duration-base) var(--jh-ease),background var(--jh-duration-base) var(--jh-ease)}
-.quick-card,.create-btn,.goal-check,.more-btn,.box-actions button,.period-presets button,.theme-option,.nav-item,.eye-btn{-webkit-user-select:none;user-select:none}
-body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.chart-card,.modal-card,.settings-panel,.bottom-nav,.quick-card{transition:background-color var(--jh-duration-slow) var(--jh-ease),border-color var(--jh-duration-slow) var(--jh-ease),color var(--jh-duration-slow) var(--jh-ease),box-shadow var(--jh-duration-slow) var(--jh-ease)}
+.quick-card,.create-btn,.goal-check,.payment-check,.more-btn,.previous-pending,.unpaid-focus button,.action-row,.recurring-delete-options button,.box-actions button,.period-presets button,.theme-option,.nav-item,.eye-btn{-webkit-user-select:none;user-select:none}
+body,.page,.balance-card,.list-card,.tx-row,.box-card-v31,.goals-card,.period-card,.chart-card,.modal-card,.settings-panel,.bottom-nav,.quick-card,.previous-pending{transition:background-color var(--jh-duration-slow) var(--jh-ease),border-color var(--jh-duration-slow) var(--jh-ease),color var(--jh-duration-slow) var(--jh-ease),box-shadow var(--jh-duration-slow) var(--jh-ease)}
 
 @media(max-width:560px){
   .settings-panel{max-width:100%}
@@ -86,7 +86,7 @@ body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.char
 
 /* Reduce Motion preserva feedback estrutural, com duração curta. */
 @media(prefers-reduced-motion:reduce){
-  button,[role="button"],.toast,.loading-card,body,.page,.balance-card,.list-card,.box-card-v31,.goals-card,.period-card,.chart-card,.bottom-nav,.quick-card{transition-duration:120ms!important;animation-duration:120ms!important}
+  button,[role="button"],.toast,.loading-card,body,.page,.balance-card,.list-card,.tx-row,.box-card-v31,.goals-card,.period-card,.chart-card,.bottom-nav,.quick-card,.previous-pending{transition-duration:120ms!important;animation-duration:120ms!important}
   .modal-backdrop,.settings-overlay{animation:jh-overlay-reduced-in 130ms ease-out both!important}
   .modal-card,.settings-panel{animation:jh-sheet-reduced-in 150ms ease-out both!important}
   .modal-backdrop.is-closing,.settings-overlay.is-closing{animation:jh-overlay-out 130ms ease-in both!important}

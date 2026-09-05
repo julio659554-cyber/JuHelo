@@ -1,4 +1,4 @@
-/* JuHelo — comportamento canônico de formulários. Sem MutationObserver. */
+/* JuHelo — comportamento canônico de formulários, sem observadores de DOM. */
 (() => {
   const BRL = new Intl.NumberFormat('pt-BR', {
     style: 'currency',

@@ -1,4 +1,4 @@
-/* JuHelo — motion system canônico. Sem MutationObserver. */
+/* JuHelo — motion system canônico, sem observadores de DOM. */
 (() => {
   const EASE = 'cubic-bezier(.2,.8,.2,1)';
   const systemReduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;

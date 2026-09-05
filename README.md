@@ -14,6 +14,8 @@ Aplicativo/PWA de finanças do casal.
 - Código de convite do casal
 - Controle por mês, sem exigir dia
 - Receitas e despesas editáveis
+- Status Pago/Não pago por despesa, sem alterar os totais financeiros
+- Alerta de pendências do mês anterior na Home
 - Gastos fixos com mês inicial e mês final opcional
 - Edição de gasto fixo: só este mês / deste mês em diante / toda a série
 - Exclusão de gasto fixo: só este mês / deste mês em diante / toda a série
@@ -52,4 +54,4 @@ Configuração:
 Quando o repositório estiver conectado ao Cloudflare Pages, cada push em `main` publica automaticamente uma nova versão.
 
 ## Status
-V2 publicada no repositório e validada localmente quanto à sintaxe JavaScript e estrutura PWA. Falta apenas rodar a migration 002 no Supabase e validar a URL pública do Cloudflare em produção.
+Baseline canônico `uiux-22`, com frontend, Supabase e grafo PWA auditados. A migration de status de pagamento `20260905140204_transaction_payment_status` já está aplicada no projeto atual.

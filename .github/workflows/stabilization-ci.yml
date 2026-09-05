@@ -23,26 +23,52 @@ jobs:
 
       - name: Ensure canonical active styles only
         run: |
-          grep -q 'design-system.css?v=uiux21' index.html
-          grep -q 'app-shell.css?v=uiux21' index.html
-          grep -q 'app-ui.css?v=uiux21' index.html
-          grep -q 'forms.css?v=uiux21' index.html
-          grep -q 'categories.css?v=uiux21' index.html
-          grep -q 'picker.css?v=uiux21' index.html
-          grep -q 'interactions.css?v=uiux21' index.html
-          ! grep -q 'app-v31.css' index.html
-          ! grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html
+          grep -q 'design-system.css?v=uiux22' index.html
+          grep -q 'app-shell.css?v=uiux22' index.html
+          grep -q 'app-ui.css?v=uiux22' index.html
+          grep -q 'forms.css?v=uiux22' index.html
+          grep -q 'categories.css?v=uiux22' index.html
+          grep -q 'picker.css?v=uiux22' index.html
+          grep -q 'interactions.css?v=uiux22' index.html
+          if grep -q 'app-v31.css' index.html; then exit 1; fi
+          if grep -qE 'modal-ux-v|picker-v[0-9]|styles-v|reference-v|home-v|transactions-v|boxes-v|goals-v|stability-v' index.html; then exit 1; fi
 
       - name: Ensure one renderer and no redesign observers
         run: |
-          grep -q "app.js?v=uiux21" boot.js
-          ! grep -q 'app-v31.js' boot.js
-          ! grep -q 'MutationObserver' app.js
-          ! grep -q 'MutationObserver' boot.js
-          ! grep -q 'MutationObserver' form-ux.js
-          ! grep -q 'MutationObserver' picker.js
-          ! grep -q 'MutationObserver' motion.js
+          grep -q "app.js?v=uiux22" boot.js
+          if grep -q 'app-v31.js' boot.js; then exit 1; fi
+          if grep -q 'MutationObserver' app.js; then exit 1; fi
+          if grep -q 'MutationObserver' boot.js; then exit 1; fi
+          if grep -q 'MutationObserver' form-ux.js; then exit 1; fi
+          if grep -q 'MutationObserver' picker.js; then exit 1; fi
+          if grep -q 'MutationObserver' motion.js; then exit 1; fi
           test "$(grep -o 'createClient(' app.js | wc -l)" -eq 1
+          test "$(grep -o "serviceWorker.register" boot.js | wc -l)" -eq 1
+          if grep -q "serviceWorker.register" app.js; then exit 1; fi
+
+      - name: Ensure payment status and recurring deletion wiring
+        run: |
+          grep -q "rpc('set_transaction_paid'" app.js
+          grep -q "p_transaction_id:tx.id,p_paid:next" app.js
+          grep -q "data-toggle-paid" app.js
+          grep -q "isPayable(tx)" app.js
+          grep -q "tx.kind!=='box_contribution'" app.js
+          grep -q "payment-badge" app.js
+          grep -q "payment-check" app-ui.css
+          grep -q "width:44px" app-ui.css
+          grep -q "loadPreviousPending" app.js
+          grep -q ".eq('month',previousMonth())" app.js
+          grep -q ".eq('direction','expense')" app.js
+          grep -q ".eq('is_paid',false)" app.js
+          grep -q "data-previous-pending" app.js
+          grep -q "data-clear-unpaid" app.js
+          grep -q "rpc('delete_recurring_expense'" app.js
+          grep -q "p_scope:scope" app.js
+          grep -q "data-delete-recurring-scope=\"this_month\"" app.js
+          grep -q "data-delete-recurring-scope=\"future\"" app.js
+          grep -q "data-delete-recurring-scope=\"all\"" app.js
+          grep -q "recurring-delete-options>button.destructive" forms.css
+          if grep -q "line-through" app-ui.css; then exit 1; fi
 
       - name: Ensure canonical categories and card wiring
         run: |
@@ -63,14 +89,14 @@ jobs:
           grep -q 'categoryBarsSvg' app.js
           grep -q "neq('kind','box_contribution')" app.js
           grep -q "data-preset=\"month\"" app.js
-          ! grep -q "REPORT_CATEGORIES=.*'box'" app.js
+          if grep -q "REPORT_CATEGORIES=.*'box'" app.js; then exit 1; fi
           grep -q 'grid-template-columns:repeat(2,minmax(0,1fr))' categories.css
           grep -q '.category-choice.is-wide{grid-column:auto}' categories.css
           grep -q '.card-select-field{display:none!important}' categories.css
           grep -q '\[data-expense-details\]\[hidden\]{display:none!important}' categories.css
           grep -q ".tx-icon.income::before{content:'💰'" categories.css
-          ! grep -q 'quick-card.income>span::before' categories.css
-          ! grep -q 'mini-grid article.income>span::before' categories.css
+          if grep -q 'quick-card.income>span::before' categories.css; then exit 1; fi
+          if grep -q 'mini-grid article.income>span::before' categories.css; then exit 1; fi
           grep -q 'card-setting' categories.css
           grep -q '.chart-wrap{width:100%;overflow:hidden' categories.css
           grep -q '.chart-wrap svg{display:block;width:100%;max-width:100%;min-width:0' categories.css
@@ -96,7 +122,7 @@ jobs:
           grep -q 'bottom:27px' picker.css
           grep -q 'border-right:2px solid currentColor' picker.css
           grep -q 'font-size:16px' forms.css
-          ! grep -q 'gesturestart' picker.js
+          if grep -q 'gesturestart' picker.js; then exit 1; fi
 
       - name: Ensure home see-all affordances
         run: |
@@ -106,13 +132,13 @@ jobs:
 
       - name: Ensure stable settings motion system
         run: |
-          grep -q 'motion.js?v=uiux21' index.html
+          grep -q 'motion.js?v=uiux22' index.html
           grep -q 'animateNewPage' motion.js
           grep -q 'animateHeight' motion.js
           grep -q 'stabilizeSettings' motion.js
           grep -q 'content.scrollTop = 0' motion.js
           grep -q 'settings-tab-indicator' motion.js
-          ! grep -q 'animateHeight(measure.node' motion.js
+          if grep -q 'animateHeight(measure.panel' motion.js; then exit 1; fi
           grep -q 'jh-sheet-in' interactions.css
           grep -q 'segmented:has' interactions.css
           grep -q '.settings-panel{' interactions.css
@@ -129,23 +155,23 @@ jobs:
 
       - name: Check PWA final asset graph
         run: |
-          grep -q "juhelo-uiux-21" sw.js
-          grep -q "design-system.css?v=uiux21" sw.js
-          grep -q "app-shell.css?v=uiux21" sw.js
-          grep -q "app-ui.css?v=uiux21" sw.js
-          grep -q "forms.css?v=uiux21" sw.js
-          grep -q "categories.css?v=uiux21" sw.js
-          grep -q "picker.css?v=uiux21" sw.js
-          grep -q "interactions.css?v=uiux21" sw.js
-          grep -q "app.js?v=uiux21" sw.js
-          grep -q "form-ux.js?v=uiux21" sw.js
-          grep -q "picker.js?v=uiux21" sw.js
-          grep -q "motion.js?v=uiux21" sw.js
-          grep -q "boot.js?v=uiux21" sw.js
-          ! grep -q 'app-v31.js' sw.js
-          ! grep -q 'app-v31.css' sw.js
+          grep -q "juhelo-uiux-22" sw.js
+          grep -q "design-system.css?v=uiux22" sw.js
+          grep -q "app-shell.css?v=uiux22" sw.js
+          grep -q "app-ui.css?v=uiux22" sw.js
+          grep -q "forms.css?v=uiux22" sw.js
+          grep -q "categories.css?v=uiux22" sw.js
+          grep -q "picker.css?v=uiux22" sw.js
+          grep -q "interactions.css?v=uiux22" sw.js
+          grep -q "app.js?v=uiux22" sw.js
+          grep -q "form-ux.js?v=uiux22" sw.js
+          grep -q "picker.js?v=uiux22" sw.js
+          grep -q "motion.js?v=uiux22" sw.js
+          grep -q "boot.js?v=uiux22" sw.js
+          if grep -q 'app-v31.js' sw.js; then exit 1; fi
+          if grep -q 'app-v31.css' sw.js; then exit 1; fi
 
       - name: Check build marker
         run: |
-          grep -q 'juhelo-build" content="uiux-21' index.html
-          grep -q 'data-juhelo-build="uiux-21"' index.html
+          grep -q 'juhelo-build" content="uiux-22' index.html
+          grep -q 'data-juhelo-build="uiux-22"' index.html

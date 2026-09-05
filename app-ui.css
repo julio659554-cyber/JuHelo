@@ -27,6 +27,28 @@
   line-height:1.42;
   font-weight:var(--jh-weight-regular);
 }
+.previous-pending{
+  width:100%;
+  min-height:76px;
+  margin:-8px 0 14px;
+  padding:14px 16px;
+  border:1px solid color-mix(in srgb,var(--jh-green) 15%,var(--jh-border));
+  border-radius:18px;
+  background:color-mix(in srgb,var(--jh-green-soft) 78%,var(--jh-surface));
+  color:var(--jh-text);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  text-align:left;
+  box-shadow:none;
+}
+.previous-pending>span{min-width:0;display:grid;gap:4px}
+.previous-pending small{color:var(--jh-green);font-size:10px;font-weight:var(--jh-weight-semibold);letter-spacing:.09em;text-transform:uppercase}
+.previous-pending strong{font-size:13px;line-height:1.4;font-weight:var(--jh-weight-medium)}
+.previous-pending>b{flex:0 0 auto;color:var(--jh-green-strong);font-size:11px;font-weight:var(--jh-weight-semibold);white-space:nowrap}
+.previous-pending>b i{font-style:normal;margin-left:3px}
+.previous-pending:active{background:var(--jh-green-soft)}
 
 .balance-card{
   position:relative;
@@ -252,7 +274,45 @@ main:has(.home-intro) .quick-grid .quick-card.goals{display:none}
   padding:13px 0;
   border-bottom:1px solid var(--jh-border);
 }
+.tx-row.is-payable{grid-template-columns:44px 38px minmax(0,1fr) auto 40px;gap:8px}
 .tx-row:last-child{border-bottom:0}
+.tx-row.is-paid{
+  margin:2px -8px;
+  padding:11px 8px;
+  border-bottom-color:transparent;
+  border-radius:14px;
+  background:color-mix(in srgb,var(--jh-green) 4%,transparent);
+  box-shadow:inset 2px 0 0 color-mix(in srgb,var(--jh-green) 32%,transparent);
+}
+.payment-check{
+  position:relative;
+  width:44px;
+  height:44px;
+  min-width:44px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:transparent;
+  display:grid;
+  place-items:center;
+}
+.payment-check::before{
+  content:"";
+  position:absolute;
+  width:24px;
+  height:24px;
+  border:1.5px solid var(--jh-border-strong);
+  border-radius:50%;
+  background:var(--jh-surface);
+  transition:background var(--jh-duration-base) var(--jh-ease),border-color var(--jh-duration-base) var(--jh-ease),transform var(--jh-duration-fast) var(--jh-ease);
+}
+.payment-check svg{position:relative;z-index:1;width:15px;height:15px;stroke-width:2.4;opacity:0;transform:scale(.72);transition:opacity var(--jh-duration-fast) var(--jh-ease),transform var(--jh-duration-base) var(--jh-ease)}
+.payment-check.checked{color:#fff}
+.payment-check.checked::before{border-color:var(--jh-green);background:var(--jh-green)}
+.payment-check.checked svg{opacity:1;transform:scale(1)}
+.payment-check:not(:disabled):active::before{transform:scale(.9)}
+.payment-check[aria-busy="true"]::before{box-shadow:0 0 0 3px color-mix(in srgb,var(--jh-green) 10%,transparent)}
 .tx-icon{
   width:38px;
   height:38px;
@@ -276,6 +336,11 @@ main:has(.home-intro) .quick-grid .quick-card.goals{display:none}
   overflow-wrap:anywhere;
 }
 .tx-copy small{color:var(--jh-muted);font-size:11px;line-height:1.2}
+.tx-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.tx-meta>span{min-width:0}
+.payment-badge{display:inline-flex;align-items:center;min-height:19px;padding:2px 7px;border-radius:999px;font-style:normal;font-size:9px;line-height:1;font-weight:var(--jh-weight-semibold);white-space:nowrap}
+.payment-badge.paid{background:var(--jh-green-soft);color:var(--jh-green-strong)}
+.payment-badge.unpaid{border:1px solid var(--jh-border);background:var(--jh-surface-subtle);color:var(--jh-muted)}
 .tx-row>b{color:var(--jh-text);font-size:14px;font-weight:var(--jh-weight-semibold);white-space:nowrap}
 .more-btn{
   width:40px;
@@ -291,6 +356,10 @@ main:has(.home-intro) .quick-grid .quick-card.goals{display:none}
   letter-spacing:1.5px;
 }
 .more-btn:active{background:var(--jh-surface-subtle)}
+.unpaid-focus{margin:22px 0 -14px;padding:10px 12px;border:1px solid color-mix(in srgb,var(--jh-green) 13%,var(--jh-border));border-radius:14px;background:color-mix(in srgb,var(--jh-green-soft) 62%,var(--jh-surface));display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--jh-green-strong);font-size:11px;font-weight:var(--jh-weight-medium)}
+.unpaid-focus button{min-height:36px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:var(--jh-green-strong);font-size:10px;font-weight:var(--jh-weight-semibold);white-space:nowrap}
+.unpaid-focus button:active{background:var(--jh-green-soft)}
+.month-loading{margin-top:30px}
 
 /* ========================= CAIXINHAS ========================= */
 .page-action{display:block;margin:0 0 20px}
@@ -415,6 +484,7 @@ main:has(.home-intro) .quick-grid .quick-card.goals{display:none}
   .quick-card{min-height:72px;padding:11px 12px}
   .home-lists,.extract-grid{margin-top:26px}
   .tx-row{grid-template-columns:36px minmax(0,1fr) auto 38px;gap:9px}
+  .tx-row.is-payable{grid-template-columns:44px 36px minmax(0,1fr) auto 38px;gap:7px}
   .tx-icon{width:36px;height:36px}
   .tx-row>b{font-size:13px}
   .box-card-v31{padding:16px}
@@ -438,7 +508,9 @@ main:has(.home-intro) .quick-grid .quick-card.goals{display:none}
   .quick-card>span{width:36px;height:36px}
   .quick-card strong{font-size:14px}
   .quick-card small{font-size:11px}
+  .previous-pending{align-items:flex-start;flex-direction:column;gap:8px}
   .tx-row{grid-template-columns:34px minmax(0,1fr) auto 36px;gap:8px}
+  .tx-row.is-payable{grid-template-columns:44px 34px minmax(0,1fr) auto 36px;gap:6px}
   .tx-icon{width:34px;height:34px}
   .tx-copy strong{font-size:13px}
   .tx-row>b{font-size:12px}

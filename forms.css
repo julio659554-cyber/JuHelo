@@ -83,6 +83,26 @@ html:has(body>.modal-backdrop),html:has(body>.settings-overlay),body:has(>.modal
 .danger-btn{border:1px solid color-mix(in srgb,var(--jh-red) 18%,var(--jh-border));background:var(--jh-red-soft);color:var(--jh-red)}
 .primary-btn:disabled,.secondary-btn:disabled,.ghost-btn:disabled,.danger-btn:disabled{opacity:.5;transform:none}
 
+.transaction-actions,.recurring-delete{display:grid;gap:10px}
+.transaction-actions-summary{min-width:0;margin-bottom:2px;padding:13px;border:1px solid var(--jh-border);border-radius:15px;background:var(--jh-surface-subtle);display:flex;align-items:center;gap:11px}
+.transaction-actions-summary>div{min-width:0;display:grid;gap:3px}
+.transaction-actions-summary strong{color:var(--jh-text);font-size:14px;line-height:1.3;font-weight:var(--jh-weight-medium);overflow-wrap:anywhere}
+.transaction-actions-summary small{color:var(--jh-muted);font-size:11px}
+.action-row{width:100%;min-height:54px;padding:0 15px;border:1px solid var(--jh-border);border-radius:15px;background:var(--jh-surface);color:var(--jh-text);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:13px;font-weight:var(--jh-weight-medium)}
+.action-row i{color:var(--jh-muted);font-style:normal;font-weight:var(--jh-weight-regular)}
+.action-row:active{background:var(--jh-surface-subtle)}
+.action-row.danger{border-color:color-mix(in srgb,var(--jh-red) 14%,var(--jh-border));color:var(--jh-red)}
+.action-row.danger i{color:var(--jh-red)}
+.recurring-delete>p{margin:0 2px 4px;color:var(--jh-muted);font-size:13px;line-height:1.48}
+.recurring-delete>p strong{color:var(--jh-text);font-weight:var(--jh-weight-semibold)}
+.recurring-delete-options{display:grid;gap:8px}
+.recurring-delete-options>button{width:100%;min-height:66px;padding:12px 14px;border:1px solid var(--jh-border);border-radius:15px;background:var(--jh-surface-subtle);color:var(--jh-text);display:grid;gap:3px;text-align:left}
+.recurring-delete-options>button strong{font-size:13px;line-height:1.25;font-weight:var(--jh-weight-semibold)}
+.recurring-delete-options>button small{color:var(--jh-muted);font-size:11px;line-height:1.35;font-weight:var(--jh-weight-regular)}
+.recurring-delete-options>button:active{background:var(--jh-surface)}
+.recurring-delete-options>button.destructive{border-color:color-mix(in srgb,var(--jh-red) 20%,var(--jh-border));background:var(--jh-red-soft);color:var(--jh-red-strong)}
+.recurring-delete-options>button.destructive small{color:var(--jh-red)}
+
 .balance-note,.history-balance{padding:13px 14px;border:1px solid var(--jh-border);border-radius:14px;background:var(--jh-surface-subtle);display:flex;justify-content:space-between;gap:12px;color:var(--jh-muted);font-size:12px}
 .balance-note strong,.history-balance strong{color:var(--jh-text);font-weight:var(--jh-weight-semibold)}
 .history-list{display:grid}
